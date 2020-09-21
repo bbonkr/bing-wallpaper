@@ -2,7 +2,7 @@
 {
     public class ErrorModel
     {
-        public int code { get; set; }
+        public int Code { get; set; }
 
         public string Message { get; set; }
 
@@ -10,7 +10,7 @@
         {
             return new ErrorModel
             {
-                code = code,
+                Code = code,
                 Message = message
             };
         }
