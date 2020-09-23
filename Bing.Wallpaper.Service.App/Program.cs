@@ -71,9 +71,9 @@ namespace Bing.Wallpaper.Service.App
 
                    var defaultConnection = context.Configuration.GetConnectionString("Default");
                    
-                   if (envVars.Contains("DOTNETCORE_CONNECTION_STRING"))
+                   if (envVars.Contains($"{PREFIX}ConnectionStrings__Default"))
                    {
-                       defaultConnection = envVars["DOTNETCORE_CONNECTION_STRING"].ToString();
+                       defaultConnection = envVars[$"{PREFIX}ConnectionStrings__Default"].ToString();
                    }
 
                    var migrationAssemblyName = typeof(Bing.Wallpaper.Data.SqlServer.PlaceholderType).Assembly.FullName;
