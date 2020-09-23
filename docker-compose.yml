@@ -9,8 +9,8 @@ services:
     container_name: bing_wallpaper_service # 컨테이너 명칭
     restart: always
     environment:
-      - DOTNETCORE_App_DestinationPath=/app/images
-      - DOTNETCORE_App_RunAtTime=${RUN_AT_TIME}
-      - DOTNETCORE_CONNECTION_STRING=${CONNECTION_STRING}
+      - DOTNETCORE_App__DestinationPath=/app/images
+      - DOTNETCORE_App__RunAtTime=${RUN_AT_TIME}
+      - DOTNETCORE_ConnectionStrings__Default=${CONNECTION_STRING}
     volumes:
       - ${DESTINATION_PATH}:/app/images
