@@ -7,6 +7,8 @@ namespace Bing.Wallpaper.Options
 {
     public class AppOptions
     {
+        public const string App = "App";
+
         public string DestinationPath { get; set; }
 
         /// <summary>
