@@ -20,6 +20,9 @@
     <ProjectReference Include="..\Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj" />
     <ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
     <ProjectReference Include="..\Bing.Wallpaper.Entities\Bing.Wallpaper.Entities.csproj" />
+    <ProjectReference Include="..\Bing.Wallpaper.Models\Bing.Wallpaper.Models.csproj" />
+    <ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
+    <ProjectReference Include="..\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj" />
   </ItemGroup>
 
 </Project>

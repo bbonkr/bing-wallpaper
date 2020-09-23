@@ -332,3 +332,5 @@ ASALocalRun/
 out/
 
 */**/internal-nlog.txt
+
+.env

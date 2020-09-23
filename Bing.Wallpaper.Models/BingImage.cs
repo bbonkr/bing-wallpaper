@@ -24,7 +24,14 @@ namespace Bing.Wallpaper.Models
             if (!String.IsNullOrEmpty(Url))
             {
                 Regex regex = new Regex("[?&]id=([^?&]+)");
-                return regex.Match(Url).Groups.Values.LastOrDefault()?.Value;
+                if (regex.Match(Url).Success)
+                {
+                    //return regex.Match(Url).Groups.Values.LastOrDefault()?.Value;
+
+                    var matchGroup = regex.Match(Url).Groups;
+
+                    return matchGroup[matchGroup.Count - 1].Value;
+                }
             }
 
             return null;
