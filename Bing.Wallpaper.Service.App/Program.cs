@@ -62,7 +62,7 @@ namespace Bing.Wallpaper.Service.App
                    //Adds services to the Dependency Injection container
 
                    var envVars = Environment.GetEnvironmentVariables();
-
+                   
                    services.AddLogging();
                    services.Configure<AppOptions>(context.Configuration.GetSection(AppOptions.App));
 
