@@ -334,3 +334,4 @@ out/
 */**/internal-nlog.txt
 
 .env
+.config/
