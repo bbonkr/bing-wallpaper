@@ -10,6 +10,8 @@ namespace Bing.Wallpaper.Services
 {
     public class BingImageService : IImageService<BingImage>
     {
+        private const string BASE_URL = "https://www.bing.com/HPImageArchive.aspx?format=js&idx=1&n=10&mkt=en-US";
+
         public BingImageService(ILoggerFactory loggerFactory)
         {
             logger = loggerFactory.CreateLogger<BingImageService>();

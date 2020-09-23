@@ -14,11 +14,14 @@ namespace Bing.Wallpaper.Data
 
         public DbSet<ImageInfo> Images { get; set; }
 
+        public DbSet<AppLog> Logs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ImageInfoConfiguration());
+            modelBuilder.ApplyConfiguration(new AppLogConfiguration());
         }
     }
 }

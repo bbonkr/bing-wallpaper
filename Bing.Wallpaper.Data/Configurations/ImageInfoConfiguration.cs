@@ -11,6 +11,8 @@ namespace Bing.Wallpaper.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ImageInfo> builder)
         {
+            builder.ToTable("Images");
+
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)

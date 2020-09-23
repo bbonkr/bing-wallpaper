@@ -55,7 +55,10 @@ namespace Bing.Wallpaper.Services
 
                 if (fileName.Contains("."))
                 {
-                    fileNameWithoutExtension = String.Join(".", fileName.Split('.').SkipLast(1));
+                    var fileNamesToken = fileName.Split('.');
+                    
+                    fileNameWithoutExtension = String.Join(".", fileNamesToken.Take(fileNamesToken.Length - 1));
+
                     fileExtension = $".{ fileName.Split('.').LastOrDefault() }";
                 }
 

@@ -8,5 +8,13 @@ namespace Bing.Wallpaper.Options
     public class AppOptions
     {
         public string DestinationPath { get; set; }
+
+        /// <summary>
+        /// 실행시각 
+        /// 
+        /// 시각 => HH:mm:ss
+        /// ex) 01:00:00
+        /// </summary>
+        public string RunAtTime { get; set; }
     }
 }

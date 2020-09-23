@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  bing_wallpaper_service:
+    build: 
+      context: .
+      dockerfile: ./service.Dockerfile # 빌드 파일
+    image: bbonkr/bing_wallpaper_service:latest # 도커 이미지 명칭
+    container_name: bing_wallpaper_service # 컨테이너 명칭
+    restart: always
+    environment:
+      - DOTNETCORE_DestinationPath=/app/images
+      - DOTNETCORE_RunAtTime=${RUN_AT_TIME}
+      - DOTNETCORE_CONNECTION_STRING=${CONNECTION_STRING}
+    volumes:
+      - ${DESTINATION_PATH}:/app/images
