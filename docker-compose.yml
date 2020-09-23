@@ -14,3 +14,4 @@ services:
       - DOTNETCORE_ConnectionStrings__Default=${CONNECTION_STRING}
     volumes:
       - ${DESTINATION_PATH}:/app/images
+      - ${PWD}/.config/appsettings.json:/app/appsettings.json
