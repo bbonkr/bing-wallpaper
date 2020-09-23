@@ -64,7 +64,7 @@ namespace Bing.Wallpaper.Service.App
                    var envVars = Environment.GetEnvironmentVariables();
 
                    services.AddLogging();
-                   services.Configure<AppOptions>(context.Configuration.GetSection("App"));
+                   services.Configure<AppOptions>(context.Configuration.GetSection(AppOptions.App));
 
                    services.AddSingleton<IImageService<BingImage>, BingImageService>();
                    services.AddSingleton<ILocalFileService, LocalFileService>();                   
