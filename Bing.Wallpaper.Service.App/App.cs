@@ -41,7 +41,8 @@ namespace Bing.Wallpaper.Service.App
 
             timer = new System.Timers.Timer();
             timer.Interval = 1000;
-            timer.Elapsed += Timer_Elapsed;            
+            timer.Elapsed += Timer_Elapsed;
+            timer.Enabled = true;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -135,6 +136,7 @@ namespace Bing.Wallpaper.Service.App
 
         private async Task RunService()
         {
+            logger.LogInformation("이미지 수집을 시작합니다");
             var serviceResult = await imageService.Get();
 
             if (serviceResult == null)
@@ -169,6 +171,8 @@ namespace Bing.Wallpaper.Service.App
                 databaseContext.Images.AddRange(result.ToArray());
 
                 await databaseContext.SaveChangesAsync();
+
+                logger.LogInformation($"이미지 수집을 종료합니다. 수집된 이미지는 {serviceResult.Images.Count}건 입니다.");
             }
         }
 
