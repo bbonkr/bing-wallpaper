@@ -330,3 +330,5 @@ ASALocalRun/
 .mfractor/
 
 out/
+
+*/**/internal-nlog.txt

@@ -13,6 +13,8 @@ namespace Bing.Wallpaper.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<AppLog> builder)
         {
+            builder.ToTable("AppLogs");
+
             builder.HasComment("로깅 NLog");
 
             builder.HasKey(x => x.Id);

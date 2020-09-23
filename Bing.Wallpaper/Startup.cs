@@ -63,6 +63,7 @@ namespace Bing.Wallpaper
             });
 
             
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,7 +76,6 @@ namespace Bing.Wallpaper
                 var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
                 databaseContext.Database.Migrate();
             }
-            
 
             if (env.IsDevelopment())
             {

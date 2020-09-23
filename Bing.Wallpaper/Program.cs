@@ -15,20 +15,23 @@ namespace Bing.Wallpaper
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            
             try
             {
                 CreateHostBuilder(args).Build().Run();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
                 logger.Error(ex, "Stopped webapp because of exception");
+                throw ex;
             }
             finally
             {
+                NLog.LogManager.Flush();
                 NLog.LogManager.Shutdown();
             }
-            
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -37,10 +40,11 @@ namespace Bing.Wallpaper
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-            .ConfigureLogging(logging => {
-                logging.ClearProviders();
-                logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-            })
-            .UseNLog();
+            //.ConfigureLogging(logging => {
+            //    logging.ClearProviders();
+            //    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+            //})
+            .UseNLog()
+            ;
     }
 }
