@@ -8,7 +8,8 @@ services:
     image: bbonkr/bing_wallpaper_service:latest # 도커 이미지 명칭
     container_name: bing_wallpaper_service # 컨테이너 명칭
     restart: always
-    # environment:
+    environment:
+      - TZ=Asia/Seoul
       # - "DOTNETCORE_App__DestinationPath=/app/images"
       # - "DOTNETCORE_App__RunAtTime=${RUN_AT_TIME}"
       # - "DOTNETCORE_ConnectionStrings__Default=${CONNECTION_STRING}"
