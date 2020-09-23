@@ -6,7 +6,7 @@ COPY . .
 RUN dotnet restore
 
 # copy everything else and build app
-RUN dotnet publish -c Release -o out
+RUN dotnet publish --project ./Bing.Wallpaper.Service.App/Bing.Wallpaper.Service.App.csproj  -c Release -o out
 
 
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
