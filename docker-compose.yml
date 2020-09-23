@@ -10,9 +10,6 @@ services:
     restart: always
     environment:
       - TZ=Asia/Seoul
-      # - "DOTNETCORE_App__DestinationPath=/app/images"
-      # - "DOTNETCORE_App__RunAtTime=${RUN_AT_TIME}"
-      # - "DOTNETCORE_ConnectionStrings__Default=${CONNECTION_STRING}"
     volumes:
       - "${DESTINATION_PATH}:/app/images"
       - "${PWD}/.config/appsettings.json:/app/appsettings.json"
