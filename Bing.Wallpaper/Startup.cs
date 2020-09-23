@@ -16,6 +16,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using NLog;
+using NLog.Targets;
+using NLog.Web;
+
 namespace Bing.Wallpaper
 {
     public class Startup
@@ -30,6 +34,10 @@ namespace Bing.Wallpaper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Register Configuration
+            // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
+            //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
+
             services.AddControllers();
 
             services.AddTransient<IImageService<BingImage>, BingImageService>();
@@ -38,13 +46,13 @@ namespace Bing.Wallpaper
 
             var envVars = Environment.GetEnvironmentVariables();
 
-            services.AddDbContext<DefaultDatabaseContext>(options => {
-                var connectionString = Configuration.GetConnectionString("Default");
+            var connectionString = Configuration.GetConnectionString("Default");
+            if (envVars.Contains("ASPNETCORE_CONNECTION_STRING"))
+            {
+                connectionString = envVars["ASPNETCORE_CONNECTION_STRING"].ToString();
+            }
 
-                if (envVars.Contains("ASPNETCORE_CONNECTION_STRING"))
-                {
-                    connectionString = envVars["ASPNETCORE_CONNECTION_STRING"].ToString();
-                }
+            services.AddDbContext<DefaultDatabaseContext>(options => {
 
                 options.UseSqlServer(connectionString, sqlServerOptions =>
                 {
@@ -62,8 +70,17 @@ namespace Bing.Wallpaper
                 }
             });
 
-            
-            
+            //var target = NLog.LogManager.Configuration.AllTargets.FirstOrDefault(x => x.Name == "database") as DatabaseTarget;
+            //if (target != null)
+            //{
+            //    Console.WriteLine(">".PadRight(80, '>'));
+            //    Console.WriteLine($"\t\tconnection string: { target.ConnectionString}");
+            //    //target.ConnectionString = connectionString;
+
+            //    //Console.WriteLine(">".PadRight(80, '>'));
+            //    //Console.WriteLine($"\t\tconnection string: { target.ConnectionString}");
+            //}
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +88,8 @@ namespace Bing.Wallpaper
             IApplicationBuilder app, 
             IWebHostEnvironment env)
         {
+            //GlobalDiagnosticsContext.Set("connectionString", Configuration.GetConnectionString("Default"));
+
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
