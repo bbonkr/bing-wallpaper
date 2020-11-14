@@ -33,7 +33,7 @@ namespace Bing.Wallpaper.Service.App
                 NLog.LogManager.Flush();
                 NLog.LogManager.Shutdown();
             }
-            
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) => new HostBuilder()
@@ -50,7 +50,7 @@ namespace Bing.Wallpaper.Service.App
                    config.SetBasePath(Directory.GetCurrentDirectory());
                    config.AddJsonFile($"{APP_SETTINGS_FILENAME}{SETTINGS_FILE_EXT}", optional: true);
                    config.AddJsonFile($"{APP_SETTINGS_FILENAME}.{context.HostingEnvironment.EnvironmentName}{SETTINGS_FILE_EXT}", optional: true);
-                   config.AddEnvironmentVariables(prefix: PREFIX);
+                   config.AddEnvironmentVariables();
                    config.AddCommandLine(args);
                })
                //.ConfigureContainer(config => {
@@ -62,18 +62,18 @@ namespace Bing.Wallpaper.Service.App
                    //Adds services to the Dependency Injection container
 
                    var envVars = Environment.GetEnvironmentVariables();
-                   
+
                    services.AddLogging();
                    services.Configure<AppOptions>(context.Configuration.GetSection(AppOptions.App));
 
                    services.AddSingleton<IImageService<BingImage>, BingImageService>();
-                   services.AddSingleton<ILocalFileService, LocalFileService>();                   
+                   services.AddSingleton<ILocalFileService, LocalFileService>();
 
                    var defaultConnection = context.Configuration.GetConnectionString("Default");
-                   
-                   if (envVars.Contains($"{PREFIX}ConnectionStrings__Default"))
+
+                   if (envVars.Contains($"ConnectionStrings__Default"))
                    {
-                       defaultConnection = envVars[$"{PREFIX}ConnectionStrings__Default"].ToString();
+                       defaultConnection = envVars[$"ConnectionStrings__Default"].ToString();
                    }
 
                    var migrationAssemblyName = typeof(Bing.Wallpaper.Data.SqlServer.PlaceholderType).Assembly.FullName;
@@ -96,7 +96,7 @@ namespace Bing.Wallpaper.Service.App
                    logging.AddConsole();
                    //logging.SetMinimumLevel(LogLevel.Trace);
                    logging.AddNLog();
-                   
+
                })
                .UseConsoleLifetime(options =>
                {
