@@ -80,6 +80,7 @@ namespace Bing.Wallpaper.Service.App
         private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             var current = String.Format("{0:HH:mm:ss}", e.SignalTime);
+            //logger.LogInformation($"current time: {current}");
             if (current == appOptions.RunAtTime)
             {
                 try
