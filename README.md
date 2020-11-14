@@ -6,9 +6,15 @@ title: "Bing Today Image Collector"
 
 Bing.com 오늘의 이미지를 수집합니다.
 
+⚠ 수집된 이미지 파일은 저작권을 주의해야 합니다.
+
+저는 `Windows`, `MacOS` **배경화면**으로만 사용합니다.
+
 ## 준비
 
 EF Core 3 부터 전역 또는 로컬 도구로 설치되어야 합니다.
+
+### EF 도구 설치
 
 ```bash
 $ dotnet tool install --global dotnet-ef
@@ -67,7 +73,46 @@ Options:
   --prefix-output                        Prefix output with level.
 ```
 
-데이터베이스 마이그레이션 코드 작성
+UPDATE 2020-11-14: .NET 5 사용
+
+이전 EF 도구가 설치되어 있는 경우 아래 명령으로 .NET 5 EF 도구로 업데이트할 수 있습니다.
+
+```
+$ dotnet tool update --global dotnet-ef
+```
+
+업데이트된 EF 도구의 버전을 확인합니다.
+
+```
+$ dotnet ef
+
+                     _/\__
+               ---==/    \\
+         ___  ___   |.    \|\
+        | __|| __|  |  )   \\\
+        | _| | _|   \_/ |  //|\\
+        |___||_|       /   \\\/\\
+
+Entity Framework Core .NET Command-line Tools 5.0.0
+
+Usage: dotnet ef [options] [command]
+
+Options:
+  --version        Show version information
+  -h|--help        Show help information
+  -v|--verbose     Show verbose output.
+  --no-color       Don't colorize output.
+  --prefix-output  Prefix output with level.
+
+Commands:
+  database    Commands to manage the database.
+  dbcontext   Commands to manage DbContext types.
+  migrations  Commands to manage migrations.
+
+Use "dotnet ef [command] --help" for more information about a command.
+```
+
+### 데이터베이스 마이그레이션 코드 작성
 
 ```
 $ cd Bing.Wallpaper.Data
