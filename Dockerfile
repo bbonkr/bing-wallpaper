@@ -2,11 +2,11 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /app
 
 # copy csproj and restore as distinct layers
-COPY . .
-RUN dotnet restore
+# COPY . .
+# RUN dotnet restore
 
 # copy everything else and build app
-RUN cd Bing.Wallpaper && dotnet publish -c Release -o /app/out
+RUN cd Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
