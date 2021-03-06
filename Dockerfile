@@ -6,7 +6,7 @@ COPY . .
 RUN dotnet restore
 
 # copy everything else and build app
-RUN dotnet publish -c Release -o out
+RUN cd Bing.Wallpaper && dotnet publish -c Release -o /app/out
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime

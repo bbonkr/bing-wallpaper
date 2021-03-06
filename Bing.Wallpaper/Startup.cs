@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bing.Wallpaper.Data;
+using Bing.Wallpaper.Jobs;
 using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Options;
+using Bing.Wallpaper.Repositories;
 using Bing.Wallpaper.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 using NLog;
 using NLog.Targets;
@@ -38,11 +42,12 @@ namespace Bing.Wallpaper
             // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
             //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
 
-            services.AddControllers();
-
-            services.AddTransient<IImageService<BingImage>, BingImageService>();
-            services.AddTransient<ILocalFileService, LocalFileService>();
-
+            
+            services.AddScoped<IImageService<BingImage>, BingImageService>();
+            services.AddScoped<ILocalFileService, LocalFileService>();
+            
+            services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IAppLogRepository, AppLogRepository>();
 
             var envVars = Environment.GetEnvironmentVariables();
 
@@ -52,8 +57,8 @@ namespace Bing.Wallpaper
                 connectionString = envVars["ASPNETCORE_CONNECTION_STRING"].ToString();
             }
 
-            services.AddDbContext<DefaultDatabaseContext>(options => {
-
+            services.AddDbContext<DefaultDatabaseContext>(options =>
+            {
                 options.UseSqlServer(connectionString, sqlServerOptions =>
                 {
                     sqlServerOptions.MigrationsAssembly("Bing.Wallpaper.Data.SqlServer");
@@ -70,17 +75,46 @@ namespace Bing.Wallpaper
                 }
             });
 
-            //var target = NLog.LogManager.Configuration.AllTargets.FirstOrDefault(x => x.Name == "database") as DatabaseTarget;
-            //if (target != null)
-            //{
-            //    Console.WriteLine(">".PadRight(80, '>'));
-            //    Console.WriteLine($"\t\tconnection string: { target.ConnectionString}");
-            //    //target.ConnectionString = connectionString;
 
-            //    //Console.WriteLine(">".PadRight(80, '>'));
-            //    //Console.WriteLine($"\t\tconnection string: { target.ConnectionString}");
-            //}
+            services.AddScheduler(builder =>
+            {
+                builder.AddJob<BingImageJob>( configure: options =>
+                {
+                    /*
+                     * -------------------------------------------------------------------------------------------------------------
+                     *                                        Allowed values    Allowed special characters   Comment
+                     *
+                     * 忙式式式式式式式式式式式式式 second (optional)       0-59              * , - /                      
+                     * 弛 忙式式式式式式式式式式式式式 minute                0-59              * , - /                      
+                     * 弛 弛 忙式式式式式式式式式式式式式 hour                0-23              * , - /                      
+                     * 弛 弛 弛 忙式式式式式式式式式式式式式 day of month      1-31              * , - / L W ?                
+                     * 弛 弛 弛 弛 忙式式式式式式式式式式式式式 month           1-12 or JAN-DEC   * , - /                      
+                     * 弛 弛 弛 弛 弛 忙式式式式式式式式式式式式式 day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
+                     * 弛 弛 弛 弛 弛 弛
+                     * * * * * * *                     
+                     * -------------------------------------------------------------------------------------------------------------
+                    */
+                    options.CronSchedule = "* * 5 * * *";
+                    options.CronTimeZone = TimeZoneInfo.Local.Id;
+                    options.RunImmediately = true;
+                });
+            });
 
+            services.AddDtoMapper();
+
+            services.AddControllers();
+
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bing Image Collector", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,7 +123,6 @@ namespace Bing.Wallpaper
             IWebHostEnvironment env)
         {
             //GlobalDiagnosticsContext.Set("connectionString", Configuration.GetConnectionString("Default"));
-
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
@@ -99,6 +132,8 @@ namespace Bing.Wallpaper
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bing Image Collector v1.0"));
             }
 
             app.UseHttpsRedirection();

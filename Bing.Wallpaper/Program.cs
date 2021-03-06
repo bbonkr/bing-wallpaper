@@ -24,7 +24,6 @@ namespace Bing.Wallpaper
             {
                 var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
                 logger.Error(ex, "Stopped webapp because of exception");
-                throw ex;
             }
             finally
             {
@@ -40,10 +39,6 @@ namespace Bing.Wallpaper
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-            //.ConfigureLogging(logging => {
-            //    logging.ClearProviders();
-            //    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-            //})
             .UseNLog()
             ;
     }

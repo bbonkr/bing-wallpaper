@@ -95,6 +95,16 @@ namespace Bing.Wallpaper.Services
             return result;
         }
 
+        public async Task<byte[]> ReadAsync(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            return await File.ReadAllBytesAsync(filePath);
+        }
+
         private readonly AppOptions appOptions;
         private readonly HttpClient client;
     }

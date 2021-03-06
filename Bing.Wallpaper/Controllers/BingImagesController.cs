@@ -2,6 +2,7 @@
 using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Services;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
