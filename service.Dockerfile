@@ -3,6 +3,10 @@ WORKDIR /app
 
 # copy csproj and restore as distinct layers
 COPY . .
+
+# Fix dotnet restore
+RUN curl -o /usr/local/share/ca-certificates/verisign.crt -SsL https://crt.sh/?d=1039083 && update-ca-certificates
+
 RUN dotnet restore
 
 # copy everything else and build app
