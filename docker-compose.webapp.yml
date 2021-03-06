@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  bing_wallpaper_service:
+  bing_wallpaper:
     build: 
       context: .
       dockerfile: ./Dockerfile # 빌드 파일
