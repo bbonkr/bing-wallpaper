@@ -7,6 +7,8 @@ namespace Bing.Wallpaper.Services
 {
     public interface ILocalFileService
     {
-        Task<ImageInfo> Save(ImageModel image);        
+        Task<ImageInfo> Save(ImageModel image);
+
+        Task<byte[]> ReadAsync(string filePath);
     }
 }
