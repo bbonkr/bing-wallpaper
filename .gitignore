@@ -335,3 +335,4 @@ out/
 
 .env
 .config/
+appsettings.*.json

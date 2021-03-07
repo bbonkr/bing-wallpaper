@@ -8,8 +8,21 @@ services:
     image: bbonkr/bing_wallpaper:latest # 도커 이미지 명칭
     container_name: bing_wallpaper # 컨테이너 명칭
     restart: always
+    ports:
+      - 5000:5000
     environment:
       - TZ=Asia/Seoul
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Default=<database connection string here>
+      - App__DestinationPath=/app/images
     volumes:
       - "${DESTINATION_PATH}:/app/images"
-      - "${PWD}/.config/appsettings.json:/app/appsettings.json"
+      #- "${PWD}/.config/appsettings.json:/app/appsettings.json"
+    network_mode: bridge
+    # networks:
+    #   - app-network    
+
+# networks:
+#   app-network:
+#     external:
+#       name: bridge
