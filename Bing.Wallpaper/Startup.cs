@@ -102,7 +102,8 @@ namespace Bing.Wallpaper
 
             services.AddDtoMapper();
 
-            services.AddControllers();
+            //services.AddControllers();
+            services.AddControllersWithViews();
 
             services.AddApiVersioning(options =>
             {
@@ -138,14 +139,16 @@ namespace Bing.Wallpaper
 
             // Use proxy
             // app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
+
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

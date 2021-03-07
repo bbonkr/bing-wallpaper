@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\**" />
+    <Content Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ClientApp\**" />
+    <None Remove="ClientApp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="CronScheduler.AspNetCore" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
@@ -27,6 +34,11 @@
     <ProjectReference Include="..\Bing.Wallpaper.Models\Bing.Wallpaper.Models.csproj" />
     <ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
     <ProjectReference Include="..\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 </Project>
