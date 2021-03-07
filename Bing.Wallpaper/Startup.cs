@@ -136,7 +136,8 @@ namespace Bing.Wallpaper
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bing Image Collector v1.0"));
             }
 
-            app.UseHttpsRedirection();
+            // Use proxy
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
