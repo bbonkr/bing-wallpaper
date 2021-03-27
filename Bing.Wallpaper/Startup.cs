@@ -149,6 +149,7 @@ namespace Bing.Wallpaper
                 //endpoints.MapControllers();
 
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapFallbackToController("Index", "Home");
             });
         }
     }
