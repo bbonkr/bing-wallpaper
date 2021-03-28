@@ -25,4 +25,4 @@ services:
 # networks:
 #   app-network:
 #     external:
-#       name: bridge
+#       name: app-network
