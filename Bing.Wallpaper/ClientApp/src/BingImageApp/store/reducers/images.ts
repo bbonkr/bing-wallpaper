@@ -11,16 +11,16 @@ export const isLoadingImages = createReducer<boolean, ImagesActionTypes>(false)
     );
 
 export const loadImagesError = createReducer<
-    ApiResponseModel | undefined,
+    ApiResponseModel | null,
     ImagesActionTypes
->(undefined)
+>(null)
     .handleAction(
         [
             imagesActions.loadImages.request,
             imagesActions.loadImages.success,
             imagesActions.resetLoadImagesError,
         ],
-        (state, action) => undefined,
+        (state, action) => null,
     )
     .handleAction(
         [imagesActions.loadImages.failure],
@@ -34,7 +34,7 @@ export const images = createReducer<
     return [...(state ?? []), ...(action.payload.data ?? [])];
 });
 
-export const hadMoreImages = createReducer<boolean, ImagesActionTypes>(true)
+export const hasMoreImages = createReducer<boolean, ImagesActionTypes>(true)
     .handleAction(
         [imagesActions.loadImages.success],
         (state, action) => (action.payload.data ?? []).length > 0,
@@ -44,10 +44,21 @@ export const hadMoreImages = createReducer<boolean, ImagesActionTypes>(true)
         (state, action) => true,
     );
 
+export const fullSizeImage = createReducer<
+    ImageItemModel | null,
+    ImagesActionTypes
+>(null)
+    .handleAction(
+        [imagesActions.showFullSizeImage],
+        (state, action) => action.payload,
+    )
+    .handleAction([imagesActions.hideFullSizeImage], (state, action) => null);
+
 const imagesState = combineReducers({
     isLoadingImages,
     images,
-    hadMoreImages,
+    hasMoreImages: hasMoreImages,
+    fullSizeImage,
 });
 
 export default imagesState;

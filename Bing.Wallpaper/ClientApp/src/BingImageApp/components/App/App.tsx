@@ -6,6 +6,8 @@ import { Header } from '../Header';
 import { Footer } from '../Footer';
 import { NotFound } from '../NotFount';
 import { PageWrapper, ContentWrapper } from '../Layouts';
+import { ImagesContent } from '../ImagesContent';
+import { FullSizeImage } from '../FullSizeImage';
 import { useStore } from '../../store';
 import 'halfmoon/css/halfmoon.css';
 
@@ -20,7 +22,7 @@ export const App = () => {
                     <ContentWrapper>
                         <Switch>
                             <Route path="/" exact>
-                                <Empty title="Images" content={<p>Images</p>} />
+                                <ImagesContent />
                             </Route>
                             <Route path="/logs" exact>
                                 <Empty title="Logs" content={<p>Logs</p>} />
@@ -34,6 +36,7 @@ export const App = () => {
 
                     <Footer />
                 </PageWrapper>
+                <FullSizeImage />
             </BrowserRouter>
         </Provider>
     );
