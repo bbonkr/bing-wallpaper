@@ -24,6 +24,7 @@ namespace Bing.Wallpaper.Services
             ImageInfo result = new ImageInfo();
             var baseUrl = image.GetBaseUrl();
             var imageUrl = $"{baseUrl}{image.Url}";
+            var now = DateTimeOffset.UtcNow;
 
             var destinationDirectory = appOptions.DestinationPath;
 
@@ -62,7 +63,7 @@ namespace Bing.Wallpaper.Services
                     fileExtension = $".{ fileName.Split('.').LastOrDefault() }";
                 }
 
-                var saveFileName = $"{fileNameWithoutExtension}-{DateTimeOffset.UtcNow.Ticks}{fileExtension}";
+                var saveFileName = $"{fileNameWithoutExtension}-{now.Ticks}{fileExtension}";
 
 
                 var filePath = Path.Combine(destinationDirectory, saveFileName);
@@ -89,7 +90,7 @@ namespace Bing.Wallpaper.Services
                 result.FileName = fileName;
                 result.Directory = destinationDirectory;
                 result.Hash = image.Hsh;
-                result.CreatedAt = DateTimeOffset.UtcNow;
+                result.CreatedAt = now;
             }
 
             return result;

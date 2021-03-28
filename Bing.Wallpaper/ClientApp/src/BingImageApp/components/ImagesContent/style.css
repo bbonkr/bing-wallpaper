@@ -1,0 +1,19 @@
+.card-title-over-image {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    background-color: #000000cf;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.card-title-over-image p {
+    color: #efefef;
+    padding: .3rem .2rem;
+}
+
+.clickable {
+    cursor: pointer;
+}
