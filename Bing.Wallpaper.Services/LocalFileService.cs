@@ -12,7 +12,7 @@ namespace Bing.Wallpaper.Services
 {
     public class LocalFileService : ILocalFileService
     {
-        public LocalFileService(IOptionsMonitor<AppOptions> optionMonitor)
+        public LocalFileService(IOptionsMonitor<CollectorOptions> optionMonitor)
         {
             this.appOptions = optionMonitor.CurrentValue;
             client = new HttpClient();
@@ -106,7 +106,7 @@ namespace Bing.Wallpaper.Services
             return await File.ReadAllBytesAsync(filePath);
         }
 
-        private readonly AppOptions appOptions;
+        private readonly CollectorOptions appOptions;
         private readonly HttpClient client;
     }
 }

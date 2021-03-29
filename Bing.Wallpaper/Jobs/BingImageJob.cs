@@ -85,18 +85,21 @@ namespace Bing.Wallpaper.Jobs
                     var imageInfo = await fileService.Save(image);
                     result.Add(imageInfo);
                 }
+                var affectedCount = 0;
+                if (result.Count > 0)
+                {
+                    databaseContext.Images.AddRange(result.ToArray());
 
-                databaseContext.Images.AddRange(result.ToArray());
-
-                await databaseContext.SaveChangesAsync();
+                    affectedCount = await databaseContext.SaveChangesAsync();
+                }
 
                 watch.Stop();
-                logger.LogInformation($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed.ToString("mm:ss:fff")} Completed");
+                logger.LogInformation($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Completed. Count of collecting images is {affectedCount:n0}");
             }
             catch (Exception ex)
             {
                 watch.Stop();
-                logger.LogInformation($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed.ToString("mm:ss:fff")} Incompleted ({ex.Message})");
+                logger.LogInformation($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Incompleted ({ex.Message})");
             }
             finally
             {

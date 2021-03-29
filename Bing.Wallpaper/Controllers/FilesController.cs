@@ -24,7 +24,7 @@ namespace Bing.Wallpaper.Controllers
         public FilesController(
             IImageRepository repository, 
             ILocalFileService fileService,
-            IOptionsMonitor<AppOptions> appOptionsAccessor,
+            IOptionsMonitor<CollectorOptions> appOptionsAccessor,
             ILoggerFactory loggerFactory)
         {
             this.repository = repository;
@@ -106,7 +106,7 @@ namespace Bing.Wallpaper.Controllers
 
         private readonly IImageRepository repository;
         private readonly ILocalFileService fileService;
-        private readonly AppOptions appOptions;
+        private readonly CollectorOptions appOptions;
         private readonly ILogger logger;
     }
 }
