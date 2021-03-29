@@ -31,15 +31,17 @@ namespace Bing.Wallpaper.Controllers
 
                 logger.LogInformation($"{nameof(ImagesController)}.{nameof(GetAllAsync)} posts.count={records.Count():n0}");
 
-                records = records.Select(x => {
+                records = records.Select(x =>
+                {
                     var item = x;
 
-                    var tokens=x.FileName.Split(".");
+                    var tokens = x.FileName.Split(".");
                     item.FileName = string.Join(".", tokens.Take(tokens.Length - 1));
                     item.FileExtension = $".{tokens.Last()}";
 
                     return item;
                 });
+
                 return StatusCode((int)HttpStatusCode.OK, records);
             }
             catch (Exception ex)

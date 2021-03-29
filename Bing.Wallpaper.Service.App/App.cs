@@ -25,7 +25,7 @@ namespace Bing.Wallpaper.Service.App
         public App(
             IHostApplicationLifetime hostApplicationLifetime,
             DefaultDatabaseContext databaseContext,
-            IOptions<AppOptions> appOptionsAccessor,
+            IOptions<CollectorOptions> appOptionsAccessor,
             IImageService<BingImage> imageService,
             ILocalFileService fileService,
             ILoggerFactory loggerFactory)
@@ -35,7 +35,7 @@ namespace Bing.Wallpaper.Service.App
             this.imageService = imageService;
             this.fileService = fileService;
             
-            appOptions = appOptionsAccessor.Value ?? new AppOptions();
+            appOptions = appOptionsAccessor.Value ?? new CollectorOptions();
 
             logger = loggerFactory.CreateLogger<App>();
 
@@ -187,7 +187,7 @@ namespace Bing.Wallpaper.Service.App
         private readonly DefaultDatabaseContext databaseContext;
         private readonly IImageService<BingImage> imageService;
         private readonly ILocalFileService fileService;
-        private readonly AppOptions appOptions;
+        private readonly CollectorOptions appOptions;
         private readonly ILogger logger;
         private readonly System.Timers.Timer timer;
     }
