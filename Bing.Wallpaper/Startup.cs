@@ -24,6 +24,9 @@ using NLog;
 using NLog.Targets;
 using NLog.Web;
 
+using kr.bbon.AspNetCore;
+using Microsoft.Extensions.Options;
+
 namespace Bing.Wallpaper
 {
     public class Startup
@@ -65,20 +68,27 @@ namespace Bing.Wallpaper
                 });
             });
 
-            services.Configure<AppOptions>(options =>
+            //services.Configure<CollectorOptions>(options =>
+            //{
+            //    options.DestinationPath = Configuration["App:DestinationPath"];
+
+            //    if (envVars.Contains("ASPNETCORE_DESTINATION_PATH"))
+            //    {
+            //        options.DestinationPath = envVars["ASPNETCORE_DESTINATION_PATH"].ToString();
+            //    }
+            //});
+
+            var collectorOptions = new CollectorOptions();
+            services.Configure<CollectorOptions>(options =>
             {
-                options.DestinationPath = Configuration["App:DestinationPath"];
+                Configuration.GetSection(CollectorOptions.Name).Bind(options);
 
-                if (envVars.Contains("ASPNETCORE_DESTINATION_PATH"))
-                {
-                    options.DestinationPath = envVars["ASPNETCORE_DESTINATION_PATH"].ToString();
-                }
+                collectorOptions = options;
             });
-
 
             services.AddScheduler(builder =>
             {
-                builder.AddJob<BingImageJob>( configure: options =>
+                builder.AddJob<BingImageJob>(configure: options =>
                 {
                     /*
                      * -------------------------------------------------------------------------------------------------------------
@@ -94,7 +104,8 @@ namespace Bing.Wallpaper
                      * * * * * * *                     
                      * -------------------------------------------------------------------------------------------------------------
                     */
-                    options.CronSchedule = "* * 5 * * *";
+                    //options.CronSchedule = "* * 5 * * *";
+                    options.CronSchedule = collectorOptions.Schedule;
                     options.CronTimeZone = TimeZoneInfo.Local.Id;
                     options.RunImmediately = true;
                 });
@@ -105,17 +116,16 @@ namespace Bing.Wallpaper
             //services.AddControllers();
             services.AddControllersWithViews();
 
-            services.AddApiVersioning(options =>
-            {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
-            });
+            //services.AddApiVersioning(options =>
+            //{
+            //    options.AssumeDefaultVersionWhenUnspecified = true;
+            //    options.DefaultApiVersion = new ApiVersion(1, 0);
+            //    options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            //});
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bing Image Collector", Version = "v1" });
-            });
+            var defaultVersion = new ApiVersion(1, 0);
+            
+            services.AddApiVersioningAndSwaggerGen<SwaggerOptions>(defaultVersion);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -133,8 +143,17 @@ namespace Bing.Wallpaper
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bing Image Collector v1.0"));
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bing Image Collector v1.0"));
+                app.UseSwaggerUIWithApiVersioning();
+
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var collectorOptionsAccessor = scope.ServiceProvider.GetService<IOptionsMonitor<CollectorOptions>>();
+                    var logger = scope.ServiceProvider.GetService<ILogger<Startup>>();
+                    var options = collectorOptionsAccessor.CurrentValue.ToJson();
+                    logger.LogDebug($"[Options: Collector] values: {Environment.NewLine}{options}");
+                }
             }
 
             // Use proxy
