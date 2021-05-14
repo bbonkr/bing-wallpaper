@@ -1,32 +1,30 @@
 .full-size-image-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: #000000cf;
-    z-index: 100;
+    z-index: 2000;
     display: flex;
+    flex-direction: column;
 }
 
 .full-size-image-container>img {
-    max-width: 100vw;
-    max-height: 100vh;
     margin-left: auto;
     margin-right: auto;
     justify-self: center;
     align-self: center;
+    flex:1;
+    object-fit: cover;
+    object-position: center;
 }
 
 .full-size-image-container .tools {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0.6rem;
+    padding: 0.25rem;
 }
 
 .full-size-image-container .tools div>p {

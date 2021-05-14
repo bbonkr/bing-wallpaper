@@ -8,7 +8,7 @@ interface ImagesListProps {
 
 export const ImagesList = ({ images }: ImagesListProps) => {
     return (
-        <div className="d-flex flex-row flex-wrap justify-content-center">
+        <div className="columns is-multiline">
             {images.map((image) => (
                 <ImageCard key={image.id} image={image} />
             ))}
