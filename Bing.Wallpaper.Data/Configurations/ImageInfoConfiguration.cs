@@ -1,6 +1,8 @@
 ﻿using Bing.Wallpaper.Entities;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -52,6 +54,26 @@ namespace Bing.Wallpaper.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(1000)
                 ;
+
+            builder.OwnsOne(x => x.Metadata, onb =>
+            {
+                onb.Property(x => x.Title).IsRequired()
+                    .HasMaxLength(1000)
+                    .HasComment("제목");
+
+                onb.Property(x => x.Origin).IsRequired()
+                .HasMaxLength(1000)
+                .HasComment("원본 위치");
+
+                onb.Property(x => x.Copyright)
+                .HasMaxLength(1000)
+                .HasComment("저작권");
+
+                onb.Property(x => x.CopyrightLink)
+                .HasMaxLength(2000)
+                .HasComment("저작권 링크");
+            });
         }
     }
+
 }

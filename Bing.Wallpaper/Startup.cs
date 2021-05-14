@@ -107,7 +107,7 @@ namespace Bing.Wallpaper
                     //options.CronSchedule = "* * 5 * * *";
                     options.CronSchedule = collectorOptions.Schedule;
                     options.CronTimeZone = TimeZoneInfo.Local.Id;
-                    options.RunImmediately = true;
+                    options.RunImmediately = false;
                 });
             });
 

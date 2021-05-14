@@ -17,7 +17,10 @@ namespace Bing.Wallpaper
             services.AddAutoMapper(options =>
             {
                 options.CreateMap<ImageInfo, ImageItemModel>()
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.Ticks));
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.Ticks))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Metadata.Title))
+                .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Metadata.Copyright))
+                .ForMember(dest => dest.CopyrightLink, opt => opt.MapFrom(src => src.Metadata.CopyrightLink));
 
                 options.CreateMap<ImageInfo, ImageItemDetailModel>()
                 .IncludeBase<ImageInfo, ImageItemModel>()

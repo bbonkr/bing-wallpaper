@@ -35,6 +35,7 @@ namespace Bing.Wallpaper.Services
                         AllowTrailingCommas = true,
                         PropertyNameCaseInsensitive = true,
                         IgnoreNullValues = true,
+                        IgnoreReadOnlyProperties = true,
                     });
 
                     return result;

@@ -23,5 +23,10 @@ namespace Bing.Wallpaper.Entities
         public long FileSize { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
+
+        /// <summary>
+        /// 추가 데이터
+        /// </summary>
+        public virtual ImageMetadata Metadata { get; set; }
     }
 }

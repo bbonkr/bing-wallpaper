@@ -137,6 +137,7 @@ namespace Bing.Wallpaper.Service.App
 
         private async Task RunService()
         {
+            var now = DateTimeOffset.UtcNow;
             logger.LogInformation("이미지 수집을 시작합니다");
             var serviceResult = await imageService.Get();
 
@@ -165,13 +166,33 @@ namespace Bing.Wallpaper.Service.App
                         continue;
                     }
 
-                    var imageInfo = await fileService.Save(image);
-                    result.Add(imageInfo);
+                    var savedFile = await fileService.SaveAsync(image);
+
+                    result.Add(new ImageInfo
+                    {
+                        BaseUrl = image.GetBaseUrl(),
+                        Url = image.Url,
+                        FilePath = savedFile.FilePath,
+                        FileName = savedFile.FileName,
+                        Directory = savedFile.Directory,
+                        Hash = image.Hsh,
+                        CreatedAt = now,
+                        Metadata = new ImageMetadata
+                        {
+                            Title = image.Title,
+                            Origin = image.GetSourceTitle(),
+                            Copyright = image.Copyright,
+                            CopyrightLink = image.CopyrightLink,
+                        }
+                    });
                 }
 
-                databaseContext.Images.AddRange(result.ToArray());
+                if (result.Count > 0)
+                {
+                    databaseContext.Images.AddRange(result.ToArray());
 
-                await databaseContext.SaveChangesAsync();
+                    await databaseContext.SaveChangesAsync();
+                }
 
                 logger.LogInformation($"이미지 수집을 종료합니다. 수집된 이미지는 {serviceResult.Images.Count}건 입니다.");
             }
