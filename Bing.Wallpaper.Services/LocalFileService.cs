@@ -1,6 +1,8 @@
 ﻿using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Options;
+using Bing.Wallpaper.Services.Models;
+
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
@@ -19,9 +21,11 @@ namespace Bing.Wallpaper.Services
             client.Timeout = TimeSpan.FromSeconds(30);
         }
 
-        public async Task<ImageInfo> Save(ImageModel image)
+        public async Task<LocalFileModel> SaveAsync(ImageModel image)
         {
-            ImageInfo result = new ImageInfo();
+            //ImageInfo result = new ImageInfo();
+            var result = new LocalFileModel();
+
             var baseUrl = image.GetBaseUrl();
             var imageUrl = $"{baseUrl}{image.Url}";
             var now = DateTimeOffset.UtcNow;
@@ -32,6 +36,8 @@ namespace Bing.Wallpaper.Services
             {
                 Directory.CreateDirectory(destinationDirectory);
             }
+
+            result.Directory = destinationDirectory;
 
             var response = await client.GetAsync(imageUrl);
 
@@ -51,6 +57,8 @@ namespace Bing.Wallpaper.Services
                     throw new ArgumentException("Does not find a file name");
                 }
 
+                result.FileName = fileName;
+
                 var fileNameWithoutExtension = fileName;
                 var fileExtension = String.Empty;
 
@@ -67,11 +75,11 @@ namespace Bing.Wallpaper.Services
 
 
                 var filePath = Path.Combine(destinationDirectory, saveFileName);
-
+                result.FilePath = filePath;
 
                 using (var responseStream = await response.Content.ReadAsStreamAsync())
                 {
-                    result.FileSize = responseStream.Length;
+                    result.Size = responseStream.Length;
 
                     responseStream.Position = 0;
 
@@ -84,13 +92,22 @@ namespace Bing.Wallpaper.Services
                     responseStream.Close();
                 }
 
-                result.BaseUrl = image.GetBaseUrl();
-                result.Url = image.Url;
-                result.FilePath = filePath;
-                result.FileName = fileName;
-                result.Directory = destinationDirectory;
-                result.Hash = image.Hsh;
-                result.CreatedAt = now;
+                // TODO: Needs refactoring.
+
+                //result.BaseUrl = image.GetBaseUrl();
+                //result.Url = image.Url;
+                //result.FilePath = filePath;
+                //result.FileName = fileName;
+                //result.Directory = destinationDirectory;
+                //result.Hash = image.Hsh;
+                //result.CreatedAt = now;
+                //result.Metadata = new ImageMetadata
+                //{
+                //    Title = image.Title,
+                //    Origin = image.GetSourceTitle(),
+                //    Copyright = image.Copyright,
+                //    CopyrightLink = image.CopyrightLink,
+                //};
             }
 
             return result;

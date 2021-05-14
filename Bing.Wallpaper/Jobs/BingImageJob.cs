@@ -40,6 +40,7 @@ namespace Bing.Wallpaper.Jobs
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             var watch = new Stopwatch();
+            var now = DateTimeOffset.UtcNow;
             string message = string.Empty;
 
             try
@@ -82,8 +83,25 @@ namespace Bing.Wallpaper.Jobs
                         continue;
                     }
 
-                    var imageInfo = await fileService.Save(image);
-                    result.Add(imageInfo);
+                    var savedFile = await fileService.SaveAsync(image);
+
+                    result.Add(new ImageInfo
+                    {
+                        BaseUrl = image.GetBaseUrl(),
+                        Url = image.Url,
+                        FilePath = savedFile.FilePath,
+                        FileName = savedFile.FileName,
+                        Directory = savedFile.Directory,
+                        Hash = image.Hsh,
+                        CreatedAt = now,
+                        Metadata = new ImageMetadata
+                        {
+                            Title = image.Title,
+                            Origin = image.GetSourceTitle(),
+                            Copyright = image.Copyright,
+                            CopyrightLink = image.CopyrightLink,
+                        }
+                    });
                 }
                 var affectedCount = 0;
                 if (result.Count > 0)
@@ -103,7 +121,6 @@ namespace Bing.Wallpaper.Jobs
             }
             finally
             {
-              
                 
             }
         }

@@ -8,6 +8,7 @@ using Bing.Wallpaper.Options;
 using Bing.Wallpaper.Repositories;
 using Bing.Wallpaper.Services;
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
@@ -21,20 +22,26 @@ namespace Bing.Wallpaper.Controllers
     [Route("[area]/v{version:apiVersion}/[controller]")]
     public class FilesController : ApiControllerBase
     {
+        private const string THUMBNAIL_PATH = "thumbnails";
+
         public FilesController(
-            IImageRepository repository, 
+            IImageRepository repository,
             ILocalFileService fileService,
             IOptionsMonitor<CollectorOptions> appOptionsAccessor,
+            IImageFileService imageFileService,
+            IWebHostEnvironment webHostEnvironment,
             ILoggerFactory loggerFactory)
         {
             this.repository = repository;
             this.fileService = fileService;
             this.appOptions = appOptionsAccessor.CurrentValue;
+            this.imageFileService = imageFileService;
+            this.webHostEnvironment = webHostEnvironment;
             this.logger = loggerFactory.CreateLogger<ImagesController>();
         }
 
         [HttpGet("{id:Guid}")]
-        public async Task<IActionResult> GetFileByIdAsync(string id)
+        public async Task<IActionResult> GetFileByIdAsync(string id, [FromQuery] string type = "")
         {
             try
             {
@@ -45,9 +52,41 @@ namespace Bing.Wallpaper.Controllers
                     return StatusCode((int)HttpStatusCode.NotFound);
                 }
 
-                var buffer = await fileService.ReadAsync(record.FilePath);
+                var fileInfo = new FileInfo(record.FilePath);
 
-                if(buffer == null)
+                if (!fileInfo.Exists)
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+                if (type?.ToLower() == "thumbnail")
+                {
+                    try
+                    {
+                        var thumbnailPath = GetThumbnailPath();
+                        string thumbnailFilePath;
+                        if (!imageFileService.HasThumbnail(fileInfo.FullName, thumbnailPath))
+                        {
+                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName, thumbnailPath);
+                            fileInfo = new FileInfo(thumbnailFilePath);
+                        }
+                        else
+                        {
+                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName, thumbnailPath);
+                        }
+
+                        fileInfo = new FileInfo(thumbnailFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, ex.Message);
+                        fileInfo = new FileInfo(record.FilePath);
+                    }
+                }
+
+                var buffer = await fileService.ReadAsync(fileInfo.FullName);
+
+                if (buffer == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound);
                 }
@@ -63,14 +102,14 @@ namespace Bing.Wallpaper.Controllers
         }
 
         [HttpGet("{fileName}")]
-        public async Task<IActionResult> GetFileByFileNameAsync(string fileName)
+        public async Task<IActionResult> GetFileByFileNameAsync(string fileName, [FromQuery] string type = "")
         {
             try
             {
-                var files=Directory.GetFiles(appOptions.DestinationPath, $"{fileName}*");
+                var files = Directory.GetFiles(appOptions.DestinationPath, $"{fileName}*");
 
 
-                if(files.Length  == 0)
+                if (files.Length == 0)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound);
                 }
@@ -80,7 +119,36 @@ namespace Bing.Wallpaper.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.NotFound);
                 }
-                var buffer = await fileService.ReadAsync(fileInfo.FullName);
+
+                
+
+                if (type?.ToLower() == "thumbnail")
+                {
+                    try
+                    {
+                        var thumbnailPath = GetThumbnailPath();
+                        string thumbnailFilePath;
+                        if (!imageFileService.HasThumbnail(fileInfo.FullName, thumbnailPath))
+                        {
+                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName, thumbnailPath);
+                            fileInfo = new FileInfo(thumbnailFilePath);
+                        }
+                        else
+                        {
+                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName, thumbnailPath);
+                        }
+
+                        fileInfo = new FileInfo(thumbnailFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, ex.Message);
+                        fileInfo = new FileInfo(files.FirstOrDefault());
+                    }
+                }
+
+
+               var buffer = await fileService.ReadAsync(fileInfo.FullName);
 
                 if (buffer == null)
                 {
@@ -91,7 +159,7 @@ namespace Bing.Wallpaper.Controllers
 
                 var contentTypeProvider = new FileExtensionContentTypeProvider();
                 var contentType = "application/octet-stream";
-                if(!contentTypeProvider.TryGetContentType(fileInfo.Name, out contentType))
+                if (!contentTypeProvider.TryGetContentType(fileInfo.Name, out contentType))
                 {
                     contentType = "application/octet-stream";
                 }
@@ -104,9 +172,27 @@ namespace Bing.Wallpaper.Controllers
             }
         }
 
+        private string GetThumbnailPath()
+        {
+            if(string.IsNullOrWhiteSpace(appOptions.ThumbnailPath))
+            {
+                var thumbnailPath = Path.Combine(webHostEnvironment.ContentRootPath, THUMBNAIL_PATH);
+                if (!Directory.Exists(thumbnailPath))
+                {
+                    Directory.CreateDirectory(thumbnailPath);
+                }
+
+                return thumbnailPath;
+            }
+
+            return appOptions.ThumbnailPath;
+        }
+
         private readonly IImageRepository repository;
         private readonly ILocalFileService fileService;
+        private readonly IImageFileService imageFileService;
         private readonly CollectorOptions appOptions;
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
     }
 }

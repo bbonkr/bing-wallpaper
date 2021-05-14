@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useImagesApi } from '../../hooks/useImagesApi';
+import { FaWindowClose, FaExpandArrowsAlt } from 'react-icons/fa';
 import './style.css';
 
 export const FullSizeImage = () => {
@@ -38,23 +39,23 @@ export const FullSizeImage = () => {
                 <div className="tools">
                     <div>
                         <button
-                            className="btn"
+                            className="button"
                             title="Full screen"
                             onClick={handleClickFullScreen}
                         >
-                            []
+                            <FaExpandArrowsAlt />
                         </button>
                     </div>
                     <div>
-                        <p>{fullSizeImage.fileName}</p>
+                        <p>{fullSizeImage.title ?? fullSizeImage.fileName}</p>
                     </div>
                     <div>
                         <button
-                            className="btn"
+                            className="button"
                             title="Close"
                             onClick={handleClickClose}
                         >
-                            &times;
+                            <FaWindowClose />
                         </button>
                     </div>
                 </div>
@@ -63,6 +64,7 @@ export const FullSizeImage = () => {
                     src={`/api/v1.0/files/${encodeURIComponent(
                         `${fullSizeImage.fileName}`,
                     )}`}
+                    title={fullSizeImage.title}
                     alt={fullSizeImage?.fileName}
                 />
             </div>

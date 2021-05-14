@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ImagesList } from './ImagesList';
 import { useImagesApi } from '../../hooks/useImagesApi';
+import { Content } from '../Layouts';
 
 export const ImagesContent = () => {
     const [page, setPage] = useState(1);
@@ -27,14 +28,12 @@ export const ImagesContent = () => {
     }, []);
 
     return (
-        <div className="container-fluid mb-20 pb-20">
-            <div className="content">
-                <ImagesList images={images ?? []} />
-            </div>
+        <Content classNames={['p-6']}>
+            <ImagesList images={images ?? []} />
             {hadMoreImages && (
-                <div className="d-flex flex-column justify-content-center align-items-center">
+                <div className="is-flex is-flex-direction-column is-justify-content-center">
                     <button
-                        className="btn"
+                        className="button"
                         disabled={isLoadingImages}
                         onClick={handleClickLoadMore}
                     >
@@ -42,6 +41,6 @@ export const ImagesContent = () => {
                     </button>
                 </div>
             )}
-        </div>
+        </Content>
     );
 };
