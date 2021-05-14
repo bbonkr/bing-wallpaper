@@ -13,8 +13,10 @@ using System.Threading.Tasks;
 
 namespace Bing.Wallpaper.Controllers
 {
+    [ApiVersion("1.0")]
     [ApiController]
-    [Route("api/[controller]")]
+    [Area("api")]
+    [Route("[area]/v{version:apiVersion}/[controller]")]
     public class BingImagesController : ControllerBase
     {
         public BingImagesController(
@@ -30,8 +32,9 @@ namespace Bing.Wallpaper.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetImages()
+        public async Task<IActionResult> GetImagesAsync()
         {
+            var now = DateTimeOffset.UtcNow;
             try
             {
                 var bingImages = await imageService.Get();
@@ -64,8 +67,31 @@ namespace Bing.Wallpaper.Controllers
                         continue;
                     }
 
-                    var imageInfo = await localFileService.Save(image);
-                    result.Add(imageInfo);
+                    var savedFile = await localFileService.SaveAsync(image);
+
+                    result.Add(new ImageInfo
+                    {
+                        BaseUrl = image.GetBaseUrl(),
+                        Url = image.Url,
+                        FilePath = savedFile.FilePath,
+                        FileName = savedFile.FileName,
+                        Directory = savedFile.Directory,
+                        Hash = image.Hsh,
+                        CreatedAt = now,
+                        Metadata = new ImageMetadata
+                        {
+                            Title = image.Title,
+                            Origin = image.GetSourceTitle(),
+                            Copyright = image.Copyright,
+                            CopyrightLink = image.CopyrightLink,
+                        }
+                    });
+                }
+
+
+                if (result.Count == 0)
+                {
+                    return StatusCode(404, ErrorModel.GetErrorModel(404, "Could not find today images."));
                 }
 
                 databaseContext.Images.AddRange(result.ToArray());

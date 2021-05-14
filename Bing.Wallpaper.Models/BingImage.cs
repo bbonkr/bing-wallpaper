@@ -10,9 +10,9 @@ namespace Bing.Wallpaper.Models
     {
         public string UrlBase { get; set; }
 
-        public string CopyRight { get; set; }
+        public string Copyright { get; set; }
 
-        public string CopyRightLink { get; set; }
+        public string CopyrightLink { get; set; }
 
         public override string GetBaseUrl()
         {

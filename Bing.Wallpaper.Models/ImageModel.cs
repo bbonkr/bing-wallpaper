@@ -1,4 +1,6 @@
-﻿namespace Bing.Wallpaper.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Bing.Wallpaper.Models
 {
     public abstract class ImageModel
     {
@@ -6,7 +8,7 @@
 
         public string Title { get; set; }
 
-        public string Hsh { get; set; }
+        public string Hsh { get; set; }    
 
         public abstract string GetBaseUrl();
 

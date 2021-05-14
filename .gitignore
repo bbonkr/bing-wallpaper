@@ -336,3 +336,6 @@ out/
 .env
 .config/
 appsettings.*.json
+
+# thumbnail directory
+thumbnails/

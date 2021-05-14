@@ -13,6 +13,9 @@ export interface ImageItemModel {
     id: string;
     fileName: string;
     fileExtension: string;
+    title?: string;
+    copyright?: string;
+    copyrightLink?: string;
     fileSize: number;
     createdAt: Date;
 }

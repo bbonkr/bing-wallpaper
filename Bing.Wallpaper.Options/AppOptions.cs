@@ -11,6 +11,8 @@ namespace Bing.Wallpaper.Options
 
         public string DestinationPath { get; set; }
 
+        public string ThumbnailPath { get; set; }
+
         /// <summary>
         /// 실행시각 
         /// 

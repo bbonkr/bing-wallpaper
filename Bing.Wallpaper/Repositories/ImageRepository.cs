@@ -32,6 +32,7 @@ namespace Bing.Wallpaper.Repositories
             var skip = (page - 1) * take;
 
             var query = dbContext.Images.Where(x => true)
+                .Include(x=>x.Metadata)
                 .OrderByDescending(x => x.CreatedAt)
                 .Skip(skip)
                 .Take(take)
@@ -45,7 +46,9 @@ namespace Bing.Wallpaper.Repositories
 
         public async Task<ImageItemDetailModel> FindByIdAsync(string id)
         {
-            var query = dbContext.Images.Where(x => x.Id == id)
+            var query = dbContext.Images
+                .Include(x => x.Metadata)
+                .Where(x => x.Id == id)
                .Select(x => mapper.Map<ImageItemDetailModel>(x));
 
             var items = await query.AsNoTracking().FirstOrDefaultAsync();
