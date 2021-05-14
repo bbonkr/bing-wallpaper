@@ -51,6 +51,7 @@ namespace Bing.Wallpaper
             
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IAppLogRepository, AppLogRepository>();
+            services.AddTransient<IImageFileService, ImageFileService>();
 
             var envVars = Environment.GetEnvironmentVariables();
 

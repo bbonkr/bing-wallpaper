@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <Compile Remove="ClientApp\**" />
+    <Compile Remove="thumbnails\**" />
     <Content Remove="ClientApp\**" />
+    <Content Remove="thumbnails\**" />
     <EmbeddedResource Remove="ClientApp\**" />
+    <EmbeddedResource Remove="thumbnails\**" />
     <None Remove="ClientApp\**" />
+    <None Remove="thumbnails\**" />
   </ItemGroup>
 
   <ItemGroup>
