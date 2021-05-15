@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Bing.Wallpaper.Controllers
 {
     [Controller]
-    //[Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         public IActionResult Index()
