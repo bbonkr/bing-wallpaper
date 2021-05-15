@@ -56,6 +56,7 @@ namespace Bing.Wallpaper
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IAppLogRepository, AppLogRepository>();
             services.AddTransient<IImageFileService, ImageFileService>();
+            
 
             var envVars = Environment.GetEnvironmentVariables();
 
@@ -99,7 +100,7 @@ namespace Bing.Wallpaper
                      * * * * * * *                     
                      * -------------------------------------------------------------------------------------------------------------
                     */
-                    //options.CronSchedule = "* * 5 * * *";
+                    //options.CronSchedule = "0 0 5 * * *";
                     options.CronSchedule = collectorOptions.Schedule;
                     options.CronTimeZone = TimeZoneInfo.Local.Id;
                     options.RunImmediately = false;

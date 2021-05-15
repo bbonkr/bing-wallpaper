@@ -27,17 +27,18 @@ namespace Bing.Wallpaper.Jobs
 
         public BingImageJob(IServiceProvider provider)
         {
-            using (var scope = provider.CreateScope())
-            {
-                databaseContext = scope.ServiceProvider.GetRequiredService<DefaultDatabaseContext>();
-                imageService = scope.ServiceProvider.GetRequiredService<IImageService<BingImage>>();
-                fileService = scope.ServiceProvider.GetRequiredService<ILocalFileService>();
-                var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
+            this.provider = provider;
+            var scope = provider.CreateScope();
 
-                logger = loggerFactory.CreateLogger<BingImageJob>();
-                var collectorOptionAccessor = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CollectorOptions>>();
-                collectorOptions = collectorOptionAccessor.CurrentValue;
-            }
+            databaseContext = scope.ServiceProvider.GetRequiredService<DefaultDatabaseContext>();
+            imageService = scope.ServiceProvider.GetRequiredService<IImageService<BingImage>>();
+            fileService = scope.ServiceProvider.GetRequiredService<ILocalFileService>();
+            var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
+
+            logger = loggerFactory.CreateLogger<BingImageJob>();
+            var collectorOptionAccessor = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CollectorOptions>>();
+            collectorOptions = collectorOptionAccessor.CurrentValue;
+
         }
 
         public string Name { get; } = nameof(BingImageJob);
@@ -117,7 +118,7 @@ namespace Bing.Wallpaper.Jobs
                 {
                     databaseContext.Images.AddRange(result.ToArray());
 
-                    affectedCount = await databaseContext.SaveChangesAsync();
+                    affectedCount = await databaseContext.SaveChangesAsync(cancellationToken);
                 }
 
                 watch.Stop();
@@ -139,6 +140,7 @@ namespace Bing.Wallpaper.Jobs
         private readonly ILocalFileService fileService;
         private readonly ILogger logger;
         private readonly CollectorOptions collectorOptions;
+        private readonly IServiceProvider provider;
 
     }
 }
