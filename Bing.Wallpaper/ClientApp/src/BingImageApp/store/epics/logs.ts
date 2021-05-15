@@ -2,48 +2,48 @@ import { combineEpics, Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { from, of } from 'rxjs';
 import { filter, map, switchMap, catchError } from 'rxjs/operators';
-import imagesActions, { ImagesActionTypes } from '../actions/images';
+import logsActions, { LogsActionTypes } from '../actions/logs';
 import { RootState } from '../reducers';
 import { ApiResponseModel } from '../../models';
 import { Services } from '../../services';
 
-export const loadImagesEpic: Epic<
-    ImagesActionTypes,
-    ImagesActionTypes,
+export const loadLogsEpic: Epic<
+    LogsActionTypes,
+    LogsActionTypes,
     RootState,
     Services
 > = (action$, state$, api) =>
     action$.pipe(
-        filter(isActionOf(imagesActions.loadImages.request)),
+        filter(isActionOf([logsActions.loadLogs.request])),
         switchMap((action) =>
-            from(api.images.getImages(action.payload)).pipe(
-                map(imagesActions.loadImages.success),
+            from(api.logs.getLogs(action.payload)).pipe(
+                map(logsActions.loadLogs.success),
                 catchError((error: ApiResponseModel) =>
-                    of(imagesActions.loadImages.failure(error)),
+                    of(logsActions.loadLogs.failure(error)),
                 ),
             ),
         ),
     );
 
-export const appendImagesEpic: Epic<
-    ImagesActionTypes,
-    ImagesActionTypes,
+export const appendLogsEpic: Epic<
+    LogsActionTypes,
+    LogsActionTypes,
     RootState,
     Services
 > = (action$, state$, api) =>
     action$.pipe(
-        filter(isActionOf(imagesActions.appendImages.request)),
+        filter(isActionOf([logsActions.appendLogs.request])),
         switchMap((action) =>
-            from(api.images.getImages(action.payload)).pipe(
-                map(imagesActions.appendImages.success),
+            from(api.logs.getLogs(action.payload)).pipe(
+                map(logsActions.appendLogs.success),
                 catchError((error: ApiResponseModel) =>
-                    of(imagesActions.appendImages.failure(error)),
+                    of(logsActions.appendLogs.failure(error)),
                 ),
             ),
         ),
     );
 
-const imagesEpic = combineEpics(loadImagesEpic, appendImagesEpic);
+const imagesEpic = combineEpics(loadLogsEpic, appendLogsEpic);
 
 export default imagesEpic;
 export type ImagesEpic = ReturnType<typeof imagesEpic>;

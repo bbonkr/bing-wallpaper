@@ -8,6 +8,10 @@ using Bing.Wallpaper.Options;
 using Bing.Wallpaper.Repositories;
 using Bing.Wallpaper.Services;
 
+using kr.bbon.AspNetCore;
+using kr.bbon.AspNetCore.Filters;
+using kr.bbon.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -20,6 +24,7 @@ namespace Bing.Wallpaper.Controllers
     [ApiController]
     [Area("api")]
     [Route("[area]/v{version:apiVersion}/[controller]")]
+    [ApiExceptionHandlerFilter]
     public class FilesController : ApiControllerBase
     {
         private const string THUMBNAIL_PATH = "thumbnails";
@@ -49,14 +54,14 @@ namespace Bing.Wallpaper.Controllers
 
                 if (record == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
+                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
                 }
 
                 var fileInfo = new FileInfo(record.FilePath);
 
                 if (!fileInfo.Exists)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
+                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
                 }
 
                 if (type?.ToLower() == "thumbnail")
@@ -97,7 +102,9 @@ namespace Bing.Wallpaper.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(HttpStatusCode.InternalServerError, ex.Message);
+                logger.LogError(ex, ex.Message);
+
+                throw new HttpStatusException<object>(HttpStatusCode.NotFound, ex.Message, default);
             }
         }
 
@@ -108,19 +115,16 @@ namespace Bing.Wallpaper.Controllers
             {
                 var files = Directory.GetFiles(appOptions.DestinationPath, $"{fileName}*");
 
-
                 if (files.Length == 0)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
+                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
                 }
 
                 var fileInfo = new FileInfo(files.FirstOrDefault());
                 if (!fileInfo.Exists)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
-                }
-
-                
+                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
+                }                
 
                 if (type?.ToLower() == "thumbnail")
                 {
@@ -168,7 +172,9 @@ namespace Bing.Wallpaper.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(HttpStatusCode.InternalServerError, ex.Message);
+                logger.LogError(ex, ex.Message);
+
+                throw new HttpStatusException<object>(HttpStatusCode.NotFound, ex.Message, default);
             }
         }
 
