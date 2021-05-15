@@ -87,7 +87,13 @@ export const LogsContent = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={COLUMNS_COUNT}>Empty</td>
+                                <td
+                                    className="has-text-centered"
+                                    colSpan={COLUMNS_COUNT}
+                                >
+                                    Did not find anything. Please try another
+                                    keyword.
+                                </td>
                             </tr>
                         )}
                     </tbody>
