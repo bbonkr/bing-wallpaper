@@ -48,6 +48,7 @@ export const LogsContent = () => {
     useEffect(() => {
         if ((logs ?? []).length === 0) {
             loadLogsRequest({ page: page, take: take, keyword: '', level: '' });
+            setPage((_) => 1);
         }
     }, []);
 
