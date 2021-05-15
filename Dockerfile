@@ -12,7 +12,7 @@ COPY . .
 RUN curl -o /usr/local/share/ca-certificates/verisign.crt -SsL https://crt.sh/?d=1039083 && update-ca-certificates
 
 # Build client
-RUN cd Bing.Wallpaper/clientApp && npm install && npm run build
+RUN cd Bing.Wallpaper/ClientApp && npm install && npm run build
 
 # RUN dotnet restore
 # copy everything else and build app
