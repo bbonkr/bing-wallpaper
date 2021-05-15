@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { Empty } from '../Empty';
 import { Header, Footer } from '../Layouts';
 import { NotFound } from '../NotFount';
 import { Container } from '../Layouts';
 import { ImagesContent } from '../ImagesContent';
+import { LogsContent } from '../LogsContent';
 import { FullSizeImage } from '../FullSizeImage';
 import { useStore } from '../../store';
 import { LinkModel } from '../../models';
@@ -22,7 +22,7 @@ const menuRoutes: (LinkModel & { Component: React.ReactNode })[] = [
     {
         href: '/logs',
         title: 'Logs',
-        Component: <Empty title="Logs" content={<p>Logs</p>} />,
+        Component: <LogsContent />,
     },
 ];
 

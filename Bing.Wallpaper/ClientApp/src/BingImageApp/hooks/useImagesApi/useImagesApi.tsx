@@ -12,6 +12,8 @@ export const useImagesApi = () => {
         ...images,
         loadImagesRequest: (payload: LoadImagesRequestModel) =>
             dispatch(imagesActions.loadImages.request(payload)),
+        appendImagesRequest: (payload: LoadImagesRequestModel) =>
+            dispatch(imagesActions.appendImages.request(payload)),
         resetImagesError: () => dispatch(imagesActions.resetLoadImagesError()),
         showFullSizeImage: (payload: ImageItemModel) =>
             dispatch(imagesActions.showFullSizeImage(payload)),

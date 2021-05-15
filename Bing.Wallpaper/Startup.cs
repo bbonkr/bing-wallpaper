@@ -31,12 +31,15 @@ namespace Bing.Wallpaper
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -44,7 +47,8 @@ namespace Bing.Wallpaper
             // Register Configuration
             // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
             //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
-
+            services.AddHttpContextAccessor();
+            
             
             services.AddScoped<IImageService<BingImage>, BingImageService>();
             services.AddScoped<ILocalFileService, LocalFileService>();
@@ -68,16 +72,6 @@ namespace Bing.Wallpaper
                     sqlServerOptions.MigrationsAssembly("Bing.Wallpaper.Data.SqlServer");
                 });
             });
-
-            //services.Configure<CollectorOptions>(options =>
-            //{
-            //    options.DestinationPath = Configuration["App:DestinationPath"];
-
-            //    if (envVars.Contains("ASPNETCORE_DESTINATION_PATH"))
-            //    {
-            //        options.DestinationPath = envVars["ASPNETCORE_DESTINATION_PATH"].ToString();
-            //    }
-            //});
 
             var collectorOptions = new CollectorOptions();
             services.Configure<CollectorOptions>(options =>
@@ -114,15 +108,7 @@ namespace Bing.Wallpaper
 
             services.AddDtoMapper();
 
-            //services.AddControllers();
             services.AddControllersWithViews();
-
-            //services.AddApiVersioning(options =>
-            //{
-            //    options.AssumeDefaultVersionWhenUnspecified = true;
-            //    options.DefaultApiVersion = new ApiVersion(1, 0);
-            //    options.ApiVersionReader = new HeaderApiVersionReader("api-version");
-            //});
 
             var defaultVersion = new ApiVersion(1, 0);
             
@@ -134,7 +120,6 @@ namespace Bing.Wallpaper
             IApplicationBuilder app, 
             IWebHostEnvironment env)
         {
-            //GlobalDiagnosticsContext.Set("connectionString", Configuration.GetConnectionString("Default"));
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
@@ -144,8 +129,6 @@ namespace Bing.Wallpaper
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bing Image Collector v1.0"));
                 app.UseSwaggerUIWithApiVersioning();
 
                 using (var scope = app.ApplicationServices.CreateScope())

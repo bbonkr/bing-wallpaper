@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LinkModel } from '../../models';
 import { GenericLink } from '../GenericLink';
 import { AppOptions } from '../../constants';
+import { FaGithub } from 'react-icons/fa';
 interface HeaderProps {
     menuRoutes: LinkModel[];
 }
@@ -104,9 +105,9 @@ export const Header = ({ menuRoutes }: HeaderProps) => {
                         classNames={['navbar-item']}
                         onClick={handleClickMenu}
                     >
-                        <img src="/bbon-icon-48.png" width="auto" height="28" />
+                        <img src="/bbon-icon-48.png" width="auto" height="28" />{' '}
+                        <span className="ml-3">{AppOptions.Title}</span>
                     </GenericLink>
-                    <div className="navbar-item">{AppOptions.Title}</div>
                     <a
                         role="button"
                         className={`navbar-burger ${
@@ -148,7 +149,17 @@ export const Header = ({ menuRoutes }: HeaderProps) => {
 
                     <div className="navbar-end">
                         <div className="navbar-item">
-                            <div className="buttons"></div>
+                            <div className="buttons">
+                                <a
+                                    className="button"
+                                    href="https://github.com/bbonkr/bing-wallpaper"
+                                    target="_blank"
+                                    rel="external"
+                                    title="Navigate to github bing-wallpaper page"
+                                >
+                                    <FaGithub />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

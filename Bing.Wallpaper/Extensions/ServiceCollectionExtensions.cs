@@ -26,7 +26,8 @@ namespace Bing.Wallpaper
                 .IncludeBase<ImageInfo, ImageItemModel>()
                 .ForMember(dest => dest.FilePath, opt => opt.MapFrom(src => src.FilePath));
 
-                options.CreateMap<AppLog, LogModel>();
+                options.CreateMap<AppLog, LogModel>()
+                .ForMember(dest => dest.Logged, opt => opt.MapFrom(src => src.Logged.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")));
             });
 
             return services;
