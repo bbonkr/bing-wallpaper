@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Models;
+using Bing.Wallpaper.Options;
 using Bing.Wallpaper.Services;
 
 using CronScheduler.Extensions.Scheduler;
+
+using kr.bbon.AspNetCore;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,21 +27,26 @@ namespace Bing.Wallpaper.Jobs
 
         public BingImageJob(IServiceProvider provider)
         {
+            using (var scope = provider.CreateScope())
+            {
+                databaseContext = scope.ServiceProvider.GetRequiredService<DefaultDatabaseContext>();
+                imageService = scope.ServiceProvider.GetRequiredService<IImageService<BingImage>>();
+                fileService = scope.ServiceProvider.GetRequiredService<ILocalFileService>();
+                var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
 
-            var scope = provider.CreateScope();
-
-            databaseContext = scope.ServiceProvider.GetRequiredService<DefaultDatabaseContext>();
-            imageService  = scope.ServiceProvider.GetRequiredService<IImageService<BingImage>>();
-            fileService = scope.ServiceProvider.GetRequiredService<ILocalFileService>();
-            var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
-
-            logger = loggerFactory.CreateLogger<BingImageJob>();
+                logger = loggerFactory.CreateLogger<BingImageJob>();
+                var collectorOptionAccessor = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CollectorOptions>>();
+                collectorOptions = collectorOptionAccessor.CurrentValue;
+            }
         }
 
         public string Name { get; } = nameof(BingImageJob);
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            // print options
+            logger.LogInformation($"[{TAG}][{nameof(CollectorOptions)}]: ${collectorOptions.ToJson()}");
+
             var watch = new Stopwatch();
             var now = DateTimeOffset.UtcNow;
             string message = string.Empty;
@@ -93,6 +101,7 @@ namespace Bing.Wallpaper.Jobs
                         FileName = savedFile.FileName,
                         Directory = savedFile.Directory,
                         Hash = image.Hsh,
+                        ContentType = savedFile.ContentType,
                         CreatedAt = now,
                         Metadata = new ImageMetadata
                         {
@@ -129,6 +138,7 @@ namespace Bing.Wallpaper.Jobs
         private readonly IImageService<BingImage> imageService;
         private readonly ILocalFileService fileService;
         private readonly ILogger logger;
-            
+        private readonly CollectorOptions collectorOptions;
+
     }
 }
