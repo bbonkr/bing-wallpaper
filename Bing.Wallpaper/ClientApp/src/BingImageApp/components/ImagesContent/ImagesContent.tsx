@@ -24,12 +24,14 @@ export const ImagesContent = () => {
     };
 
     const handleClickRefresh = () => {
-        loadImagesRequest({ page: page, take: take });
+        loadImagesRequest({ page: 1, take: take });
+        setPage((_) => 1);
     };
 
     useEffect(() => {
         if ((images ?? []).length === 0) {
             loadImagesRequest({ page: page, take: take });
+            setPage((_) => 1);
         }
     }, []);
 
