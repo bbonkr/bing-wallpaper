@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ImagesList } from './ImagesList';
 import { useImagesApi } from '../../hooks/useImagesApi';
-import { Content } from '../Layouts';
+import { Content, Section } from '../Layouts';
+import { FaSync } from 'react-icons/fa';
 
 export const ImagesContent = () => {
     const [page, setPage] = useState(1);
@@ -10,15 +11,20 @@ export const ImagesContent = () => {
     const {
         images,
         isLoadingImages,
-        hasMoreImages: hadMoreImages,
+        hasMoreImages,
         loadImagesRequest,
+        appendImagesRequest,
     } = useImagesApi();
 
     const handleClickLoadMore = () => {
-        if (hadMoreImages) {
-            loadImagesRequest({ page: page + 1, take: take });
+        if (hasMoreImages) {
+            appendImagesRequest({ page: page + 1, take: take });
             setPage((state) => state + 1);
         }
+    };
+
+    const handleClickRefresh = () => {
+        loadImagesRequest({ page: page, take: take });
     };
 
     useEffect(() => {
@@ -28,19 +34,45 @@ export const ImagesContent = () => {
     }, []);
 
     return (
-        <Content classNames={['p-6']}>
-            <ImagesList images={images ?? []} />
-            {hadMoreImages && (
-                <div className="is-flex is-flex-direction-column is-justify-content-center">
-                    <button
-                        className="button"
-                        disabled={isLoadingImages}
-                        onClick={handleClickLoadMore}
-                    >
-                        {isLoadingImages ? 'Loading ...' : 'Load more images'}
-                    </button>
-                </div>
-            )}
+        <Content classNames={[]}>
+            <Section
+                title={
+                    <p>
+                        Bing Today Images{' '}
+                        <button
+                            className={`button ${
+                                isLoadingImages ? 'is-loading' : ''
+                            }`}
+                            disabled={isLoadingImages}
+                            onClick={handleClickRefresh}
+                            title="Reload images"
+                        >
+                            <FaSync />
+                        </button>
+                    </p>
+                }
+                useHero
+                heroColor="is-primary"
+                heroSize="is-small"
+            />
+
+            <Section classNames={['p-6']}>
+                <ImagesList images={images ?? []} />
+                {hasMoreImages && (
+                    <div className="is-flex is-flex-direction-column is-justify-content-center">
+                        <button
+                            className={`button ${
+                                isLoadingImages ? 'is-loading' : ''
+                            }`}
+                            disabled={isLoadingImages}
+                            onClick={handleClickLoadMore}
+                            title="Load more images"
+                        >
+                            Load more
+                        </button>
+                    </div>
+                )}
+            </Section>
         </Content>
     );
 };

@@ -12,6 +12,12 @@ export const loadImages = createAsyncAction(
     'load-images/failure',
 )<LoadImagesRequestModel, ImagesApiResponseModel, ApiResponseModel>();
 
+export const appendImages = createAsyncAction(
+    'append-images/request',
+    'append-images/success',
+    'append-images/failure',
+)<LoadImagesRequestModel, ImagesApiResponseModel, ApiResponseModel>();
+
 export const resetLoadImagesError = createAction('load-images/reset-error')();
 
 export const showFullSizeImage = createAction(
@@ -22,6 +28,7 @@ export const hideFullSizeImage = createAction('load-image/hide-full-size')();
 
 const imagesActions = {
     loadImages,
+    appendImages,
     resetLoadImagesError,
     showFullSizeImage,
     hideFullSizeImage,
@@ -29,6 +36,7 @@ const imagesActions = {
 
 export type ImagesActionTypes =
     | ActionType<typeof loadImages>
+    | ActionType<typeof appendImages>
     | ActionType<typeof resetLoadImagesError>
     | ActionType<typeof showFullSizeImage>
     | ActionType<typeof hideFullSizeImage>;
