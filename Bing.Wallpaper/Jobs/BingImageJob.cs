@@ -118,7 +118,7 @@ namespace Bing.Wallpaper.Jobs
             catch (Exception ex)
             {
                 watch.Stop();
-                logger.LogInformation($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Incompleted ({ex.Message})");
+                logger.LogWarning($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Incompleted ({ex.Message})");
             }
             finally
             {

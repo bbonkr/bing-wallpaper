@@ -20,7 +20,7 @@ namespace Bing.Wallpaper.Models
         /// <summary>
         /// 작성시각
         /// </summary>
-        public DateTimeOffset Logged { get; set; }
+        public string Logged { get; set; }
 
         /// <summary>
         /// 로그 레벨

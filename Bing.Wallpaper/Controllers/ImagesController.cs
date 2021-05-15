@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 using Bing.Wallpaper.Repositories;
 
+using kr.bbon.AspNetCore.Filters;
+using kr.bbon.AspNetCore.Mvc;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,6 +17,7 @@ namespace Bing.Wallpaper.Controllers
     [ApiController]
     [Area("api")]
     [Route("[area]/v{version:apiVersion}/[controller]")]
+    [ApiExceptionHandlerFilter]
     public class ImagesController : ApiControllerBase
     {
         public ImagesController(IImageRepository repository, ILoggerFactory loggerFactory)
@@ -25,29 +29,20 @@ namespace Bing.Wallpaper.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync(int page = 1, int take = 10)
         {
-            try
+            var records = await repository.GetAllAsync(page, take);
+
+            records = records.Select(x =>
             {
-                var records = await repository.GetAllAsync(page, take);
+                var item = x;
 
-                logger.LogInformation($"{nameof(ImagesController)}.{nameof(GetAllAsync)} posts.count={records.Count():n0}");
+                var tokens = x.FileName.Split(".");
+                item.FileName = string.Join(".", tokens.Take(tokens.Length - 1));
+                item.FileExtension = $".{tokens.Last()}";
 
-                records = records.Select(x =>
-                {
-                    var item = x;
+                return item;
+            });
 
-                    var tokens = x.FileName.Split(".");
-                    item.FileName = string.Join(".", tokens.Take(tokens.Length - 1));
-                    item.FileExtension = $".{tokens.Last()}";
-
-                    return item;
-                });
-
-                return StatusCode((int)HttpStatusCode.OK, records);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError, ex.Message);
-            }
+            return StatusCode((int)HttpStatusCode.OK, records);
         }
 
         private readonly IImageRepository repository;

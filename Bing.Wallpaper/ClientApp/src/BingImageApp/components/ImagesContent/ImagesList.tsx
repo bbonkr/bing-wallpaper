@@ -8,7 +8,7 @@ interface ImagesListProps {
 
 export const ImagesList = ({ images }: ImagesListProps) => {
     return (
-        <div className="columns is-multiline">
+        <div className="columns is-multiline is-justify-content-center is-align-items-center">
             {images.map((image) => (
                 <ImageCard key={image.id} image={image} />
             ))}
