@@ -13,16 +13,12 @@ namespace Bing.Wallpaper
 {
     public class Program
     {
-        public static async void Main(string[] args)
+        public static void Main(string[] args)
         {
             
             try
             {
-                var host = CreateHostBuilder(args).Build();
-                
-                await host.RunStartupJobsAync();
-
-                host.Run();
+                CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
