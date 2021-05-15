@@ -49,6 +49,10 @@ namespace Bing.Wallpaper.Services
 
                     result.ContentType = contentType;
                 }
+                else
+                {
+                    result.ContentType = "application/octet-stream";
+                }
 
                 var fileName = image.GetFileName();
 
