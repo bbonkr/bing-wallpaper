@@ -85,6 +85,7 @@ namespace Bing.Wallpaper.Controllers
                         FilePath = savedFile.FilePath,
                         FileName = savedFile.FileName,
                         Directory = savedFile.Directory,
+                        FileSize = savedFile.Size,
                         Hash = image.Hsh,
                         CreatedAt = now,
                         Metadata = new ImageMetadata
