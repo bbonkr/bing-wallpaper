@@ -3,7 +3,7 @@ WORKDIR /app
 
 # install node.js
 RUN curl -sL https://deb.nodesource.com/setup_14.x |  bash -
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs && npm install -g npm
 
 # copy csproj and restore as distinct layers
 COPY . .
