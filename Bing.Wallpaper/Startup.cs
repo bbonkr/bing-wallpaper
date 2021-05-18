@@ -26,6 +26,7 @@ using NLog.Web;
 
 using kr.bbon.AspNetCore;
 using Microsoft.Extensions.Options;
+using System.IO;
 
 namespace Bing.Wallpaper
 {
@@ -48,15 +49,11 @@ namespace Bing.Wallpaper
             // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
             //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
             services.AddHttpContextAccessor();
-            
-            
-            services.AddScoped<IImageService<BingImage>, BingImageService>();
-            services.AddScoped<ILocalFileService, LocalFileService>();
-            
+
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IAppLogRepository, AppLogRepository>();
-            services.AddTransient<IImageFileService, ImageFileService>();
             
+            services.AddApplicationServices(Configuration);
 
             var envVars = Environment.GetEnvironmentVariables();
 
@@ -78,6 +75,17 @@ namespace Bing.Wallpaper
             services.Configure<CollectorOptions>(options =>
             {
                 Configuration.GetSection(CollectorOptions.Name).Bind(options);
+
+                if (string.IsNullOrWhiteSpace(options.ThumbnailPath))
+                {
+                    options.ThumbnailPath = Path.Join(WebHostEnvironment.ContentRootPath, "thumbnails");
+
+                    if (!Directory.Exists(options.ThumbnailPath))
+                    {
+                        Directory.CreateDirectory(options.ThumbnailPath);
+                    }
+                }
+               
 
                 collectorOptions = options;
             });

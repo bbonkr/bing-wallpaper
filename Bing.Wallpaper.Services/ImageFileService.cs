@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Drawing;
 using ImageMagick;
 using System.IO;
+using Microsoft.Extensions.Options;
+using Bing.Wallpaper.Options;
 
 namespace Bing.Wallpaper.Services
 {
@@ -13,13 +15,23 @@ namespace Bing.Wallpaper.Services
     {
         Task<string> GenerateThumbnailAsync(string imageFilePath, string thumbnailDirectory);
 
+        Task<string> GenerateThumbnailAsync(string imageFilePath);
+
         string GetThumbnailFilePath(string imageFilePath, string thumbnailDirectory);
+        string GetThumbnailFilePath(string imageFilePath);
 
         bool HasThumbnail(string imageFilePath, string thumbnailDirectory);
+
+        bool HasThumbnail(string imageFilePath);
     }
 
     public class ImageFileService: IImageFileService
     {
+        public ImageFileService(IOptionsMonitor<CollectorOptions> collectorOptionsMonitor)
+        {
+            collectorOptions = collectorOptionsMonitor.CurrentValue ?? throw new ArgumentException("Collector options are invaild.");
+        }
+
         public Task<string> GenerateThumbnailAsync(string imageFilePath, string thumbnailDirectory)
         {
             PreprocessThumbnailDirectory(thumbnailDirectory);
@@ -41,12 +53,21 @@ namespace Bing.Wallpaper.Services
             return Task.FromResult(thumbnailFilePath);
         }
 
-   
+        public async Task<string> GenerateThumbnailAsync(string imageFilePath)
+        {
+            return await GenerateThumbnailAsync(imageFilePath, collectorOptions.ThumbnailPath);
+        }
+
         public bool HasThumbnail(string imageFilePath, string thumbnailDirectory)
         {
             var thumbnailFilePath = GetThumbnailFilePath(imageFilePath, thumbnailDirectory);
 
             return File.Exists(thumbnailFilePath);
+        }
+
+        public bool HasThumbnail(string imageFilePath)
+        {
+            return HasThumbnail(imageFilePath, collectorOptions.ThumbnailPath);
         }
 
         public string GetThumbnailFilePath(string imageFilePath, string thumbnailDirectory)
@@ -58,6 +79,11 @@ namespace Bing.Wallpaper.Services
             var thumbnailFilePath = Path.Combine(thumbnailDirectory, $"{name}{extension}");
 
             return thumbnailFilePath;
+        }
+
+        public string GetThumbnailFilePath(string imageFilePath)
+        {
+            return GetThumbnailFilePath(imageFilePath, collectorOptions.ThumbnailPath);
         }
 
         private (string Name, string Extension) GetFileNamePart(string imageFilePath)
@@ -96,9 +122,7 @@ namespace Bing.Wallpaper.Services
             }
         }
 
-        private bool ThumbnailCallback()
-        {
-            return false;
-        }
+
+        private readonly CollectorOptions collectorOptions;
     }
 }

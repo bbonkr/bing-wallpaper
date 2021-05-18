@@ -103,6 +103,7 @@ namespace Bing.Wallpaper.Jobs
                         Directory = savedFile.Directory,
                         Hash = image.Hsh,
                         ContentType = savedFile.ContentType,
+                        FileSize = savedFile.Size,
                         CreatedAt = now,
                         Metadata = new ImageMetadata
                         {

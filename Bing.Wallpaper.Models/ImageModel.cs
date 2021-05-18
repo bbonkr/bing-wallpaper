@@ -12,8 +12,27 @@ namespace Bing.Wallpaper.Models
 
         public abstract string GetBaseUrl();
 
-        public abstract string GetFileName();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="suffix"></param>
+        /// <returns></returns>
+        public abstract ImageFileInfo GetFileName(string suffix);
+
+        /// <summary>
+        /// Get remained URL that excludes the base URL.
+        /// </summary>
+        /// <param name="suffix">file name suffix</param>
+        /// <returns></returns>
+        //public abstract string GetUrlBase(string suffix);
 
         public abstract string GetSourceTitle();
+    }
+
+    public class ImageFileInfo
+    {
+        public string BaseUrl { get; set; }
+
+        public string FileName { get; set; }
     }
 }

@@ -27,21 +27,17 @@ namespace Bing.Wallpaper.Controllers
     [ApiExceptionHandlerFilter]
     public class FilesController : ApiControllerBase
     {
-        private const string THUMBNAIL_PATH = "thumbnails";
-
         public FilesController(
             IImageRepository repository,
             ILocalFileService fileService,
             IOptionsMonitor<CollectorOptions> appOptionsAccessor,
             IImageFileService imageFileService,
-            IWebHostEnvironment webHostEnvironment,
             ILoggerFactory loggerFactory)
         {
             this.repository = repository;
             this.fileService = fileService;
             this.appOptions = appOptionsAccessor.CurrentValue;
             this.imageFileService = imageFileService;
-            this.webHostEnvironment = webHostEnvironment;
             this.logger = loggerFactory.CreateLogger<ImagesController>();
         }
 
@@ -68,16 +64,16 @@ namespace Bing.Wallpaper.Controllers
                 {
                     try
                     {
-                        var thumbnailPath = GetThumbnailPath();
+                        var thumbnailPath = appOptions.ThumbnailPath;
                         string thumbnailFilePath;
-                        if (!imageFileService.HasThumbnail(fileInfo.FullName, thumbnailPath))
+                        if (!imageFileService.HasThumbnail(fileInfo.FullName))
                         {
-                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName, thumbnailPath);
+                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
                             fileInfo = new FileInfo(thumbnailFilePath);
                         }
                         else
                         {
-                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName, thumbnailPath);
+                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
                         }
 
                         fileInfo = new FileInfo(thumbnailFilePath);
@@ -130,16 +126,15 @@ namespace Bing.Wallpaper.Controllers
                 {
                     try
                     {
-                        var thumbnailPath = GetThumbnailPath();
                         string thumbnailFilePath;
-                        if (!imageFileService.HasThumbnail(fileInfo.FullName, thumbnailPath))
+                        if (!imageFileService.HasThumbnail(fileInfo.FullName))
                         {
-                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName, thumbnailPath);
+                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
                             fileInfo = new FileInfo(thumbnailFilePath);
                         }
                         else
                         {
-                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName, thumbnailPath);
+                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
                         }
 
                         fileInfo = new FileInfo(thumbnailFilePath);
@@ -178,27 +173,11 @@ namespace Bing.Wallpaper.Controllers
             }
         }
 
-        private string GetThumbnailPath()
-        {
-            if(string.IsNullOrWhiteSpace(appOptions.ThumbnailPath))
-            {
-                var thumbnailPath = Path.Combine(webHostEnvironment.ContentRootPath, THUMBNAIL_PATH);
-                if (!Directory.Exists(thumbnailPath))
-                {
-                    Directory.CreateDirectory(thumbnailPath);
-                }
-
-                return thumbnailPath;
-            }
-
-            return appOptions.ThumbnailPath;
-        }
 
         private readonly IImageRepository repository;
         private readonly ILocalFileService fileService;
         private readonly IImageFileService imageFileService;
         private readonly CollectorOptions appOptions;
-        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
     }
 }
