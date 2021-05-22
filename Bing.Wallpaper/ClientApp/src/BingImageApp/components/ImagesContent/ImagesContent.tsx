@@ -39,7 +39,7 @@ export const ImagesContent = () => {
         <Content classNames={[]}>
             <Section
                 title={
-                    <p>
+                    <React.Fragment>
                         Bing Today Images{' '}
                         <button
                             className={`button ${
@@ -51,7 +51,7 @@ export const ImagesContent = () => {
                         >
                             <FaSync />
                         </button>
-                    </p>
+                    </React.Fragment>
                 }
                 useHero
                 heroColor="is-primary"
