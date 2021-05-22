@@ -2,14 +2,14 @@ import { combineEpics, Epic } from 'redux-observable';
 import { isActionOf } from 'typesafe-actions';
 import { from, of } from 'rxjs';
 import { filter, map, switchMap, catchError } from 'rxjs/operators';
-import imagesActions, { ImagesActionTypes } from '../actions/images';
+import { imagesActions, ImagesActions } from '../actions/images';
 import { RootState } from '../reducers';
 import { ApiResponseModel } from '../../models';
 import { Services } from '../../services';
 
 export const loadImagesEpic: Epic<
-    ImagesActionTypes,
-    ImagesActionTypes,
+    ImagesActions,
+    ImagesActions,
     RootState,
     Services
 > = (action$, state$, api) =>
@@ -26,8 +26,8 @@ export const loadImagesEpic: Epic<
     );
 
 export const appendImagesEpic: Epic<
-    ImagesActionTypes,
-    ImagesActionTypes,
+    ImagesActions,
+    ImagesActions,
     RootState,
     Services
 > = (action$, state$, api) =>

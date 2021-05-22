@@ -26,7 +26,7 @@ export const showFullSizeImage = createAction(
 
 export const hideFullSizeImage = createAction('load-image/hide-full-size')();
 
-const imagesActions = {
+export const imagesActions = {
     loadImages,
     appendImages,
     resetLoadImagesError,
@@ -34,11 +34,4 @@ const imagesActions = {
     hideFullSizeImage,
 };
 
-export type ImagesActionTypes =
-    | ActionType<typeof loadImages>
-    | ActionType<typeof appendImages>
-    | ActionType<typeof resetLoadImagesError>
-    | ActionType<typeof showFullSizeImage>
-    | ActionType<typeof hideFullSizeImage>;
-
-export default imagesActions;
+export type ImagesActions = ActionType<typeof imagesActions>;

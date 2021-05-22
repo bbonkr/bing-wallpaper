@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { ImagesState } from '../../store/reducers/images';
-import imagesActions from '../../store/actions/images';
+import { imagesActions } from '../../store/actions/images';
 import { ImageItemModel, LoadImagesRequestModel } from '../../models';
 
 export const useImagesApi = () => {

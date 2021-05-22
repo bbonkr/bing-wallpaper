@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { LogsState } from '../../store/reducers/logs';
-import logsActions from '../../store/actions/logs';
+import { logsActions } from '../../store/actions/logs';
 import { LoadLogsRequestModel } from '../../models';
 
 export const useLogsApi = () => {

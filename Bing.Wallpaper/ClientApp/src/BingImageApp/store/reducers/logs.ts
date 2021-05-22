@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 import { ApiResponseModel, LogModel } from '../../models';
-import logsActions, { LogsActionTypes } from '../actions/logs';
+import { logsActions, LogsActions } from '../actions/logs';
 
-export const isLoadingLogs = createReducer<boolean, LogsActionTypes>(false)
+export const isLoadingLogs = createReducer<boolean, LogsActions>(false)
     .handleAction(
         [logsActions.loadLogs.request, logsActions.appendLogs.request],
         (state, action) => true,
@@ -20,7 +20,7 @@ export const isLoadingLogs = createReducer<boolean, LogsActionTypes>(false)
 
 export const loadLogsError = createReducer<
     ApiResponseModel | null,
-    LogsActionTypes
+    LogsActions
 >(null)
     .handleAction(
         [
@@ -37,7 +37,7 @@ export const loadLogsError = createReducer<
         (state, action) => action.payload,
     );
 
-export const logs = createReducer<LogModel[] | undefined, LogsActionTypes>([])
+export const logs = createReducer<LogModel[] | undefined, LogsActions>([])
     .handleAction([logsActions.loadLogs.success], (state, action) => {
         return [...(action.payload.data ?? [])];
     })
@@ -45,7 +45,7 @@ export const logs = createReducer<LogModel[] | undefined, LogsActionTypes>([])
         return [...(state ?? []).concat(action.payload.data ?? [])];
     });
 
-export const hasMoreLogs = createReducer<boolean, LogsActionTypes>(true)
+export const hasMoreLogs = createReducer<boolean, LogsActions>(true)
     .handleAction(
         [logsActions.loadLogs.success, logsActions.appendLogs.success],
         (state, action) => (action.payload.data ?? []).length > 0,

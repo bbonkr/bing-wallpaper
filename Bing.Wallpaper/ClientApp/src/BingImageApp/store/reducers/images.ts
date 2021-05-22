@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 import { ApiResponseModel, ImageItemModel } from '../../models';
-import imagesActions, { ImagesActionTypes } from '../actions/images';
+import { imagesActions, ImagesActions } from '../actions/images';
 
-export const isLoadingImages = createReducer<boolean, ImagesActionTypes>(false)
+export const isLoadingImages = createReducer<boolean, ImagesActions>(false)
     .handleAction(
         [imagesActions.loadImages.request, imagesActions.appendImages.request],
         (state, action) => true,
@@ -20,7 +20,7 @@ export const isLoadingImages = createReducer<boolean, ImagesActionTypes>(false)
 
 export const loadImagesError = createReducer<
     ApiResponseModel | null,
-    ImagesActionTypes
+    ImagesActions
 >(null)
     .handleAction(
         [
@@ -39,7 +39,7 @@ export const loadImagesError = createReducer<
 
 export const images = createReducer<
     ImageItemModel[] | undefined,
-    ImagesActionTypes
+    ImagesActions
 >([])
     .handleAction([imagesActions.loadImages.success], (state, action) => {
         return [...(action.payload.data ?? [])];
@@ -48,7 +48,7 @@ export const images = createReducer<
         return [...(state ?? []).concat(...(action.payload.data ?? []))];
     });
 
-export const hasMoreImages = createReducer<boolean, ImagesActionTypes>(true)
+export const hasMoreImages = createReducer<boolean, ImagesActions>(true)
     .handleAction(
         [imagesActions.loadImages.success, imagesActions.appendImages.success],
         (state, action) => (action.payload.data ?? []).length > 0,
@@ -65,7 +65,7 @@ export const hasMoreImages = createReducer<boolean, ImagesActionTypes>(true)
 
 export const fullSizeImage = createReducer<
     ImageItemModel | null,
-    ImagesActionTypes
+    ImagesActions
 >(null)
     .handleAction(
         [imagesActions.showFullSizeImage],
