@@ -1,21 +1,22 @@
-import axios from 'axios';
 import { LogsApiResponseModel, LoadLogsRequestModel } from '../../../models';
+import { ApiClientBase } from '../ApiClientBase';
 
-export class LogsApiClient {
+export class LogsApiClient extends ApiClientBase {
     public async getLogs(
         options: LoadLogsRequestModel,
     ): Promise<LogsApiResponseModel> {
-        const url = `/api/v1.0/logs?page=${options.page}&take=${
+        const url = `${this.getBaseUrl()}?page=${options.page}&take=${
             options.take
         }&level=${options.level}&keyword=${encodeURIComponent(
             options.keyword ?? '',
         )}`;
 
-        const response = await axios.get<LogsApiResponseModel>(url);
-        if (response.status === 200) {
-            return response.data;
-        } else {
-            throw response;
-        }
+        const response = await this.getClient().get<LogsApiResponseModel>(url);
+
+        return this.returnsResponseModelIfSucceed(response);
+    }
+
+    protected getBaseUrl(): string {
+        return `${super.getBaseUrl()}/logs`;
     }
 }
