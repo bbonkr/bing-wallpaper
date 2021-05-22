@@ -29,14 +29,14 @@ export const GenericLink = ({
     return record.href.startsWith('/') ? (
         <Link
             to={record.href}
-            className={UiHelper.GetClassNames(...(classNames ?? []))}
+            className={UiHelper.getClassNames(...(classNames ?? []))}
             onClick={handleClick}
         >
             {children ?? record.title}
         </Link>
     ) : (
         <a
-            className={`${UiHelper.GetClassNames(...(classNames ?? []))}`}
+            className={`${UiHelper.getClassNames(...(classNames ?? []))}`}
             href={record.href}
             target={record.target || '_blank'}
             onClick={handleClick}

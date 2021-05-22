@@ -18,7 +18,7 @@ export const Content = ({
         <div
             className={`content ${size ?? ''} ${
                 orderedListalternative ?? ''
-            } ${UiHelper.GetClassNames(...(classNames ?? []))}`}
+            } ${UiHelper.getClassNames(...(classNames ?? []))}`}
         >
             {children}
         </div>
