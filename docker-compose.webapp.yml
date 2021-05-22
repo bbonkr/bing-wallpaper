@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   bing_wallpaper:
-    build: 
+    build:
       context: .
       dockerfile: ./Dockerfile # 빌드 파일
     image: bbonkr/bing_wallpaper:latest # 도커 이미지 명칭
@@ -13,15 +13,14 @@ services:
     environment:
       - TZ=Asia/Seoul
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__Default=<database connection string here>
       - App__DestinationPath=/app/images
+      - ConnectionStrings__Default=<database connection string here>
+      - Collector__Schedule=0 0 1 * * *
     volumes:
       - "${DESTINATION_PATH}:/app/images"
-      #- "${PWD}/.config/appsettings.json:/app/appsettings.json"
     network_mode: bridge
     # networks:
-    #   - app-network    
-
+    #   - app-network
 # networks:
 #   app-network:
 #     external:
