@@ -12,6 +12,8 @@ using kr.bbon.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using kr.bbon.AspNetCore.Models;
+using kr.bbon.EntityFrameworkCore.Extensions;
+using Bing.Wallpaper.Models;
 
 namespace Bing.Wallpaper.Controllers
 {
@@ -29,6 +31,7 @@ namespace Bing.Wallpaper.Controllers
         }
 
         [HttpGet]
+        [Produces(typeof(ApiResponseModel<IPagedModel<LogModel>>))]
         public async Task<IActionResult> GetAllAsync(int page = 1, int take = 10, string level = "", string keyword = "")
         {
             var records = await repository.GetAllAsync(page, take, level, keyword);

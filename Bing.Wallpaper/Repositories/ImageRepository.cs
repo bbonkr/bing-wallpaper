@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
@@ -8,15 +9,17 @@ using AutoMapper;
 using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Models;
 
+using kr.bbon.EntityFrameworkCore.Extensions;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Bing.Wallpaper.Repositories
 {
     public interface IImageRepository
     {
-        Task<IEnumerable<ImageItemModel>> GetAllAsync(int page, int take);
+        Task<IPagedModel<ImageItemModel>> GetAllAsync(int page, int take, CancellationToken cancellationToken = default);
 
-        Task<ImageItemDetailModel> FindByIdAsync(string id);
+        Task<ImageItemDetailModel> FindByIdAsync(string id, CancellationToken cancellationToken = default);
     }
 
     public class ImageRepository : IImageRepository
@@ -27,33 +30,31 @@ namespace Bing.Wallpaper.Repositories
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<ImageItemModel>> GetAllAsync(int page, int take)
+        public async Task<IPagedModel<ImageItemModel>> GetAllAsync(int page, int take, CancellationToken cancellationToken = default)
         {
             var skip = (page - 1) * take;
 
-            var query = dbContext.Images.Where(x => true)
-                .Include(x=>x.Metadata)
+            var items = await dbContext.Images.Where(x => true)
+                .Include(x => x.Metadata)
                 .OrderByDescending(x => x.CreatedAt)
-                .Skip(skip)
-                .Take(take)
                 //.Select(x => new ImageItemModel(x.Id, x.FileName, x.FileSize, x.CreatedAt.Ticks));
-                .Select(x => mapper.Map<ImageItemModel>(x));
-
-            var items = await query.AsNoTracking().ToListAsync();
+                .Select(x => mapper.Map<ImageItemModel>(x))
+                .AsNoTracking()
+                .ToPagedModelAsync(page, take, cancellationToken);
 
             return items;
         }
 
-        public async Task<ImageItemDetailModel> FindByIdAsync(string id)
+        public async Task<ImageItemDetailModel> FindByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var query = dbContext.Images
+            var item = await dbContext.Images
                 .Include(x => x.Metadata)
                 .Where(x => x.Id == id)
-               .Select(x => mapper.Map<ImageItemDetailModel>(x));
+                .AsNoTracking()
+               .Select(x => mapper.Map<ImageItemDetailModel>(x))
+               .FirstOrDefaultAsync(cancellationToken);
 
-            var items = await query.AsNoTracking().FirstOrDefaultAsync();
-
-            return items;
+            return item;
         }
 
         private readonly DefaultDatabaseContext dbContext;

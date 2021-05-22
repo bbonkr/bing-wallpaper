@@ -120,8 +120,8 @@ namespace Bing.Wallpaper
             services.AddControllersWithViews();
 
             var defaultVersion = new ApiVersion(1, 0);
-            
-            services.AddApiVersioningAndSwaggerGen<SwaggerOptions>(defaultVersion);
+
+            services.AddApiVersioningAndSwaggerGen(defaultVersion);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
