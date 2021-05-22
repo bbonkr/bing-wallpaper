@@ -39,16 +39,20 @@ export const loadLogsError = createReducer<
 
 export const logs = createReducer<LogModel[] | undefined, LogsActions>([])
     .handleAction([logsActions.loadLogs.success], (state, action) => {
-        return [...(action.payload.data ?? [])];
+        return [...(action.payload.data?.items ?? [])];
     })
     .handleAction([logsActions.appendLogs.success], (state, action) => {
-        return [...(state ?? []).concat(action.payload.data ?? [])];
+        return [...(state ?? []).concat(action.payload.data?.items ?? [])];
     });
 
 export const hasMoreLogs = createReducer<boolean, LogsActions>(true)
     .handleAction(
         [logsActions.loadLogs.success, logsActions.appendLogs.success],
-        (state, action) => (action.payload.data ?? []).length > 0,
+        (state, action) => {
+            const itemsCount = (action.payload.data?.items ?? []).length;
+            const limit = action.payload.data?.limit ?? 0;
+            return limit === itemsCount;
+        },
     )
     .handleAction(
         [

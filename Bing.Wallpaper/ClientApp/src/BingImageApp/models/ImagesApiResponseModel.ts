@@ -1,7 +1,8 @@
 import { ApiResponseModel } from './ApiResponseModel';
+import { PagedModel } from './PagedModel';
 
 export interface ImagesApiResponseModel
-    extends ApiResponseModel<ImageItemModel[]> {}
+    extends ApiResponseModel<PagedModel<ImageItemModel>> {}
 
 export interface ImageItemModel {
     id: string;

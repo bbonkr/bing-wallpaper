@@ -1,5 +1,5 @@
 import { ApiResponseModel } from './ApiResponseModel';
-
+import { PagedModel } from './PagedModel';
 export interface LogModel {
     id: string;
     machineName: string;
@@ -11,7 +11,8 @@ export interface LogModel {
     exception: string;
 }
 
-export interface LogsApiResponseModel extends ApiResponseModel<LogModel[]> {}
+export interface LogsApiResponseModel
+    extends ApiResponseModel<PagedModel<LogModel>> {}
 
 export interface LoadLogsRequestModel {
     page: number;
