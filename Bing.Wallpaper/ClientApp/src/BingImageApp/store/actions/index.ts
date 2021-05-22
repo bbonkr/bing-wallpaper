@@ -1,10 +1,10 @@
 import { ActionType } from 'typesafe-actions';
-import images from './images';
-import logs from './logs';
+import { imagesActions } from './images';
+import { logsActions } from './logs';
 
 const rootAction = {
-    images,
-    logs,
+    images: imagesActions,
+    logs: logsActions,
 };
 
 export default rootAction;

@@ -42,135 +42,122 @@ namespace Bing.Wallpaper.Controllers
         }
 
         [HttpGet("{id:Guid}")]
+        [Produces(typeof(FileContentResult))]
         public async Task<IActionResult> GetFileByIdAsync(string id, [FromQuery] string type = "")
         {
-            try
+
+            var record = await repository.FindByIdAsync(id);
+
+            if (record == null)
             {
-                var record = await repository.FindByIdAsync(id);
+                throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
+            }
 
-                if (record == null)
+            var fileInfo = new FileInfo(record.FilePath);
+
+            if (!fileInfo.Exists)
+            {
+                throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
+            }
+
+            if (type?.ToLower() == "thumbnail")
+            {
+                try
                 {
-                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
-                }
-
-                var fileInfo = new FileInfo(record.FilePath);
-
-                if (!fileInfo.Exists)
-                {
-                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
-                }
-
-                if (type?.ToLower() == "thumbnail")
-                {
-                    try
+                    var thumbnailPath = appOptions.ThumbnailPath;
+                    string thumbnailFilePath;
+                    if (!imageFileService.HasThumbnail(fileInfo.FullName))
                     {
-                        var thumbnailPath = appOptions.ThumbnailPath;
-                        string thumbnailFilePath;
-                        if (!imageFileService.HasThumbnail(fileInfo.FullName))
-                        {
-                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
-                            fileInfo = new FileInfo(thumbnailFilePath);
-                        }
-                        else
-                        {
-                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
-                        }
-
+                        thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
                         fileInfo = new FileInfo(thumbnailFilePath);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        logger.LogError(ex, ex.Message);
-                        fileInfo = new FileInfo(record.FilePath);
+                        thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
                     }
+
+                    fileInfo = new FileInfo(thumbnailFilePath);
                 }
-
-                var buffer = await fileService.ReadAsync(fileInfo.FullName);
-
-                if (buffer == null)
+                catch (Exception ex)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
+                    logger.LogError(ex, ex.Message);
+                    fileInfo = new FileInfo(record.FilePath);
                 }
-
-                logger.LogInformation($"Download: {record.FileName}{record.FileExtension}");
-
-                return File(buffer, record.ContentType, $"{record.FileName}{record.FileExtension}");
             }
-            catch (Exception ex)
+
+            var buffer = await fileService.ReadAsync(fileInfo.FullName);
+
+            if (buffer == null)
             {
-                logger.LogError(ex, ex.Message);
-
-                throw new HttpStatusException<object>(HttpStatusCode.NotFound, ex.Message, default);
+                return StatusCode((int)HttpStatusCode.NotFound);
             }
+
+            logger.LogInformation($"Download: {record.FileName}{record.FileExtension}");
+
+            return File(buffer, record.ContentType, $"{record.FileName}{record.FileExtension}");
         }
 
         [HttpGet("{fileName}")]
+        [Produces(typeof(FileContentResult))]
         public async Task<IActionResult> GetFileByFileNameAsync(string fileName, [FromQuery] string type = "")
         {
-            try
+
+            var files = Directory.GetFiles(appOptions.DestinationPath, $"{fileName}*");
+
+            if (files.Length == 0)
             {
-                var files = Directory.GetFiles(appOptions.DestinationPath, $"{fileName}*");
+                throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
+            }
 
-                if (files.Length == 0)
-                {
-                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
-                }
+            var fileInfo = new FileInfo(files.FirstOrDefault());
+            if (!fileInfo.Exists)
+            {
+                throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
+            }
 
-                var fileInfo = new FileInfo(files.FirstOrDefault());
-                if (!fileInfo.Exists)
+            if (type?.ToLower() == "thumbnail")
+            {
+                try
                 {
-                    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
-                }                
-
-                if (type?.ToLower() == "thumbnail")
-                {
-                    try
+                    string thumbnailFilePath;
+                    if (!imageFileService.HasThumbnail(fileInfo.FullName))
                     {
-                        string thumbnailFilePath;
-                        if (!imageFileService.HasThumbnail(fileInfo.FullName))
-                        {
-                            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
-                            fileInfo = new FileInfo(thumbnailFilePath);
-                        }
-                        else
-                        {
-                            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
-                        }
-
+                        thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
                         fileInfo = new FileInfo(thumbnailFilePath);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        logger.LogError(ex, ex.Message);
-                        fileInfo = new FileInfo(files.FirstOrDefault());
+                        thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
                     }
+
+                    fileInfo = new FileInfo(thumbnailFilePath);
                 }
-
-
-               var buffer = await fileService.ReadAsync(fileInfo.FullName);
-
-                if (buffer == null)
+                catch (Exception ex)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound);
+                    logger.LogError(ex, ex.Message);
+                    fileInfo = new FileInfo(files.FirstOrDefault());
                 }
-
-                logger.LogInformation($"Download: {fileInfo.Name}");
-
-                var contentTypeProvider = new FileExtensionContentTypeProvider();
-                var contentType = "application/octet-stream";
-                if (!contentTypeProvider.TryGetContentType(fileInfo.Name, out contentType))
-                {
-                    contentType = "application/octet-stream";
-                }
-
-                return File(buffer, contentType, fileInfo.Name);
             }
-            catch (Exception ex)
+
+
+            var buffer = await fileService.ReadAsync(fileInfo.FullName);
+
+            if (buffer == null)
             {
-                logger.LogError(ex, ex.Message);
-
-                throw new HttpStatusException<object>(HttpStatusCode.NotFound, ex.Message, default);
+                return StatusCode((int)HttpStatusCode.NotFound);
             }
+
+            logger.LogInformation($"Download: {fileInfo.Name}");
+
+            var contentTypeProvider = new FileExtensionContentTypeProvider();
+            var contentType = "application/octet-stream";
+            if (!contentTypeProvider.TryGetContentType(fileInfo.Name, out contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return File(buffer, contentType, fileInfo.Name);
+
         }
 
 

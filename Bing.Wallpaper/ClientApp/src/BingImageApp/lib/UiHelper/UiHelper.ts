@@ -1,5 +1,5 @@
 export class UiHelper {
-    public static GetClassNames(...className: string[]): string {
+    public static getClassNames(...className: string[]): string {
         return className.join(' ');
     }
 }

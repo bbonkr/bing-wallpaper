@@ -19,15 +19,10 @@ export const appendLogs = createAsyncAction(
 
 export const resetLoadLogsError = createAction('load-logs/reset-error')();
 
-const logsActions = {
+export const logsActions = {
     loadLogs,
     appendLogs,
     resetLoadLogsError,
 };
 
-export type LogsActionTypes =
-    | ActionType<typeof loadLogs>
-    | ActionType<typeof appendLogs>
-    | ActionType<typeof resetLoadLogsError>;
-
-export default logsActions;
+export type LogsActions = ActionType<typeof logsActions>;

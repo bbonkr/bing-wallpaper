@@ -26,7 +26,7 @@ export const Card = ({
 }: PropsWithChildren<CardProps>) => {
     return (
         <div
-            className={`card ${UiHelper.GetClassNames(...(classNames ?? []))}`}
+            className={`card ${UiHelper.getClassNames(...(classNames ?? []))}`}
         >
             {cardImage && (
                 <div className="card-image">

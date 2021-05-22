@@ -1,6 +1,10 @@
 .is-position-relative {
     position: relative;
-    min-height: 240px;
+    min-height: 190px;
+}
+
+figure.is-position-relative{
+    margin: 0 !important;
 }
 
 .is-position-relative img {
@@ -23,11 +27,10 @@
     display: flex;
     flex-direction: column;
     align-items: start;
-    padding: 0.25rem;
-    margin: 0.75rem;
 }
 
-.card-title-over-image p {
+.card-title-over-image p,
+figcaption.card-title-over-image {
     color: #efefef;
     padding: .3rem .2rem;
 }

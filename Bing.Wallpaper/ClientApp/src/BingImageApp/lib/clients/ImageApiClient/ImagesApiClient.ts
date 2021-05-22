@@ -1,20 +1,25 @@
-import axios from 'axios';
+import { ApiClientBase } from '../ApiClientBase';
 import {
     ImagesApiResponseModel,
     LoadImagesRequestModel,
 } from '../../../models';
 
-export class ImagesApiClient {
+export class ImagesApiClient extends ApiClientBase {
     public async getImages(
         options: LoadImagesRequestModel,
     ): Promise<ImagesApiResponseModel> {
-        var url = `/api/v1.0/images?page=${options.page}&take=${options.take}`;
+        const url = `${this.getBaseUrl()}?page=${options.page}&take=${
+            options.take
+        }`;
 
-        var response = await axios.get<ImagesApiResponseModel>(url);
-        if (response.status === 200) {
-            return response.data;
-        } else {
-            throw response;
-        }
+        const response = await this.getClient().get<ImagesApiResponseModel>(
+            url,
+        );
+
+        return this.returnsResponseModelIfSucceed(response);
+    }
+
+    protected getBaseUrl(): string {
+        return `${super.getBaseUrl()}/images`;
     }
 }

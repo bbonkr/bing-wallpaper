@@ -34,7 +34,7 @@ export const Section = ({
                     : ''
             } ${useHero ? 'hero' : ''} ${heroColor ?? ''} ${
                 heroSize ?? ''
-            } ${UiHelper.GetClassNames(...(classNames ?? []))}`}
+            } ${UiHelper.getClassNames(...(classNames ?? []))}`}
         >
             {useHero ? (
                 <div className="hero-body">

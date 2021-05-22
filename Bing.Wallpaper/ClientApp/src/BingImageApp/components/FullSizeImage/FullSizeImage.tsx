@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useImagesApi } from '../../hooks/useImagesApi';
-import { FaWindowClose, FaExpandArrowsAlt } from 'react-icons/fa';
+import { FaExpandArrowsAlt, FaTimes } from 'react-icons/fa';
 import './style.css';
 
 export const FullSizeImage = () => {
@@ -55,18 +55,20 @@ export const FullSizeImage = () => {
                             title="Close"
                             onClick={handleClickClose}
                         >
-                            <FaWindowClose />
+                            <FaTimes />
                         </button>
                     </div>
                 </div>
-                <img
-                    ref={imageRef}
-                    src={`/api/v1.0/files/${encodeURIComponent(
-                        `${fullSizeImage.fileName}`,
-                    )}`}
-                    title={fullSizeImage.title}
-                    alt={fullSizeImage?.fileName}
-                />
+                <figure>
+                    <img
+                        ref={imageRef}
+                        src={`/api/v1.0/files/${encodeURIComponent(
+                            `${fullSizeImage.fileName}`,
+                        )}`}
+                        title={fullSizeImage.title}
+                        alt={fullSizeImage?.fileName}
+                    />
+                </figure>
             </div>
         )
     );

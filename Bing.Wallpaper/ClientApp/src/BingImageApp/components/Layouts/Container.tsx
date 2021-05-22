@@ -11,7 +11,7 @@ export const Container = ({
 }: PropsWithChildren<ContainerProps>) => {
     return (
         <div
-            className={`container ${UiHelper.GetClassNames(
+            className={`container ${UiHelper.getClassNames(
                 ...(classNames ?? []),
             )}`}
         >
