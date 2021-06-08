@@ -45,6 +45,8 @@ namespace Bing.Wallpaper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureAppOptions(Configuration);
+
             // Register Configuration
             // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
             //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
@@ -52,7 +54,7 @@ namespace Bing.Wallpaper
 
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IAppLogRepository, AppLogRepository>();
-            
+      
             services.AddApplicationServices(Configuration);
 
             var envVars = Environment.GetEnvironmentVariables();
