@@ -9,7 +9,7 @@ RUN apt-get install -y nodejs && npm install -g npm
 COPY . .
 
 # Fix dotnet restore
-RUN curl -o /usr/local/share/ca-certificates/verisign.crt -SsL https://crt.sh/?d=1039083 && update-ca-certificates
+# RUN curl -o /usr/local/share/ca-certificates/verisign.crt -SsL https://crt.sh/?d=1039083 && update-ca-certificates
 
 # Build client
 RUN cd Bing.Wallpaper/ClientApp && npm install && npm run build
