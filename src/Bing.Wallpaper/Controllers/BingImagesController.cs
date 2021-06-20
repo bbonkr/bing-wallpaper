@@ -16,98 +16,37 @@ using kr.bbon.AspNetCore;
 using System.Net;
 using kr.bbon.AspNetCore.Models;
 using kr.bbon.Core;
+using MediatR;
+using Bing.Wallpaper.Mediator.Images.Commands;
+using Microsoft.AspNetCore.Http;
 
 namespace Bing.Wallpaper.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Area("api")]
-    [Route("[area]/v{version:apiVersion}/[controller]")]
+    [Area(DefaultValues.AreaName)]
+    [Route(DefaultValues.RouteTemplate)]
     [ApiExceptionHandlerFilter]
     public class BingImagesController : ApiControllerBase
     {
         public BingImagesController(
-            DefaultDatabaseContext databaseContext,
-            IImageService<BingImage> imageService,
-            ILocalFileService localFileService,
-            ILogger<BingImagesController> logger)
+              IMediator mediator)
         {
-            this.databaseContext = databaseContext;
-            this.imageService = imageService;
-            this.localFileService = localFileService;
-            this.logger = logger;
+            this.mediator = mediator;
         }
 
         [HttpGet]
-        [Produces(typeof(ApiResponseModel<IEnumerable<ImageInfo>>))]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel))]
         public async Task<IActionResult> GetImagesAsync()
         {
-            var now = DateTimeOffset.UtcNow;
+            var command = new AddImageCommand();
 
-            var bingImages = await imageService.Get();
+            var result = await mediator.Send(command);
 
-            if (bingImages == null)
-            {
-                throw new HttpStatusException<object>(HttpStatusCode.InternalServerError, "Server error", default);
-            }
-
-            if (!String.IsNullOrEmpty(bingImages.Message))
-            {
-                throw new HttpStatusException<object>(HttpStatusCode.BadRequest, "Does not Have image information.", default);
-            }
-
-            if (bingImages.Images.Count == 0)
-            {
-                throw new HttpStatusException<object>(HttpStatusCode.NotFound, "Does not Have image information.", default);
-            }
-
-            var result = new List<ImageInfo>();
-
-            foreach (var image in bingImages.Images)
-            {
-                if (databaseContext.Images.Any(x => x.Hash == image.Hsh))
-                {
-                    continue;
-                }
-
-                var savedFile = await localFileService.SaveAsync(image);
-
-                result.Add(new ImageInfo
-                {
-                    BaseUrl = image.GetBaseUrl(),
-                    Url = image.Url,
-                    FilePath = savedFile.FilePath,
-                    FileName = savedFile.FileName,
-                    Directory = savedFile.Directory,
-                    Hash = image.Hsh,
-                    ContentType = savedFile.ContentType,
-                    FileSize = savedFile.Size,
-                    CreatedAt = now,
-                    Metadata = new ImageMetadata
-                    {
-                        Title = image.Title,
-                        Origin = image.GetSourceTitle(),
-                        Copyright = image.Copyright,
-                        CopyrightLink = image.CopyrightLink,
-                    }
-                });
-            }
-
-            if (result.Count == 0)
-            {
-                throw new HttpStatusException<object>(HttpStatusCode.NotFound, "Could not find today images.", default);
-            }
-
-            databaseContext.Images.AddRange(result.ToArray());
-
-            await databaseContext.SaveChangesAsync();
-
-            return StatusCode(HttpStatusCode.OK, result);
+            return StatusCode(HttpStatusCode.OK, $"${result.CollectedCount:n0} images collected.");
         }
 
-        private readonly DefaultDatabaseContext databaseContext;
-        private readonly IImageService<BingImage> imageService;
-        private readonly ILocalFileService localFileService;
-        private readonly ILogger logger;
+        private readonly IMediator mediator;
     }
 }
