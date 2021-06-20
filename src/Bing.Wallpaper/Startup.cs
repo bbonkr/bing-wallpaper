@@ -27,6 +27,7 @@ using NLog.Web;
 using kr.bbon.AspNetCore;
 using Microsoft.Extensions.Options;
 using System.IO;
+using CronScheduler.Extensions.Scheduler;
 
 namespace Bing.Wallpaper
 {
@@ -52,18 +53,18 @@ namespace Bing.Wallpaper
             //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
             services.AddHttpContextAccessor();
 
-            services.AddTransient<IImageRepository, ImageRepository>();
-            services.AddTransient<IAppLogRepository, AppLogRepository>();
+            //services.AddTransient<IImageRepository, ImageRepository>();
+            //services.AddTransient<IAppLogRepository, AppLogRepository>();
       
-            services.AddApplicationServices(Configuration);
+            //services.AddApplicationServices(Configuration);
 
-            var envVars = Environment.GetEnvironmentVariables();
+            //var envVars = Environment.GetEnvironmentVariables();
 
             var connectionString = Configuration.GetConnectionString("Default");
-            if (envVars.Contains("ASPNETCORE_CONNECTION_STRING"))
-            {
-                connectionString = envVars["ASPNETCORE_CONNECTION_STRING"].ToString();
-            }
+            //if (envVars.Contains("ASPNETCORE_CONNECTION_STRING"))
+            //{
+            //    connectionString = envVars["ASPNETCORE_CONNECTION_STRING"].ToString();
+            //}
 
             services.AddDbContext<DefaultDatabaseContext>(options =>
             {
@@ -73,51 +74,58 @@ namespace Bing.Wallpaper
                 });
             });
 
-            var collectorOptions = new CollectorOptions();
-            services.Configure<CollectorOptions>(options =>
-            {
-                Configuration.GetSection(CollectorOptions.Name).Bind(options);
+            services.AddDomainService(Configuration);
 
-                if (string.IsNullOrWhiteSpace(options.ThumbnailPath))
-                {
-                    options.ThumbnailPath = Path.Join(WebHostEnvironment.ContentRootPath, "thumbnails");
+            //var collectorOptions = new CollectorOptions();
+            //services.Configure<CollectorOptions>(options =>
+            //{
+            //    Configuration.GetSection(CollectorOptions.Name).Bind(options);
 
-                    if (!Directory.Exists(options.ThumbnailPath))
-                    {
-                        Directory.CreateDirectory(options.ThumbnailPath);
-                    }
-                }
-               
+            //    if (string.IsNullOrWhiteSpace(options.ThumbnailPath))
+            //    {
+            //        options.ThumbnailPath = Path.Join(WebHostEnvironment.ContentRootPath, "thumbnails");
 
-                collectorOptions = options;
-            });
+            //        if (!Directory.Exists(options.ThumbnailPath))
+            //        {
+            //            Directory.CreateDirectory(options.ThumbnailPath);
+            //        }
+            //    }
+
+            //    collectorOptions = options;
+            //});
 
             services.AddScheduler(builder =>
             {
-                builder.AddJob<BingImageJob>(configure: options =>
+                builder.Services.AddLogging().AddDomainService(Configuration);
+                builder.Services.Configure<SchedulerOptions>(options =>
                 {
                     /*
-                     * -------------------------------------------------------------------------------------------------------------
-                     *                                        Allowed values    Allowed special characters   Comment
-                     *
-                     * 忙式式式式式式式式式式式式式 second (optional)       0-59              * , - /                      
-                     * 弛 忙式式式式式式式式式式式式式 minute                0-59              * , - /                      
-                     * 弛 弛 忙式式式式式式式式式式式式式 hour                0-23              * , - /                      
-                     * 弛 弛 弛 忙式式式式式式式式式式式式式 day of month      1-31              * , - / L W ?                
-                     * 弛 弛 弛 弛 忙式式式式式式式式式式式式式 month           1-12 or JAN-DEC   * , - /                      
-                     * 弛 弛 弛 弛 弛 忙式式式式式式式式式式式式式 day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
-                     * 弛 弛 弛 弛 弛 弛
-                     * * * * * * *                     
-                     * -------------------------------------------------------------------------------------------------------------
-                    */
-                    //options.CronSchedule = "0 0 5 * * *";
+                    * -------------------------------------------------------------------------------------------------------------
+                    *                                        Allowed values    Allowed special characters   Comment
+                    *
+                    * 忙式式式式式式式式式式式式式 second (optional)       0-59              * , - /                      
+                    * 弛 忙式式式式式式式式式式式式式 minute                0-59              * , - /                      
+                    * 弛 弛 忙式式式式式式式式式式式式式 hour                0-23              * , - /                      
+                    * 弛 弛 弛 忙式式式式式式式式式式式式式 day of month      1-31              * , - / L W ?                
+                    * 弛 弛 弛 弛 忙式式式式式式式式式式式式式 month           1-12 or JAN-DEC   * , - /                      
+                    * 弛 弛 弛 弛 弛 忙式式式式式式式式式式式式式 day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
+                    * 弛 弛 弛 弛 弛 弛
+                    * * * * * * *                     
+                    * -------------------------------------------------------------------------------------------------------------
+                   */
+                    var collectorOptions = new CollectorOptions();
+                    var collectionOptionsConfiguration=Configuration.GetSection(CollectorOptions.Name);
+                    collectionOptionsConfiguration.Bind(collectorOptions);
+
                     options.CronSchedule = collectorOptions.Schedule;
                     options.CronTimeZone = TimeZoneInfo.Local.Id;
                     options.RunImmediately = false;
                 });
+
+                builder.AddJob<BingImageJob>();
             });
 
-            services.AddDtoMapper();
+            //services.AddDtoMapper();
 
             services.AddControllersWithViews();
 

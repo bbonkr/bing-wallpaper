@@ -29,7 +29,7 @@ namespace Bing.Wallpaper.Services
     {
         public ImageFileService(IOptionsMonitor<CollectorOptions> collectorOptionsMonitor)
         {
-            collectorOptions = collectorOptionsMonitor.CurrentValue ?? throw new ArgumentException("Collector options are invaild.");
+            collectorOptions = collectorOptionsMonitor.CurrentValue ?? throw new ArgumentException(CollectorOptions.ExceptionMessage, nameof(collectorOptionsMonitor));
         }
 
         public Task<string> GenerateThumbnailAsync(string imageFilePath, string thumbnailDirectory)

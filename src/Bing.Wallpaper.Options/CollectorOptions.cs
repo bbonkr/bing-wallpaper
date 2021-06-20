@@ -7,6 +7,15 @@ namespace Bing.Wallpaper.Options
 {
     public class CollectorOptions
     {
+        public const string ExceptionMessage = @"Check your appsettings.json. 
+{ 
+    ""Collector"" : {
+        ""DestinationPath"": ""<Image file directory>"",
+        ""ThumbnailPath"": ""<Thumbnail image file directory>"",
+        ""Schedule"": ""<Cron style schedule e.g.) 0 0 1 0 0 0>""
+    } 
+}";
+
         public const string Name = "Collector";
 
         public string DestinationPath { get; set; }

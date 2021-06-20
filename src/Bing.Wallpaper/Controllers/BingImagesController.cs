@@ -15,6 +15,7 @@ using kr.bbon.AspNetCore.Filters;
 using kr.bbon.AspNetCore;
 using System.Net;
 using kr.bbon.AspNetCore.Models;
+using kr.bbon.Core;
 
 namespace Bing.Wallpaper.Controllers
 {
@@ -91,7 +92,6 @@ namespace Bing.Wallpaper.Controllers
                     }
                 });
             }
-
 
             if (result.Count == 0)
             {
