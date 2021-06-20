@@ -7,12 +7,20 @@
 
     <ItemGroup>
         <Compile Remove="ClientApp\**" />
+        <Compile Remove="Models\**" />
+        <Compile Remove="Repositories\**" />
         <Compile Remove="thumbnails\**" />
         <Content Remove="ClientApp\**" />
+        <Content Remove="Models\**" />
+        <Content Remove="Repositories\**" />
         <Content Remove="thumbnails\**" />
         <EmbeddedResource Remove="ClientApp\**" />
+        <EmbeddedResource Remove="Models\**" />
+        <EmbeddedResource Remove="Repositories\**" />
         <EmbeddedResource Remove="thumbnails\**" />
         <None Remove="ClientApp\**" />
+        <None Remove="Models\**" />
+        <None Remove="Repositories\**" />
         <None Remove="thumbnails\**" />
     </ItemGroup>
 

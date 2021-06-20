@@ -1,22 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using Bing.Wallpaper.Mediator.Logs.Queries;
+using Bing.Wallpaper.Mediator.Models;
+using kr.bbon.AspNetCore;
+using kr.bbon.AspNetCore.Filters;
+using kr.bbon.AspNetCore.Models;
+using kr.bbon.AspNetCore.Mvc;
+using kr.bbon.EntityFrameworkCore.Extensions;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
-
-using Bing.Wallpaper.Repositories;
-
-using kr.bbon.AspNetCore.Mvc;
-using kr.bbon.AspNetCore.Filters;
-using kr.bbon.AspNetCore;
-
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using kr.bbon.AspNetCore.Models;
-using kr.bbon.EntityFrameworkCore.Extensions;
-using Bing.Wallpaper.Models;
-using MediatR;
-using Bing.Wallpaper.Mediator.Logs.Queries;
-using Microsoft.AspNetCore.Http;
 
 namespace Bing.Wallpaper.Controllers
 {
@@ -50,7 +43,7 @@ namespace Bing.Wallpaper.Controllers
             return StatusCode((int)HttpStatusCode.OK, result);
         }
 
-        
+
         private readonly IMediator mediator;
     }
 }

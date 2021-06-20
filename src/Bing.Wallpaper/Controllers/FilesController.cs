@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Bing.Wallpaper.Mediator.Images.Queries;
 using Bing.Wallpaper.Options;
-using Bing.Wallpaper.Repositories;
 using Bing.Wallpaper.Services;
 
 using kr.bbon.AspNetCore;

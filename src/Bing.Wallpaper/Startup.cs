@@ -1,33 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Jobs;
-using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Options;
-using Bing.Wallpaper.Repositories;
-using Bing.Wallpaper.Services;
+using CronScheduler.Extensions.Scheduler;
+using kr.bbon.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-
-using NLog;
-using NLog.Targets;
-using NLog.Web;
-
-using kr.bbon.AspNetCore;
 using Microsoft.Extensions.Options;
-using System.IO;
-using CronScheduler.Extensions.Scheduler;
+using System;
 
 namespace Bing.Wallpaper
 {
@@ -55,7 +40,7 @@ namespace Bing.Wallpaper
 
             //services.AddTransient<IImageRepository, ImageRepository>();
             //services.AddTransient<IAppLogRepository, AppLogRepository>();
-      
+
             //services.AddApplicationServices(Configuration);
 
             //var envVars = Environment.GetEnvironmentVariables();
@@ -114,7 +99,7 @@ namespace Bing.Wallpaper
                     * -------------------------------------------------------------------------------------------------------------
                    */
                     var collectorOptions = new CollectorOptions();
-                    var collectionOptionsConfiguration=Configuration.GetSection(CollectorOptions.Name);
+                    var collectionOptionsConfiguration = Configuration.GetSection(CollectorOptions.Name);
                     collectionOptionsConfiguration.Bind(collectorOptions);
 
                     options.CronSchedule = collectorOptions.Schedule;
@@ -136,7 +121,7 @@ namespace Bing.Wallpaper
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
+            IApplicationBuilder app,
             IWebHostEnvironment env)
         {
             using (var scope = app.ApplicationServices.CreateScope())
