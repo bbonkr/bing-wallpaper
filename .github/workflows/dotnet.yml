@@ -3,7 +3,7 @@ name: Build and tag
 on:
   push:
     branches:
-      - master # Default release branch
+      - main # Default release branch
     tags:
       - "!*"
 
