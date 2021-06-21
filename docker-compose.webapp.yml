@@ -18,6 +18,7 @@ services:
       - Collector__Schedule=0 0 1 * * *
     volumes:
       - "${DESTINATION_PATH}:/app/images"
+      - "${THUMBNAIL_PATH}:/app/thumbnails"
     network_mode: bridge
     # networks:
     #   - app-network

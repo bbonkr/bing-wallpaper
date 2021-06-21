@@ -1,25 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29411.108
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper", "Bing.Wallpaper\Bing.Wallpaper.csproj", "{867FF3E7-8EBC-401F-A4EE-96338370C576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper", "src\Bing.Wallpaper\Bing.Wallpaper.csproj", "{867FF3E7-8EBC-401F-A4EE-96338370C576}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Entities", "Bing.Wallpaper.Entities\Bing.Wallpaper.Entities.csproj", "{3049EBCB-4B85-4AC3-B940-26EB3B9D6862}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Entities", "src\Bing.Wallpaper.Entities\Bing.Wallpaper.Entities.csproj", "{3049EBCB-4B85-4AC3-B940-26EB3B9D6862}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Data", "Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj", "{60A3522B-D0C8-40AF-B6C0-F979D97D48B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Data", "src\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj", "{60A3522B-D0C8-40AF-B6C0-F979D97D48B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Data.SqlServer", "Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj", "{E7C7B578-1878-4BAD-AB73-50D29FD00EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Data.SqlServer", "src\Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj", "{E7C7B578-1878-4BAD-AB73-50D29FD00EF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Service.App", "Bing.Wallpaper.Service.App\Bing.Wallpaper.Service.App.csproj", "{0332E9EB-4145-49FE-B76E-CCEA8AC79FB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Service.App", "src\Bing.Wallpaper.Service.App\Bing.Wallpaper.Service.App.csproj", "{0332E9EB-4145-49FE-B76E-CCEA8AC79FB3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Models", "Bing.Wallpaper.Models\Bing.Wallpaper.Models.csproj", "{96800D4C-A09A-40FB-A7F7-4BA4AC2DA9F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Models", "src\Bing.Wallpaper.Models\Bing.Wallpaper.Models.csproj", "{96800D4C-A09A-40FB-A7F7-4BA4AC2DA9F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Services", "Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj", "{F6AD943B-5567-450E-9E7C-71415EE04DDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Services", "src\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj", "{F6AD943B-5567-450E-9E7C-71415EE04DDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Options", "Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj", "{55E97288-9D80-46A6-936F-5D0B44AA2283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Options", "src\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj", "{55E97288-9D80-46A6-936F-5D0B44AA2283}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{309F67A1-8326-4F58-898F-4BF19E6219D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bing.Wallpaper.Mediator", "src\Bing.Wallpaper.Mediator\Bing.Wallpaper.Mediator.csproj", "{61B1D27D-8AF2-4891-A236-5BD80BF44226}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,6 +129,18 @@ Global
 		{55E97288-9D80-46A6-936F-5D0B44AA2283}.Release|x64.Build.0 = Release|Any CPU
 		{55E97288-9D80-46A6-936F-5D0B44AA2283}.Release|x86.ActiveCfg = Release|Any CPU
 		{55E97288-9D80-46A6-936F-5D0B44AA2283}.Release|x86.Build.0 = Release|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Debug|x64.Build.0 = Debug|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Debug|x86.Build.0 = Debug|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Release|x64.ActiveCfg = Release|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Release|x64.Build.0 = Release|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Release|x86.ActiveCfg = Release|Any CPU
+		{61B1D27D-8AF2-4891-A236-5BD80BF44226}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

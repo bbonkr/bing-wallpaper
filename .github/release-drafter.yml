@@ -15,7 +15,8 @@ categories:
       - 'chore'
       - 'doc'
       - 'documentation'
-      - 'Modifications'
+      - 'modifications'
+      - 'refactoring'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 exclude-labels:
   - 'skip-changelog'
