@@ -11,6 +11,9 @@ COPY . .
 # Fix dotnet restore
 # RUN curl -o /usr/local/share/ca-certificates/verisign.crt -SsL https://crt.sh/?d=1039083 && update-ca-certificates
 
+# npm update 
+RUN npm install -g npm
+
 # Build client
 RUN cd src/Bing.Wallpaper/ClientApp && npm install && npm run build
 

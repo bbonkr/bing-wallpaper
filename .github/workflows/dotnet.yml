@@ -30,7 +30,7 @@ jobs:
 
       - name: build ClientApp
         run: |
-          cd Bing.Wallpaper/ClientApp
+          cd src/Bing.Wallpaper/ClientApp
           npm install
           npm run build
 
@@ -41,7 +41,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: package-version
-        run: grep '<Version>' < Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
+        run: grep '<Version>' < src/Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
         id: get_package_version
 
       - name: set-version  
