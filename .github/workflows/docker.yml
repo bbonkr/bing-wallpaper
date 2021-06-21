@@ -47,12 +47,12 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: package-version
-        run: grep '<Version>' < Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
-        id: get_package_version
+      # - name: package-version
+      #   run: grep '<Version>' < src/Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
+      #   id: get_package_version
 
-      - name: set-version  
-        run: echo "PACKAGE_VERSION=${{ steps.get_package_version.outputs.version }}" >> $GITHUB_ENV
+      # - name: set-version  
+      #   run: echo "PACKAGE_VERSION=${{ steps.get_package_version.outputs.version }}" >> $GITHUB_ENV
 
       # -
       #   name: Login to DockerHub
