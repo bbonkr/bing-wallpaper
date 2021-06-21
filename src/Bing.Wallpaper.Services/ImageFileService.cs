@@ -42,7 +42,6 @@ namespace Bing.Wallpaper.Services
             {
                 using (var image = new MagickImage(imageFilePath))
                 {
-
                     //image.Resize(120, 0);
                     image.Thumbnail(30, 0);
 

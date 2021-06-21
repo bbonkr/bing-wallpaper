@@ -25,14 +25,9 @@ namespace Bing.Wallpaper.Controllers
     public class ImagesController : ApiControllerBase
     {
         public ImagesController(
-            //IImageRepository repository, 
-            //ILoggerFactory loggerFactory
             IMediator mediator, 
             ILogger<ImagesController> logger)
         {
-            //this.repository = repository;
-            //this.logger = loggerFactory.CreateLogger<ImagesController>();
-
             this.mediator = mediator;
             this.logger = logger;
         }
@@ -42,15 +37,6 @@ namespace Bing.Wallpaper.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<IPagedModel<ImageItemModel>>))]
         public async Task<IActionResult> GetAllAsync(int page = 1, int take = 10)
         {
-            //var records = await repository.GetAllAsync(page, take);
-
-            //foreach (var item in records.Items)
-            //{
-            //    var tokens = item.FileName.Split(".");
-            //    item.FileName = string.Join(".", tokens.Take(tokens.Length - 1));
-            //    item.FileExtension = $".{tokens.Last()}";
-            //}
-
             var query = new ImagesQuery
             {
                 Page = page,
@@ -60,10 +46,9 @@ namespace Bing.Wallpaper.Controllers
 
             var records = await mediator.Send(query);
 
-            return StatusCode((int)HttpStatusCode.OK, records);
+            return StatusCode(StatusCodes.Status200OK, records);
         }
 
-        //private readonly IImageRepository repository;
         private readonly IMediator mediator;
         private readonly ILogger logger;
     }

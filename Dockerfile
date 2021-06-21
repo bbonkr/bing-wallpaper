@@ -20,7 +20,11 @@ RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
+
 WORKDIR /app
 COPY --from=build /app/out ./
+
+RUN mkdir -p /app/images
+RUN mkdir -p /app/thumbnails
 
 ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]

@@ -37,20 +37,9 @@ namespace Bing.Wallpaper
             // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
             //NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = Configuration;
             services.AddHttpContextAccessor();
-
-            //services.AddTransient<IImageRepository, ImageRepository>();
-            //services.AddTransient<IAppLogRepository, AppLogRepository>();
-
-            //services.AddApplicationServices(Configuration);
-
-            //var envVars = Environment.GetEnvironmentVariables();
-
+            
             var connectionString = Configuration.GetConnectionString("Default");
-            //if (envVars.Contains("ASPNETCORE_CONNECTION_STRING"))
-            //{
-            //    connectionString = envVars["ASPNETCORE_CONNECTION_STRING"].ToString();
-            //}
-
+            
             services.AddDbContext<DefaultDatabaseContext>(options =>
             {
                 options.UseSqlServer(connectionString, sqlServerOptions =>
@@ -60,24 +49,6 @@ namespace Bing.Wallpaper
             });
 
             services.AddDomainService(Configuration);
-
-            //var collectorOptions = new CollectorOptions();
-            //services.Configure<CollectorOptions>(options =>
-            //{
-            //    Configuration.GetSection(CollectorOptions.Name).Bind(options);
-
-            //    if (string.IsNullOrWhiteSpace(options.ThumbnailPath))
-            //    {
-            //        options.ThumbnailPath = Path.Join(WebHostEnvironment.ContentRootPath, "thumbnails");
-
-            //        if (!Directory.Exists(options.ThumbnailPath))
-            //        {
-            //            Directory.CreateDirectory(options.ThumbnailPath);
-            //        }
-            //    }
-
-            //    collectorOptions = options;
-            //});
 
             services.AddScheduler(builder =>
             {
@@ -109,8 +80,6 @@ namespace Bing.Wallpaper
 
                 builder.AddJob<BingImageJob>();
             });
-
-            //services.AddDtoMapper();
 
             services.AddControllersWithViews();
 

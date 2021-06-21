@@ -40,7 +40,7 @@ namespace Bing.Wallpaper.Controllers
 
             var result = await mediator.Send(query);
 
-            return StatusCode((int)HttpStatusCode.OK, result);
+            return StatusCode(StatusCodes.Status200OK, result);
         }
 
 

@@ -12,6 +12,7 @@ using kr.bbon.AspNetCore.Filters;
 using kr.bbon.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
@@ -55,58 +56,11 @@ namespace Bing.Wallpaper.Controllers
 
         [HttpGet("{fileName}")]
         [Produces(typeof(FileContentResult))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
         public async Task<IActionResult> GetFileByFileNameAsync(
             [FromRoute] string fileName, 
             [FromQuery] string type = "")
         {
-
-            //var files = Directory.GetFiles(appOptions.DestinationPath, $"{fileName}*");
-
-            //if (files.Length == 0)
-            //{
-            //    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File record does not find.", default);
-            //}
-
-            //var fileInfo = new FileInfo(files.FirstOrDefault());
-            //if (!fileInfo.Exists)
-            //{
-            //    throw new HttpStatusException<object>(HttpStatusCode.NotFound, "File does not exist.", default);
-            //}
-
-            //if (type?.ToLower() == "thumbnail")
-            //{
-            //    try
-            //    {
-            //        string thumbnailFilePath;
-            //        if (!imageFileService.HasThumbnail(fileInfo.FullName))
-            //        {
-            //            thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
-            //            fileInfo = new FileInfo(thumbnailFilePath);
-            //        }
-            //        else
-            //        {
-            //            thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
-            //        }
-
-            //        fileInfo = new FileInfo(thumbnailFilePath);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        logger.LogError(ex, ex.Message);
-            //        fileInfo = new FileInfo(files.FirstOrDefault());
-            //    }
-            //}
-
-
-            //var buffer = await fileService.ReadAsync(fileInfo.FullName);
-
-            //if (buffer == null)
-            //{
-            //    return StatusCode((int)HttpStatusCode.NotFound);
-            //}
-
-            //logger.LogInformation($"Download: {fileInfo.Name}");
-
             var query = new FindByImageFileNameQuery { FileName = fileName, Type = type, };
 
             var result = await mediator.Send(query);
@@ -119,7 +73,6 @@ namespace Bing.Wallpaper.Controllers
             }
 
             return File(result.Buffer, contentType, result.FileName);
-
         }
 
 
