@@ -27,6 +27,9 @@ namespace Bing.Wallpaper.Controllers
     [ApiExceptionHandlerFilter]
     public class FilesController : ApiControllerBase
     {
+
+        public readonly int MAX_AGE = (int)TimeSpan.FromDays(365).TotalSeconds;
+
         public FilesController(
             IMediator mediator,
             ILogger<FilesController> logger)
@@ -37,6 +40,8 @@ namespace Bing.Wallpaper.Controllers
 
         [HttpGet("{id:Guid}")]
         [Produces(typeof(FileContentResult))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
+        [ResponseCache(CacheProfileName = "File-Response-Cache")]
         public async Task<IActionResult> GetFileByIdAsync(
             [FromRoute] string id,
             [FromQuery] string type = "")
@@ -57,6 +62,7 @@ namespace Bing.Wallpaper.Controllers
         [HttpGet("{fileName}")]
         [Produces(typeof(FileContentResult))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
+        [ResponseCache(CacheProfileName = "File-Response-Cache")]
         public async Task<IActionResult> GetFileByFileNameAsync(
             [FromRoute] string fileName, 
             [FromQuery] string type = "")

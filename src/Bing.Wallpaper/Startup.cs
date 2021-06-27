@@ -32,6 +32,12 @@ namespace Bing.Wallpaper
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureAppOptions(Configuration);
+            services.Configure<MvcOptions>(options => {
+                options.CacheProfiles.Add("File-Response-Cache", new CacheProfile
+                {
+                    Duration = (int)TimeSpan.FromDays(365).TotalSeconds,
+                });
+            });
 
             // Register Configuration
             // https://github.com/NLog/NLog/wiki/ConfigSetting-Layout-Renderer
