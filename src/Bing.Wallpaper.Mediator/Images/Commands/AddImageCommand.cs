@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,11 +29,13 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
         public AddImageCommandHandler(
             DefaultDatabaseContext dbContext,
             IImageService<BingImage> imageService,
+            IImageFileService imageFileService,
             ILocalFileService fileService,
             ILogger<AddImageCommandHandler> logger)
         {
             this.dbContext = dbContext;
             this.imageService = imageService;
+            this.imageFileService = imageFileService;
             this.fileService = fileService;
             this.logger = logger;
         }
@@ -97,6 +100,20 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
                         CopyrightLink = image.CopyrightLink,
                     }
                 });
+
+                try
+                {
+                    if (!imageFileService.HasThumbnail(savedFile.FilePath))
+                    {
+                        await imageFileService.GenerateThumbnailAsync(savedFile.FilePath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, $"Fail to generate thumbnail. {ex.Message}");
+                }
+
+                logger.LogInformation($"Collected: {image.Title}");
             }
 
             var affectedCount = 0;
@@ -116,6 +133,7 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
         private readonly DefaultDatabaseContext dbContext;
         private readonly IImageService<BingImage> imageService;
         private readonly ILocalFileService fileService;
+        private readonly IImageFileService imageFileService;
         private readonly ILogger logger;
     }
 }
