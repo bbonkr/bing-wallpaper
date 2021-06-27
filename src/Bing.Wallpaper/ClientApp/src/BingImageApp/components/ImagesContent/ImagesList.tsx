@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageItemModel } from '../../models';
+import { ImageItemModel } from '../../../api/api';
 import { ImageCard } from './ImageCard';
 
 interface ImagesListProps {
