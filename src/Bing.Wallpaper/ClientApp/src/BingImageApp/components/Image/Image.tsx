@@ -8,6 +8,7 @@ export interface ImageProps {
     imageThumbnailSrc?: string;
     isRequestFullScreen?: boolean;
     onClick?: () => void;
+    onLoaded?: (el?: HTMLImageElement | null) => void;
     onRequestedFullscreen?: () => void;
 }
 
@@ -18,6 +19,7 @@ export const Image = ({
     imgProps,
     onClick,
     onRequestedFullscreen,
+    onLoaded,
 }: ImageProps) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
@@ -66,7 +68,12 @@ export const Image = ({
             if (imgEl) {
                 observerRef.current.observe(imgEl);
             }
+
+            if (onLoaded) {
+                onLoaded(imgEl);
+            }
         }
+
         return () => {
             if (observerRef.current) {
                 observerRef.current.disconnect();
@@ -76,7 +83,9 @@ export const Image = ({
 
     useEffect(() => {
         if (typeof isRequestFullScreen === 'boolean' && isRequestFullScreen) {
-            imageRef.current?.requestFullscreen();
+            if (typeof imageRef.current?.requestFullscreen === 'function') {
+                imageRef.current?.requestFullscreen();
+            }
             if (onRequestedFullscreen) {
                 onRequestedFullscreen();
             }

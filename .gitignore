@@ -340,5 +340,4 @@ appsettings.*.json
 # thumbnail directory
 thumbnails/
 
-wwwroot/js/
-
+**/wwwroot/js/
