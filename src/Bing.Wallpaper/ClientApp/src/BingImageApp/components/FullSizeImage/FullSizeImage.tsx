@@ -6,8 +6,8 @@ import './style.css';
 
 export const FullSizeImage = () => {
     const { fullSizeImage, hideFullSizeImage } = useImagesApi();
-
     const [isRequestedFullScreen, setIsRequestedFullScreen] = useState(false);
+    const [canRequestedFullScreen, setCanRequestedFullScreen] = useState(false);
 
     const handleClickClose = () => {
         hideFullSizeImage();
@@ -19,6 +19,14 @@ export const FullSizeImage = () => {
 
     const handleRequestedFullScreen = () => {
         setIsRequestedFullScreen((_) => false);
+    };
+
+    const handleImageElementLoaded = (el?: HTMLImageElement | null) => {
+        if (el) {
+            setCanRequestedFullScreen(
+                (_) => typeof el.requestFullscreen === 'function',
+            );
+        }
     };
 
     useEffect(() => {
@@ -48,6 +56,7 @@ export const FullSizeImage = () => {
                             className="button"
                             title="Full screen"
                             onClick={handleClickFullScreen}
+                            disabled={!canRequestedFullScreen}
                         >
                             <FaExpandArrowsAlt />
                         </button>
@@ -79,6 +88,7 @@ export const FullSizeImage = () => {
                             alt: fullSizeImage?.fileName ?? '',
                         }}
                         onRequestedFullscreen={handleRequestedFullScreen}
+                        onLoaded={handleImageElementLoaded}
                     />
                     {fullSizeImage.copyright && (
                         <figcaption>
