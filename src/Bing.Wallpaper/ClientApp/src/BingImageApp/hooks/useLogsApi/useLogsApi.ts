@@ -12,8 +12,6 @@ export const useLogsApi = () => {
         ...logs,
         loadLogsRequest: (payload: LoadLogsRequestModel) =>
             dispatch(logsActions.loadLogs.request(payload)),
-        appendLogsRequest: (payload: LoadLogsRequestModel) =>
-            dispatch(logsActions.appendLogs.request(payload)),
         resetLogsError: () => dispatch(logsActions.resetLoadLogsError()),
     };
 };

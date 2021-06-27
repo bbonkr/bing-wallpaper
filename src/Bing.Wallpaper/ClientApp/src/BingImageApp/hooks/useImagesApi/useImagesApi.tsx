@@ -2,7 +2,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { ImagesState } from '../../store/reducers/images';
 import { imagesActions } from '../../store/actions/images';
-import { ImageItemModel, LoadImagesRequestModel } from '../../models';
+import { LoadImagesRequestModel } from '../../models';
+import { ImageItemModel } from '../../../api/api';
 
 export const useImagesApi = () => {
     const dispatch = useDispatch();
@@ -12,8 +13,6 @@ export const useImagesApi = () => {
         ...images,
         loadImagesRequest: (payload: LoadImagesRequestModel) =>
             dispatch(imagesActions.loadImages.request(payload)),
-        appendImagesRequest: (payload: LoadImagesRequestModel) =>
-            dispatch(imagesActions.appendImages.request(payload)),
         resetImagesError: () => dispatch(imagesActions.resetLoadImagesError()),
         showFullSizeImage: (payload: ImageItemModel) =>
             dispatch(imagesActions.showFullSizeImage(payload)),

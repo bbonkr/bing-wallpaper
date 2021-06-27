@@ -8,6 +8,7 @@
     z-index: 2000;
     display: flex;
     flex-direction: column;
+    justify-content: center;   
 }
 
 .full-size-image-container>img {
@@ -26,8 +27,22 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem;
+    background-color: #1f1f1f;
+    color: #f1f1f1;
 }
 
 .full-size-image-container .tools div>p {
     color: #efefef;
+}
+
+.full-size-image-container figure {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-size-image-container figure>figcaption {
+    background-color: #1f1f1f;
+    color: #f1f1f1;
+    padding: 0.3rem .6rem;
+    text-align: center;
 }

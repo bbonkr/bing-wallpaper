@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { Image } from '../Image';
+import { ImageItemModel } from '../../../api/api';
 import { useImagesApi } from '../../hooks/useImagesApi';
-import { ImageItemModel } from '../../models';
+
 import './style.css';
 
 interface ImageCardProps {
@@ -9,64 +11,10 @@ interface ImageCardProps {
 
 export const ImageCard = ({ image }: ImageCardProps) => {
     const { showFullSizeImage } = useImagesApi();
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
-
-    const imageRef = useRef<HTMLImageElement>(null);
-    const observerRef = useRef<IntersectionObserver>();
 
     const handleClickImage = () => {
         showFullSizeImage(image);
     };
-
-    const handleImageLoaded = (
-        event: React.SyntheticEvent<HTMLImageElement, Event>,
-    ) => {
-        event.persist();
-        setThumbnailLoaded((_) => true);
-    };
-
-    const handleIntersection = (
-        entries: IntersectionObserverEntry[],
-        intersectionObserver: IntersectionObserver,
-    ) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting && thumbnailLoaded) {
-                intersectionObserver.unobserve(entry.target);
-                setImageLoaded((_) => true);
-                console.info(
-                    '🔨 Request image file: ',
-                    imageRef?.current?.src ||
-                        imageRef?.current?.srcset ||
-                        'Does not find image file uri',
-                );
-            }
-        });
-    };
-
-    useEffect(() => {
-        if (thumbnailLoaded) {
-            const imgEl = imageRef.current;
-
-            if (!observerRef.current) {
-                observerRef.current = new IntersectionObserver(
-                    handleIntersection,
-                    {
-                        threshold: 0.4,
-                    },
-                );
-            }
-
-            if (imgEl) {
-                observerRef.current.observe(imgEl);
-            }
-        }
-        return () => {
-            if (observerRef.current) {
-                observerRef.current.disconnect();
-            }
-        };
-    }, [thumbnailLoaded]);
 
     return (
         <div
@@ -74,21 +22,17 @@ export const ImageCard = ({ image }: ImageCardProps) => {
             onClick={handleClickImage}
         >
             <figure className="is-position-relative">
-                <img
-                    ref={imageRef}
-                    src={
-                        imageLoaded
-                            ? `/api/v1.0/files/${encodeURIComponent(
-                                  `${image.fileName}`,
-                              )}`
-                            : `/api/v1.0/files/${encodeURIComponent(
-                                  `${image.fileName}`,
-                              )}?type=thumbnail`
-                    }
-                    className={imageLoaded ? 'loaded' : ''}
-                    title={image.title ?? image.fileName}
-                    alt={image.title ?? image.fileName}
-                    onLoad={handleImageLoaded}
+                <Image
+                    imageSrc={`/api/v1.0/files/${encodeURIComponent(
+                        `${image.fileName}`,
+                    )}`}
+                    imageThumbnailSrc={`/api/v1.0/files/${encodeURIComponent(
+                        `${image.fileName}`,
+                    )}?type=thumbnail`}
+                    imgProps={{
+                        title: image.title ?? image.fileName ?? '',
+                        alt: image.title ?? image.fileName ?? '',
+                    }}
                 />
                 <figcaption className="card-title-over-image rounded-bottom">
                     {image.title ?? image.fileName}

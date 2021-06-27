@@ -8,17 +8,12 @@ export const ImagesContent = () => {
     const [page, setPage] = useState(1);
     const take = 10;
 
-    const {
-        images,
-        isLoadingImages,
-        hasMoreImages,
-        loadImagesRequest,
-        appendImagesRequest,
-    } = useImagesApi();
+    const { images, isLoadingImages, hasMoreImages, loadImagesRequest } =
+        useImagesApi();
 
     const handleClickLoadMore = () => {
         if (hasMoreImages) {
-            appendImagesRequest({ page: page + 1, take: take });
+            loadImagesRequest({ page: page + 1, take: take });
             setPage((state) => state + 1);
         }
     };

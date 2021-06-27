@@ -10,17 +10,11 @@ export const LogsContent = () => {
     const take = 10;
     const [formState, setFormState] = useState<FormState>();
 
-    const {
-        logs,
-        isLoadingLogs,
-        hasMoreLogs,
-        loadLogsRequest,
-        appendLogsRequest,
-    } = useLogsApi();
+    const { logs, isLoadingLogs, hasMoreLogs, loadLogsRequest } = useLogsApi();
 
     const handleClickLoadMore = () => {
         if (hasMoreLogs) {
-            appendLogsRequest({
+            loadLogsRequest({
                 page: page + 1,
                 take: take,
                 keyword: formState?.values.keyword ?? '',

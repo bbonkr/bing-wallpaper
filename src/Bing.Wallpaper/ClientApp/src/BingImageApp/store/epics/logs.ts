@@ -4,42 +4,36 @@ import { from, of } from 'rxjs';
 import { filter, map, switchMap, catchError } from 'rxjs/operators';
 import { logsActions, LogsActions } from '../actions/logs';
 import { RootState } from '../reducers';
-import { ApiResponseModel } from '../../models';
-import { Services } from '../../services';
+import { ApiClient, ErrorResponse } from '../../services';
 
-export const loadLogsEpic: Epic<LogsActions, LogsActions, RootState, Services> =
-    (action$, state$, api) =>
-        action$.pipe(
-            filter(isActionOf([logsActions.loadLogs.request])),
-            switchMap((action) =>
-                from(api.logs.getLogs(action.payload)).pipe(
-                    map(logsActions.loadLogs.success),
-                    catchError((error: ApiResponseModel) =>
-                        of(logsActions.loadLogs.failure(error)),
-                    ),
-                ),
-            ),
-        );
-
-export const appendLogsEpic: Epic<
+export const loadLogsEpic: Epic<
     LogsActions,
     LogsActions,
     RootState,
-    Services
+    ApiClient
 > = (action$, state$, api) =>
     action$.pipe(
-        filter(isActionOf([logsActions.appendLogs.request])),
-        switchMap((action) =>
-            from(api.logs.getLogs(action.payload)).pipe(
-                map(logsActions.appendLogs.success),
-                catchError((error: ApiResponseModel) =>
-                    of(logsActions.appendLogs.failure(error)),
+        filter(isActionOf([logsActions.loadLogs.request])),
+        switchMap((action) => {
+            const { page, take, level, keyword } = action.payload;
+            return from(
+                api.logs.apiv10LogsGetAll(
+                    page,
+                    take,
+                    level,
+                    keyword,
+                    undefined,
                 ),
-            ),
-        ),
+            ).pipe(
+                map((response) => logsActions.loadLogs.success(response.data)),
+                catchError((errorResponse: ErrorResponse) =>
+                    of(logsActions.loadLogs.failure(errorResponse.data)),
+                ),
+            );
+        }),
     );
 
-const imagesEpic = combineEpics(loadLogsEpic, appendLogsEpic);
+const imagesEpic = combineEpics(loadLogsEpic);
 
 export default imagesEpic;
 export type ImagesEpic = ReturnType<typeof imagesEpic>;
