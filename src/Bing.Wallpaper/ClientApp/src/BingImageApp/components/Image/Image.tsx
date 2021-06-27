@@ -83,6 +83,10 @@ export const Image = ({
 
     useEffect(() => {
         if (typeof isRequestFullScreen === 'boolean' && isRequestFullScreen) {
+            console.info(
+                'Image => ',
+                typeof imageRef.current?.requestFullscreen,
+            );
             if (typeof imageRef.current?.requestFullscreen === 'function') {
                 imageRef.current?.requestFullscreen();
             }

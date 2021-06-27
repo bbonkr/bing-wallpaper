@@ -58,61 +58,64 @@ export const LogsContent = () => {
                 <LogFilter onSubmit={handleSubmit} isLoading={isLoadingLogs} />
             </Section>
             <Section classNames={[]}>
-                <table className="table is-hoverable log-table">
-                    <thead>
-                        <tr className="">
-                            <th scope="col" className="">
-                                @Logged
-                            </th>
-                            <th scope="col" className="">
-                                Level
-                            </th>
-                            <th scope="col">Message</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {logs && logs.length > 0 ? (
-                            logs.map((log) => (
-                                <tr key={log.id}>
-                                    <td>{log.logged}</td>
-                                    <td>{log.level}</td>
-                                    <td>{log.message}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td
-                                    className="has-text-centered"
-                                    colSpan={COLUMNS_COUNT}
-                                >
-                                    Did not find anything. Please try another
-                                    keyword.
-                                </td>
+                <div className="table-container">
+                    <table className="table is-hoverable log-table">
+                        <thead>
+                            <tr className="">
+                                <th scope="col" className="">
+                                    @Logged
+                                </th>
+                                <th scope="col" className="">
+                                    Level
+                                </th>
+                                <th scope="col">Message</th>
                             </tr>
-                        )}
-                    </tbody>
-                    {hasMoreLogs && (
-                        <tfoot>
-                            <tr>
-                                <td
-                                    colSpan={COLUMNS_COUNT}
-                                    className="pt-6 pb-6"
-                                >
-                                    <button
-                                        className={`button is-fullwidth ${
-                                            isLoadingLogs ? 'is-loading' : ''
-                                        }`}
-                                        onClick={handleClickLoadMore}
-                                        disabled={isLoadingLogs}
-                                        title="Load more logs"
+                        </thead>
+                        <tbody>
+                            {logs && logs.length > 0 ? (
+                                logs.map((log) => (
+                                    <tr key={log.id}>
+                                        <td>{log.logged}</td>
+                                        <td>{log.level}</td>
+                                        <td>{log.message}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        className="has-text-centered"
+                                        colSpan={COLUMNS_COUNT}
                                     >
-                                        Load more
-                                    </button>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    )}
-                </table>
+                                        Did not find anything. Please try
+                                        another keyword.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                        {hasMoreLogs && (
+                            <tfoot>
+                                <tr>
+                                    <td
+                                        colSpan={COLUMNS_COUNT}
+                                        className="pt-6 pb-6"
+                                    ></td>
+                                </tr>
+                            </tfoot>
+                        )}
+                    </table>
+                </div>
+                <div>
+                    <button
+                        className={`button is-fullwidth ${
+                            isLoadingLogs ? 'is-loading' : ''
+                        }`}
+                        onClick={handleClickLoadMore}
+                        disabled={isLoadingLogs}
+                        title="Load more logs"
+                    >
+                        Load more
+                    </button>
+                </div>
             </Section>
         </Content>
     );
