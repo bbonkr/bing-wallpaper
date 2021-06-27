@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useImagesApi } from '../../hooks/useImagesApi';
 import { FaExpandArrowsAlt, FaTimes } from 'react-icons/fa';
 import { Image } from '../Image';
@@ -6,14 +6,19 @@ import './style.css';
 
 export const FullSizeImage = () => {
     const { fullSizeImage, hideFullSizeImage } = useImagesApi();
-    const imageRef = useRef<HTMLImageElement>(null);
+
+    const [isRequestedFullScreen, setIsRequestedFullScreen] = useState(false);
 
     const handleClickClose = () => {
         hideFullSizeImage();
     };
 
     const handleClickFullScreen = () => {
-        imageRef.current?.requestFullscreen();
+        setIsRequestedFullScreen((_) => true);
+    };
+
+    const handleRequestedFullScreen = () => {
+        setIsRequestedFullScreen((_) => false);
     };
 
     useEffect(() => {
@@ -68,10 +73,12 @@ export const FullSizeImage = () => {
                         imageThumbnailSrc={`/api/v1.0/files/${encodeURIComponent(
                             fullSizeImage.fileName ?? '',
                         )}?type=thumbnail`}
+                        isRequestFullScreen={isRequestedFullScreen}
                         imgProps={{
                             title: fullSizeImage.title ?? '',
                             alt: fullSizeImage?.fileName ?? '',
                         }}
+                        onRequestedFullscreen={handleRequestedFullScreen}
                     />
                     {fullSizeImage.copyright && (
                         <figcaption>

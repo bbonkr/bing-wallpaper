@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "watch": "webpack --watch --progress",
+        "dev": "webpack --watch --progress",
         "build": "cross-env NODE_ENV=production webpack",
         "gen": "openapi-generator-cli generate -i http://localhost:5000/swagger/v1/swagger.json -g typescript-axios -o src/api"
     },

@@ -6,14 +6,18 @@ export interface ImageProps {
     imgProps?: React.ImgHTMLAttributes<HTMLImageElement>;
     imageSrc?: string;
     imageThumbnailSrc?: string;
+    isRequestFullScreen?: boolean;
     onClick?: () => void;
+    onRequestedFullscreen?: () => void;
 }
 
 export const Image = ({
     imageSrc,
     imageThumbnailSrc,
+    isRequestFullScreen,
     imgProps,
     onClick,
+    onRequestedFullscreen,
 }: ImageProps) => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
@@ -69,6 +73,15 @@ export const Image = ({
             }
         };
     }, [thumbnailLoaded]);
+
+    useEffect(() => {
+        if (typeof isRequestFullScreen === 'boolean' && isRequestFullScreen) {
+            imageRef.current?.requestFullscreen();
+            if (onRequestedFullscreen) {
+                onRequestedFullscreen();
+            }
+        }
+    }, [isRequestFullScreen]);
 
     return (
         <img
