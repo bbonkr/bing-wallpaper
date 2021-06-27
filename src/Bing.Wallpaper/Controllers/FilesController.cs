@@ -37,6 +37,8 @@ namespace Bing.Wallpaper.Controllers
 
         [HttpGet("{id:Guid}")]
         [Produces(typeof(FileContentResult))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
+        [ResponseCache(CacheProfileName = "File-Response-Cache")]
         public async Task<IActionResult> GetFileByIdAsync(
             [FromRoute] string id,
             [FromQuery] string type = "")
@@ -57,6 +59,7 @@ namespace Bing.Wallpaper.Controllers
         [HttpGet("{fileName}")]
         [Produces(typeof(FileContentResult))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
+        [ResponseCache(CacheProfileName = "File-Response-Cache")]
         public async Task<IActionResult> GetFileByFileNameAsync(
             [FromRoute] string fileName, 
             [FromQuery] string type = "")
