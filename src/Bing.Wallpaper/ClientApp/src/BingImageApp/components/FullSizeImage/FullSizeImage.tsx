@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useImagesApi } from '../../hooks/useImagesApi';
 import { FaExpandArrowsAlt, FaTimes } from 'react-icons/fa';
+import { Image } from '../Image';
 import './style.css';
 
 export const FullSizeImage = () => {
@@ -60,14 +61,35 @@ export const FullSizeImage = () => {
                     </div>
                 </div>
                 <figure>
-                    <img
-                        ref={imageRef}
-                        src={`/api/v1.0/files/${encodeURIComponent(
-                            `${fullSizeImage.fileName}`,
+                    <Image
+                        imageSrc={`/api/v1.0/files/${encodeURIComponent(
+                            fullSizeImage.fileName ?? '',
                         )}`}
-                        title={fullSizeImage.title}
-                        alt={fullSizeImage?.fileName}
+                        imageThumbnailSrc={`/api/v1.0/files/${encodeURIComponent(
+                            fullSizeImage.fileName ?? '',
+                        )}?type=thumbnail`}
+                        imgProps={{
+                            title: fullSizeImage.title ?? '',
+                            alt: fullSizeImage?.fileName ?? '',
+                        }}
                     />
+                    {fullSizeImage.copyright && (
+                        <figcaption>
+                            {fullSizeImage.copyrightLink ? (
+                                <p>
+                                    <a
+                                        href={fullSizeImage.copyrightLink}
+                                        target="_blank"
+                                        rel="nofollow"
+                                    >
+                                        {fullSizeImage.copyright}
+                                    </a>
+                                </p>
+                            ) : (
+                                <p>{fullSizeImage.copyright}</p>
+                            )}
+                        </figcaption>
+                    )}
                 </figure>
             </div>
         )

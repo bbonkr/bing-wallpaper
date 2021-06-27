@@ -13,8 +13,9 @@ services:
     environment:
       - TZ=Asia/Seoul
       - ASPNETCORE_ENVIRONMENT=Production
-      - App__DestinationPath=/app/images
       - ConnectionStrings__Default=<database connection string here>
+      - Collector__DestinationPath=/app/images
+      - Collector__ThumbnailPath=/app/thumbnails
       - Collector__Schedule=0 0 1 * * *
     volumes:
       - "${DESTINATION_PATH}:/app/images"

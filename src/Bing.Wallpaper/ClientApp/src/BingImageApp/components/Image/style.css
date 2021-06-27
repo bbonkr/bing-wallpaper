@@ -1,0 +1,10 @@
+img.lazy-load-image {
+    width: 100%;
+    padding: 0;
+    -webkit-filter: blur(0.15rem);
+    filter: blur(0.15rem);
+}
+
+img.lazy-load-image.loaded {
+    filter: none;
+}

@@ -5,33 +5,16 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { RootAction } from './actions';
 import rootEpic from './epics';
 import rootState, { RootState } from './reducers';
-import services, { Services } from '../services';
-
-export const epicMiddleware = createEpicMiddleware<
-    RootAction,
-    RootAction,
-    RootState,
-    Services
->({
-    dependencies: services,
-});
-
-const middlewares = [epicMiddleware];
-
-const enhancer = composeWithDevTools(applyMiddleware(...middlewares));
-const initialiState = {};
-
-const store = createStore(rootState, initialiState, enhancer);
-epicMiddleware.run(rootEpic);
+import { ApiClient } from '../services';
 
 const initStore = (preloadedState?: RootState) => {
     const epicMiddleware = createEpicMiddleware<
         RootAction,
         RootAction,
         RootState,
-        Services
+        ApiClient
     >({
-        dependencies: services,
+        dependencies: new ApiClient(),
     });
 
     const middlewares = [epicMiddleware];
@@ -74,5 +57,3 @@ export const useStore = (initialState?: RootState) => {
 
     return store;
 };
-
-export default store;

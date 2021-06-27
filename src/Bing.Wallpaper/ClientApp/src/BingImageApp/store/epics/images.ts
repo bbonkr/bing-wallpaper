@@ -4,46 +4,32 @@ import { from, of } from 'rxjs';
 import { filter, map, switchMap, catchError } from 'rxjs/operators';
 import { imagesActions, ImagesActions } from '../actions/images';
 import { RootState } from '../reducers';
-import { ApiResponseModel } from '../../models';
-import { Services } from '../../services';
+import { ApiClient, ErrorResponse } from '../../services';
 
 export const loadImagesEpic: Epic<
     ImagesActions,
     ImagesActions,
     RootState,
-    Services
+    ApiClient
 > = (action$, state$, api) =>
     action$.pipe(
         filter(isActionOf(imagesActions.loadImages.request)),
-        switchMap((action) =>
-            from(api.images.getImages(action.payload)).pipe(
-                map(imagesActions.loadImages.success),
-                catchError((error: ApiResponseModel) =>
-                    of(imagesActions.loadImages.failure(error)),
+        switchMap((action) => {
+            const { page, take } = action.payload;
+            return from(
+                api.images.apiv10ImagesGetAll(page, take, undefined),
+            ).pipe(
+                map((response) =>
+                    imagesActions.loadImages.success(response.data),
                 ),
-            ),
-        ),
+                catchError((errorResponse: ErrorResponse) =>
+                    of(imagesActions.loadImages.failure(errorResponse.data)),
+                ),
+            );
+        }),
     );
 
-export const appendImagesEpic: Epic<
-    ImagesActions,
-    ImagesActions,
-    RootState,
-    Services
-> = (action$, state$, api) =>
-    action$.pipe(
-        filter(isActionOf(imagesActions.appendImages.request)),
-        switchMap((action) =>
-            from(api.images.getImages(action.payload)).pipe(
-                map(imagesActions.appendImages.success),
-                catchError((error: ApiResponseModel) =>
-                    of(imagesActions.appendImages.failure(error)),
-                ),
-            ),
-        ),
-    );
-
-const imagesEpic = combineEpics(loadImagesEpic, appendImagesEpic);
+const imagesEpic = combineEpics(loadImagesEpic);
 
 export default imagesEpic;
 export type ImagesEpic = ReturnType<typeof imagesEpic>;
