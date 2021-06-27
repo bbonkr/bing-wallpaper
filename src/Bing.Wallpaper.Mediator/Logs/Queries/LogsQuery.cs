@@ -35,6 +35,7 @@ namespace Bing.Wallpaper.Mediator.Logs.Queries
                 .WhereDependsOn(!string.IsNullOrWhiteSpace(request.Level), x => x.Level == request.Level)
                 .WhereDependsOn(!string.IsNullOrWhiteSpace(request.Keyword), x => EF.Functions.Like(x.Message, $"%{request.Keyword.Trim()}%"))
                 .AsNoTracking()
+                .OrderByDescending(x=>x.Logged)
                 .Select(x => mapper.Map<LogModel>(x))
                 .ToPagedModelAsync(request.Page, request.Limit, cancellationToken);
 
