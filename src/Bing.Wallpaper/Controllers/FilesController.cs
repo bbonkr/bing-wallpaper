@@ -27,9 +27,6 @@ namespace Bing.Wallpaper.Controllers
     [ApiExceptionHandlerFilter]
     public class FilesController : ApiControllerBase
     {
-
-        public readonly int MAX_AGE = (int)TimeSpan.FromDays(365).TotalSeconds;
-
         public FilesController(
             IMediator mediator,
             ILogger<FilesController> logger)
