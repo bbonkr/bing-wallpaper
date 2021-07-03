@@ -53,7 +53,7 @@ export const ImagesContent = () => {
                 heroSize="is-small"
             />
 
-            <Section classNames={['p-6']}>
+            <Section classNames={[]}>
                 <ImagesList images={images ?? []} />
                 {hasMoreImages && (
                     <div className="is-flex is-flex-direction-column is-justify-content-center">
