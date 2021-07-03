@@ -5,12 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Bing.Wallpaper.Data;
-using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Mediator.Images.Commands;
-using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Options;
-using Bing.Wallpaper.Services;
 
 using CronScheduler.Extensions.Scheduler;
 
@@ -27,33 +23,22 @@ namespace Bing.Wallpaper.Jobs
         const string TAG = "[JOB - BING TODAY IMAGE]";
 
         public BingImageJob(
-            //IServiceProvider provider
-            IMediator mediator,
-            IOptionsMonitor<CollectorOptions> collectorOptionAccessor,
-            ILogger<BingImageJob> logger
+            IServiceProvider provider
             )
         {
-            //this.provider = provider;
-            //var scope = provider.CreateScope();
-
-            //databaseContext = scope.ServiceProvider.GetRequiredService<DefaultDatabaseContext>();
-            //imageService = scope.ServiceProvider.GetRequiredService<IImageService<BingImage>>();
-            //fileService = scope.ServiceProvider.GetRequiredService<ILocalFileService>();
-            //var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
-
-            //logger = loggerFactory.CreateLogger<BingImageJob>();
-            //var collectorOptionAccessor = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CollectorOptions>>();
-            //collectorOptions = collectorOptionAccessor.CurrentValue;
-
-            this.mediator = mediator;
-            this.collectorOptions = collectorOptionAccessor.CurrentValue ?? throw new ArgumentException("");
-            this.logger = logger;
+            this.provider = provider;
         }
 
         public string Name { get; } = nameof(BingImageJob);
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            var scope= provider.CreateScope();
+            var mediator= scope.ServiceProvider.GetRequiredService<IMediator>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<BingImageJob>>();
+            var collectorOptionsMonitor = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<CollectorOptions>>();
+            var collectorOptions = collectorOptionsMonitor.CurrentValue ?? throw new ArgumentException(CollectorOptions.ExceptionMessage);
+
             // print options
             logger.LogInformation($"[{TAG}][{nameof(CollectorOptions)}]: ${collectorOptions.ToJson()}");
 
@@ -64,72 +49,6 @@ namespace Bing.Wallpaper.Jobs
             try
             {
                 watch.Start();
-
-                //var bingImages = await imageService.Get();
-
-                //if (bingImages == null)
-                //{
-                //    message = "An exception occurred while collecting image information.";
-                //    logger.LogInformation(message);
-                //    //return StatusCode(500, ErrorModel.GetErrorModel(500, "Server error"));
-                //    throw new Exception(message);
-                //}
-
-                //if (!String.IsNullOrEmpty(bingImages.Message))
-                //{
-                //    message = $"Image information collection procedure message: {bingImages.Message}";
-                //    logger.LogInformation(message);
-                //    //return StatusCode(400, ErrorModel.GetErrorModel(400, bingImages.Message));
-                //    throw new Exception(bingImages.Message);
-                //}
-
-                //if (bingImages.Images.Count == 0)
-                //{
-                //    message = "There are no collection results.";
-                //    logger.LogInformation(message);
-                //    //return StatusCode(404, ErrorModel.GetErrorModel(404, "Does not Have image information."));
-                //    throw new Exception(message);
-                //}
-
-
-                //var result = new List<ImageInfo>();
-
-                //foreach (var image in bingImages.Images)
-                //{
-                //    if (databaseContext.Images.Any(x => x.Hash == image.Hsh))
-                //    {
-                //        continue;
-                //    }
-
-                //    var savedFile = await fileService.SaveAsync(image);
-
-                //    result.Add(new ImageInfo
-                //    {
-                //        BaseUrl = image.GetBaseUrl(),
-                //        Url = image.Url,
-                //        FilePath = savedFile.FilePath,
-                //        FileName = savedFile.FileName,
-                //        Directory = savedFile.Directory,
-                //        Hash = image.Hsh,
-                //        ContentType = savedFile.ContentType,
-                //        FileSize = savedFile.Size,
-                //        CreatedAt = now,
-                //        Metadata = new ImageMetadata
-                //        {
-                //            Title = image.Title,
-                //            Origin = image.GetSourceTitle(),
-                //            Copyright = image.Copyright,
-                //            CopyrightLink = image.CopyrightLink,
-                //        }
-                //    });
-                //}
-                //var affectedCount = 0;
-                //if (result.Count > 0)
-                //{
-                //    databaseContext.Images.AddRange(result.ToArray());
-
-                //    affectedCount = await databaseContext.SaveChangesAsync(cancellationToken);
-                //}
 
                 var command = new AddImageCommand();
 
@@ -149,13 +68,6 @@ namespace Bing.Wallpaper.Jobs
             }
         }
 
-        //private readonly DefaultDatabaseContext databaseContext;
-        //private readonly IImageService<BingImage> imageService;
-        //private readonly ILocalFileService fileService;
-        //private readonly ILogger logger;
-        private readonly CollectorOptions collectorOptions;
-        //private readonly IServiceProvider provider;
-        private readonly IMediator mediator;
-        private readonly ILogger logger;
+        private readonly IServiceProvider provider;
     }
 }

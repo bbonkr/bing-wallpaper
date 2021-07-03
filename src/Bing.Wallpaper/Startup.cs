@@ -58,33 +58,41 @@ namespace Bing.Wallpaper
 
             services.AddScheduler(builder =>
             {
-                builder.Services.AddLogging().AddDomainService(Configuration);
-                builder.Services.Configure<SchedulerOptions>(options =>
+                var collectorOptions = new CollectorOptions();
+                var collectionOptionsConfiguration = Configuration.GetSection(CollectorOptions.Name);
+                collectionOptionsConfiguration.Bind(collectorOptions);
+
+                builder.Services
+                .AddLogging()
+                .AddDomainService(Configuration)
+                .Configure<CollectorOptions>(Configuration.GetSection(CollectorOptions.Name))
+                ;
+
+                builder.AddJob<BingImageJob>(sectionName: "bing-image-collect-job", configure: options =>
                 {
                     /*
-                    * -------------------------------------------------------------------------------------------------------------
-                    *                                        Allowed values    Allowed special characters   Comment
-                    *
-                    * 忙式式式式式式式式式式式式式 second (optional)       0-59              * , - /                      
-                    * 弛 忙式式式式式式式式式式式式式 minute                0-59              * , - /                      
-                    * 弛 弛 忙式式式式式式式式式式式式式 hour                0-23              * , - /                      
-                    * 弛 弛 弛 忙式式式式式式式式式式式式式 day of month      1-31              * , - / L W ?                
-                    * 弛 弛 弛 弛 忙式式式式式式式式式式式式式 month           1-12 or JAN-DEC   * , - /                      
-                    * 弛 弛 弛 弛 弛 忙式式式式式式式式式式式式式 day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
-                    * 弛 弛 弛 弛 弛 弛
-                    * * * * * * *                     
-                    * -------------------------------------------------------------------------------------------------------------
-                   */
-                    var collectorOptions = new CollectorOptions();
-                    var collectionOptionsConfiguration = Configuration.GetSection(CollectorOptions.Name);
-                    collectionOptionsConfiguration.Bind(collectorOptions);
+                      * -------------------------------------------------------------------------------------------------------------
+                      *                                        Allowed values    Allowed special characters   Comment
+                      *
+                      * 忙式式式式式式式式式式式式式 second (optional)       0-59              * , - /                      
+                      * 弛 忙式式式式式式式式式式式式式 minute                0-59              * , - /                      
+                      * 弛 弛 忙式式式式式式式式式式式式式 hour                0-23              * , - /                      
+                      * 弛 弛 弛 忙式式式式式式式式式式式式式 day of month      1-31              * , - / L W ?                
+                      * 弛 弛 弛 弛 忙式式式式式式式式式式式式式 month           1-12 or JAN-DEC   * , - /                      
+                      * 弛 弛 弛 弛 弛 忙式式式式式式式式式式式式式 day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
+                      * 弛 弛 弛 弛 弛 弛
+                      * * * * * * *                     
+                      * -------------------------------------------------------------------------------------------------------------
+                     */
 
                     options.CronSchedule = collectorOptions.Schedule;
                     options.CronTimeZone = TimeZoneInfo.Local.Id;
                     options.RunImmediately = false;
                 });
 
-                builder.AddJob<BingImageJob>();
+                builder.UnobservedTaskExceptionHandler = (sender, e) => {
+                    Console.WriteLine("Schedule Job got a exception", e.Exception);
+                };
             });
 
             services.AddControllersWithViews();
@@ -92,6 +100,8 @@ namespace Bing.Wallpaper
             var defaultVersion = new ApiVersion(1, 0);
 
             services.AddApiVersioningAndSwaggerGen(defaultVersion);
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -125,6 +135,7 @@ namespace Bing.Wallpaper
             app.UseRouting();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
