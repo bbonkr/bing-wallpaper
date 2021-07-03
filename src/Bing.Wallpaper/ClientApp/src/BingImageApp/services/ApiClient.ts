@@ -1,5 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { ApiResponseModel, ImagesApi, LogsApi } from '../../api/api';
+import {
+    ApiResponseModel,
+    ImagesApi,
+    LogsApi,
+    BingImagesApi,
+} from '../../api/api';
 import { Configuration } from '../../api/configuration';
 
 export class ApiClient {
@@ -20,9 +25,11 @@ export class ApiClient {
 
         this.logs = new LogsApi(configuration, '', axiosInstance);
         this.images = new ImagesApi(configuration, '', axiosInstance);
+        this.bingImage = new BingImagesApi(configuration, '', axiosInstance);
     }
 
     public readonly images: ImagesApi;
+    public readonly bingImage: BingImagesApi;
     public readonly logs: LogsApi;
 
     private getAxiosInstance(): AxiosInstance {

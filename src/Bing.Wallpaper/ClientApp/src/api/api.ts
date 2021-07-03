@@ -43,6 +43,37 @@ export interface ApiResponseModel {
 /**
  * 
  * @export
+ * @interface BingImageServiceGetRequestModel
+ */
+export interface BingImageServiceGetRequestModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof BingImageServiceGetRequestModel
+     */
+    format?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof BingImageServiceGetRequestModel
+     */
+    startIndex?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BingImageServiceGetRequestModel
+     */
+    take?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BingImageServiceGetRequestModel
+     */
+    market?: string | null;
+}
+/**
+ * 
+ * @export
  * @interface ImageItemModel
  */
 export interface ImageItemModel {
@@ -289,10 +320,11 @@ export const BingImagesApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @param {BingImageServiceGetRequestModel} [bingImageServiceGetRequestModel] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiv10BingImagesGetImages: async (options: any = {}): Promise<RequestArgs> => {
+        apiv10BingImagesCollectImages: async (bingImageServiceGetRequestModel?: BingImageServiceGetRequestModel, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/BingImages`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -301,15 +333,18 @@ export const BingImagesApiAxiosParamCreator = function (configuration?: Configur
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bingImageServiceGetRequestModel, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -328,11 +363,12 @@ export const BingImagesApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @param {BingImageServiceGetRequestModel} [bingImageServiceGetRequestModel] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiv10BingImagesGetImages(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiResponseModel>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiv10BingImagesGetImages(options);
+        async apiv10BingImagesCollectImages(bingImageServiceGetRequestModel?: BingImageServiceGetRequestModel, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiResponseModel>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.apiv10BingImagesCollectImages(bingImageServiceGetRequestModel, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -347,11 +383,12 @@ export const BingImagesApiFactory = function (configuration?: Configuration, bas
     return {
         /**
          * 
+         * @param {BingImageServiceGetRequestModel} [bingImageServiceGetRequestModel] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiv10BingImagesGetImages(options?: any): AxiosPromise<ApiResponseModel> {
-            return localVarFp.apiv10BingImagesGetImages(options).then((request) => request(axios, basePath));
+        apiv10BingImagesCollectImages(bingImageServiceGetRequestModel?: BingImageServiceGetRequestModel, options?: any): AxiosPromise<ApiResponseModel> {
+            return localVarFp.apiv10BingImagesCollectImages(bingImageServiceGetRequestModel, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -365,12 +402,13 @@ export const BingImagesApiFactory = function (configuration?: Configuration, bas
 export class BingImagesApi extends BaseAPI {
     /**
      * 
+     * @param {BingImageServiceGetRequestModel} [bingImageServiceGetRequestModel] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BingImagesApi
      */
-    public apiv10BingImagesGetImages(options?: any) {
-        return BingImagesApiFp(this.configuration).apiv10BingImagesGetImages(options).then((request) => request(this.axios, this.basePath));
+    public apiv10BingImagesCollectImages(bingImageServiceGetRequestModel?: BingImageServiceGetRequestModel, options?: any) {
+        return BingImagesApiFp(this.configuration).apiv10BingImagesCollectImages(bingImageServiceGetRequestModel, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
