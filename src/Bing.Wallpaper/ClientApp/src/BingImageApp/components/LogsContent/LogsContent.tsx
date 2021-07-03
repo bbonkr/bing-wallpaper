@@ -124,3 +124,5 @@ export const LogsContent = () => {
         </Content>
     );
 };
+
+export default LogsContent;

@@ -73,3 +73,5 @@ export const ImagesContent = () => {
         </Content>
     );
 };
+
+export default ImagesContent;
