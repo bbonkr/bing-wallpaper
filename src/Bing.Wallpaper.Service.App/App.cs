@@ -3,6 +3,7 @@ using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Options;
 using Bing.Wallpaper.Services;
+using Bing.Wallpaper.Services.Models;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -139,7 +140,8 @@ namespace Bing.Wallpaper.Service.App
         {
             var now = DateTimeOffset.UtcNow;
             logger.LogInformation("이미지 수집을 시작합니다");
-            var serviceResult = await imageService.Get();
+            var reuqestModel = new BingImageServiceGetRequestModel();
+            var serviceResult = await imageService.Get(reuqestModel);
 
             if (serviceResult == null)
             {
