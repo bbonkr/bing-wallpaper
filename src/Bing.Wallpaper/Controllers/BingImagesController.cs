@@ -19,6 +19,7 @@ using kr.bbon.Core;
 using MediatR;
 using Bing.Wallpaper.Mediator.Images.Commands;
 using Microsoft.AspNetCore.Http;
+using Bing.Wallpaper.Services.Models;
 
 namespace Bing.Wallpaper.Controllers
 {
@@ -35,16 +36,17 @@ namespace Bing.Wallpaper.Controllers
             this.mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel))]
-        public async Task<IActionResult> GetImagesAsync()
+        public async Task<IActionResult> CollectImagesAsync(BingImageServiceGetRequestModel model)
         {
-            var command = new AddImageCommand();
+
+            var command = new AddImageCommand(model.StartIndex, model.Take);
 
             var result = await mediator.Send(command);
 
-            return StatusCode(HttpStatusCode.OK, $"${result.CollectedCount:n0} images collected.");
+            return StatusCode(HttpStatusCode.OK, $"{result.CollectedCount:n0} images collected.");
         }
 
         private readonly IMediator mediator;

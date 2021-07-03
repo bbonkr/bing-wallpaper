@@ -43,6 +43,7 @@ export const hasMoreLogs = createReducer<boolean, LogsActions>(true)
     .handleAction([logsActions.loadLogs.success], (state, action) => {
         const itemsCount = (action.payload.data?.items ?? []).length;
         const limit = action.payload.data?.limit ?? 0;
+        console.info(`hasMoreLogs, ${action.type}`, limit, itemsCount);
         return limit === itemsCount;
     })
     .handleAction(

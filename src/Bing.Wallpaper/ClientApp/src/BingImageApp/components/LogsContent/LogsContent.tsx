@@ -77,7 +77,9 @@ export const LogsContent = () => {
                                     <tr key={log.id}>
                                         <td>{log.logged}</td>
                                         <td>{log.level}</td>
-                                        <td>{log.message}</td>
+                                        <td className="content-wrap">
+                                            {log.message}
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
@@ -104,19 +106,23 @@ export const LogsContent = () => {
                         )}
                     </table>
                 </div>
-                <div>
-                    <button
-                        className={`button is-fullwidth ${
-                            isLoadingLogs ? 'is-loading' : ''
-                        }`}
-                        onClick={handleClickLoadMore}
-                        disabled={isLoadingLogs}
-                        title="Load more logs"
-                    >
-                        Load more
-                    </button>
-                </div>
+                {hasMoreLogs && (
+                    <div>
+                        <button
+                            className={`button is-fullwidth ${
+                                isLoadingLogs ? 'is-loading' : ''
+                            }`}
+                            onClick={handleClickLoadMore}
+                            disabled={isLoadingLogs}
+                            title="Load more logs"
+                        >
+                            Load more
+                        </button>
+                    </div>
+                )}
             </Section>
         </Content>
     );
 };
+
+export default LogsContent;

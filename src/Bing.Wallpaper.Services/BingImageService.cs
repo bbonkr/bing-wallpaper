@@ -1,5 +1,8 @@
 ﻿using Bing.Wallpaper.Models;
+using Bing.Wallpaper.Services.Models;
+
 using Microsoft.Extensions.Logging;
+
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -10,7 +13,8 @@ namespace Bing.Wallpaper.Services
 {
     public class BingImageService : IImageService<BingImage>
     {
-        private const string BASE_URL = "https://www.bing.com/HPImageArchive.aspx?format=js&idx=1&n=10&mkt=en-US";
+        // https://www.bing.com/HPImageArchive.aspx?format=js&idx=1&n=10&mkt=en-US
+        private const string BASE_URL = "https://www.bing.com/HPImageArchive.aspx";
 
         public BingImageService(ILoggerFactory loggerFactory)
         {
@@ -19,10 +23,12 @@ namespace Bing.Wallpaper.Services
             client.Timeout = TimeSpan.FromSeconds(30);
         }
 
-        public async Task<ImagesModel<BingImage>> Get()
+        public async Task<ImagesModel<BingImage>> Get(BingImageServiceGetRequestModel model)
         {
             ImagesModel<BingImage> result = new ImagesModel<BingImage>();
-            var url = "https://www.bing.com/HPImageArchive.aspx?format=js&idx=1&n=10&mkt=en-US";
+
+            var url = $"{BASE_URL}{model.CreateQueryString()}";
+
             try
             {
                 var response = await client.GetAsync(url);
