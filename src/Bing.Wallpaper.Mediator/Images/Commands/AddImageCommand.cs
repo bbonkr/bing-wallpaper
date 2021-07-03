@@ -17,6 +17,15 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
 {
     public class AddImageCommand : IRequest<AddImageCommandResult>
     {
+        public AddImageCommand(int startIndex = 1, int take = 8)
+        {
+            StartIndex = startIndex;
+            Take = take;
+        }
+
+        public int StartIndex { get; set; } = 1;
+
+        public int Take { get; set; } = 8;
     }
 
     public class AddImageCommandResult
@@ -47,7 +56,11 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
             var now = DateTimeOffset.UtcNow;
             string message = string.Empty;
 
-            var bingImages = await imageService.Get();
+            var bingImages = await imageService.Get(new Services.Models.BingImageServiceGetRequestModel
+            {
+                StartIndex = request.StartIndex,
+                Take = request.Take,
+            });
 
             if (bingImages == null)
             {
