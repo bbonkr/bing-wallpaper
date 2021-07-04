@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Bing.Wallpaper.Mediator\Bing.Wallpaper.Mediator.csproj" />
+		<ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
+		<PackageReference Include="CronScheduler.AspNetCore" Version="3.0.1" />
+	</ItemGroup>
+
+</Project>
