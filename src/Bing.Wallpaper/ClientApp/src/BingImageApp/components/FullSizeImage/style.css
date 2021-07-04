@@ -8,7 +8,7 @@
     z-index: 2000;
     display: flex;
     flex-direction: column;
-    justify-content: center;   
+    justify-content: center;
 }
 
 .full-size-image-container>img {
@@ -38,6 +38,10 @@
 .full-size-image-container figure {
     display: flex;
     flex-direction: column;
+}
+
+.full-size-image-container figure > img {
+    max-height: 90vh;
 }
 
 .full-size-image-container figure>figcaption {
