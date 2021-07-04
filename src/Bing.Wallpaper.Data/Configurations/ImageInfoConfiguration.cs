@@ -19,18 +19,23 @@ namespace Bing.Wallpaper.Data.Configurations
 
             builder.Property(x => x.Id)
                 .IsRequired()
-                .ValueGeneratedOnAdd();
+                .HasDefaultValueSql("newid()")
+                .HasComment("식별자");
 
             builder.Property(x => x.BaseUrl)
                 .IsRequired()
                 .HasMaxLength(1000)
+                .HasComment("기준 URL")
                 ;
             builder.Property(x => x.ContentType)
                 .IsRequired()
                 .HasMaxLength(30)
                 ;
             builder.Property(x => x.CreatedAt)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValueSql("sysdatetimeoffset()") // sql server only
+                .HasComment("작성시각");
+
             builder.Property(x => x.Directory)
                 .IsRequired()
                 .HasMaxLength(1000);

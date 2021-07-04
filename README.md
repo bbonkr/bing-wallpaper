@@ -2,6 +2,8 @@
 title: "Bing Today Image Collector"
 ---
 
+[![Build and tag](https://github.com/bbonkr/bing-wallpaper/actions/workflows/dotnet.yml/badge.svg)](https://github.com/bbonkr/bing-wallpaper/actions/workflows/dotnet.yml) [![docker image](https://github.com/bbonkr/bing-wallpaper/actions/workflows/docker.yml/badge.svg)](https://github.com/bbonkr/bing-wallpaper/actions/workflows/docker.yml)
+
 # Bing Today Image Collector
 
 Bing.com 오늘의 이미지를 수집합니다.
@@ -115,7 +117,7 @@ Use "dotnet ef [command] --help" for more information about a command.
 ### 데이터베이스 마이그레이션 코드 작성
 
 ```powershell
-PS> ./add-migration.ps1 "Add some fields"
+PS> ./ef-migration-add.ps1 "Add some fields"
 ```
 
 ## 실행

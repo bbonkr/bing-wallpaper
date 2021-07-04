@@ -20,9 +20,9 @@ namespace Bing.Wallpaper.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
-                .HasMaxLength(36)
-                .ValueGeneratedOnAdd()
                 .IsRequired()
+                .HasMaxLength(36)
+                .HasDefaultValueSql("newid()")
                 .HasComment("식별자")
                 ;
 
@@ -34,7 +34,7 @@ namespace Bing.Wallpaper.Data.Configurations
             
             builder.Property(x => x.Logged)
                 .IsRequired()
-                .HasDefaultValue(DateTimeOffset.UtcNow)
+                .HasDefaultValueSql("sysdatetimeoffset()") // sql server only
                 .HasComment("작성시각")
                 ;
 
