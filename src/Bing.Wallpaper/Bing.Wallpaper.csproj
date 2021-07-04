@@ -13,6 +13,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Jobs\BingImageJob.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
         <PackageReference Include="CronScheduler.AspNetCore" Version="3.0.1" />
         <PackageReference Include="kr.bbon.AspNetCore" Version="1.1.0" />
@@ -34,6 +38,7 @@
         <ProjectReference Include="..\Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj" />
         <ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
         <ProjectReference Include="..\Bing.Wallpaper.Entities\Bing.Wallpaper.Entities.csproj" />
+        <ProjectReference Include="..\Bing.Wallpaper.Jobs\Bing.Wallpaper.Jobs.csproj" />
         <ProjectReference Include="..\Bing.Wallpaper.Mediator\Bing.Wallpaper.Mediator.csproj" />
         <ProjectReference Include="..\Bing.Wallpaper.Models\Bing.Wallpaper.Models.csproj" />
         <ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
@@ -41,6 +46,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Jobs\" />
         <Folder Include="wwwroot\js\" />
         <Folder Include="wwwroot\css\" />
     </ItemGroup>
