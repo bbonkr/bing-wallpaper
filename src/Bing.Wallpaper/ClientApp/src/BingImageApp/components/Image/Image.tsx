@@ -42,12 +42,12 @@ export const Image = ({
             if (entry.isIntersecting && thumbnailLoaded) {
                 intersectionObserver.unobserve(entry.target);
                 setImageLoaded((_) => true);
-                console.info(
-                    '🔨 Request image file: ',
-                    imageRef?.current?.src ||
-                        imageRef?.current?.srcset ||
-                        'Does not find image file uri',
-                );
+                // console.info(
+                //     '🔨 Request image file: ',
+                //     imageRef?.current?.src ||
+                //         imageRef?.current?.srcset ||
+                //         'Does not find image file uri',
+                // );
             }
         });
     };
@@ -83,10 +83,10 @@ export const Image = ({
 
     useEffect(() => {
         if (typeof isRequestFullScreen === 'boolean' && isRequestFullScreen) {
-            console.info(
-                'Image => ',
-                typeof imageRef.current?.requestFullscreen,
-            );
+            // console.info(
+            //     'Image => ',
+            //     typeof imageRef.current?.requestFullscreen,
+            // );
             if (typeof imageRef.current?.requestFullscreen === 'function') {
                 imageRef.current?.requestFullscreen();
             }

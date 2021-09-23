@@ -24,6 +24,7 @@
         "redux-devtools-extension": "^2.13.9",
         "redux-observable": "^1.2.0",
         "rxjs": "^6.6.6",
+        "swr": "^1.0.1",
         "typesafe-actions": "^5.1.0"
     },
     "devDependencies": {
