@@ -43,7 +43,7 @@ export const LogsContent = () => {
             ...formState,
         }));
 
-        setSize(1);
+        setSize((_) => 1);
     };
 
     useEffect(() => {

@@ -22,32 +22,37 @@ export const ImagesContent = () => {
             new ApiClient().images
                 .apiv10ImagesGetAll(page, take)
                 .then((res) => res.data.data),
+        {},
     );
 
     const handleClickLoadMore = () => {
         if (hasMoreImages) {
-            setSize(size + 1);
+            setSize((prevSize) => prevSize + 1);
         }
     };
 
     const handleClickRefresh = () => {
-        setSize(1);
+        setSize((_) => 1);
     };
 
     useEffect(() => {
         if (data) {
-            let hasMore = true;
-
-            const latestItem = data.find(
+            const latestSet = data.find(
                 (_, index, arr) => index === arr.length - 1,
             );
-            if (latestItem) {
-                hasMore = latestItem.currentPage !== latestItem.totalPages;
-            } else {
-                hasMore = true;
-            }
 
-            setHasMoreImages((prev) => (prev !== hasMore ? hasMore : prev));
+            setHasMoreImages((prevState) => {
+                let endOfList = false;
+                if (latestSet) {
+                    endOfList = latestSet.currentPage === latestSet.totalPages;
+                }
+                const hasMore = !endOfList;
+                if (prevState !== hasMore) {
+                    return hasMore;
+                }
+
+                return prevState;
+            });
         }
     }, [data]);
 
@@ -71,8 +76,8 @@ export const ImagesContent = () => {
                     (window.innerHeight + window.scrollY) /
                     window.document.body.clientHeight;
 
-                if (position > 0.8 && hasMoreImages) {
-                    setSize(size + 1);
+                if (position > 0.9 && hasMoreImages) {
+                    setSize((prevSize) => prevSize + 1);
                 }
             }, 200);
         };
