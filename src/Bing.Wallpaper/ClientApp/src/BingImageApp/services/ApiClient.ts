@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import {
-    ApiResponseModel,
+    ObjectApiResponseModel,
     ImagesApi,
     LogsApi,
     BingImagesApi,
@@ -15,7 +15,7 @@ export class ApiClient {
             (res) => res,
             (err) => {
                 if (axios.isAxiosError(err)) {
-                    const axiosErr = err as AxiosError<ApiResponseModel>;
+                    const axiosErr = err as AxiosError<ObjectApiResponseModel>;
 
                     throw axiosErr.response;
                 }
@@ -39,4 +39,4 @@ export class ApiClient {
     }
 }
 
-export type ErrorResponse = AxiosResponse<ApiResponseModel>;
+export type ErrorResponse = AxiosResponse<ObjectApiResponseModel>;

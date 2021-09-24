@@ -17,7 +17,11 @@ namespace Bing.Wallpaper.Mediator.Profiles
              .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.Ticks))
              .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Metadata.Title))
              .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Metadata.Copyright))
-             .ForMember(dest => dest.CopyrightLink, opt => opt.MapFrom(src => src.Metadata.CopyrightLink));
+             .ForMember(dest => dest.CopyrightLink, opt => opt.MapFrom(src => src.Metadata.CopyrightLink))
+             .ForMember(dest => dest.Width, opt => opt.MapFrom(src => src.Metadata.Width))
+             .ForMember(dest => dest.Height, opt => opt.MapFrom(src => src.Metadata.Height))
+             ;
+
 
             CreateMap<ImageInfo, ImageItemDetailModel>()
             .IncludeBase<ImageInfo, ImageItemModel>()

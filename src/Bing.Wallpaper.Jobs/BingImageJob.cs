@@ -63,7 +63,6 @@ namespace Bing.Wallpaper.Jobs
             }
             finally
             {
-                
             }
         }
 

@@ -20,9 +20,9 @@ namespace Bing.Wallpaper.Services
         string GetThumbnailFilePath(string imageFilePath, string thumbnailDirectory);
         string GetThumbnailFilePath(string imageFilePath);
 
-        bool HasThumbnail(string imageFilePath, string thumbnailDirectory);
-
         bool HasThumbnail(string imageFilePath);
+
+        (int width, int height) GetImageResolution(string imageFilePath);
     }
 
     public class ImageFileService: IImageFileService
@@ -43,13 +43,30 @@ namespace Bing.Wallpaper.Services
                 using (var image = new MagickImage(imageFilePath))
                 {
                     //image.Resize(120, 0);
-                    image.Thumbnail(30, 0);
+                    image.Thumbnail(64, 0);
 
                     image.Write(thumbnailFilePath);
                 }
             }
 
             return Task.FromResult(thumbnailFilePath);
+        }
+
+        public (int width, int height) GetImageResolution(string imageFilePath)
+        {
+            var w = 0;
+            var h = 0;
+
+            if (File.Exists(imageFilePath))
+            {
+                using (var image = new MagickImage(imageFilePath))
+                {
+                    w = image.Width;
+                    h = image.Height;
+                }
+            }
+
+            return (width: w, height: h);
         }
 
         public async Task<string> GenerateThumbnailAsync(string imageFilePath)
@@ -85,7 +102,7 @@ namespace Bing.Wallpaper.Services
             return GetThumbnailFilePath(imageFilePath, collectorOptions.ThumbnailPath);
         }
 
-        private (string Name, string Extension) GetFileNamePart(string imageFilePath)
+        public (string Name, string Extension) GetFileNamePart(string imageFilePath)
         {
             var file = new FileInfo(imageFilePath);
 

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
-import { ApiResponseModel, LogModel } from '../../../api/api';
+import { ObjectApiResponseModel, LogModel } from '../../../api/api';
 import { logsActions, LogsActions } from '../actions/logs';
 
 export const isLoadingLogs = createReducer<boolean, LogsActions>(false)
@@ -11,7 +11,7 @@ export const isLoadingLogs = createReducer<boolean, LogsActions>(false)
     );
 
 export const loadLogsError = createReducer<
-    ApiResponseModel | null,
+    ObjectApiResponseModel | null,
     LogsActions
 >(null)
     .handleAction(

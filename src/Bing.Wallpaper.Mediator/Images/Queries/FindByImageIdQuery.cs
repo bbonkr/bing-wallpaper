@@ -47,6 +47,8 @@ namespace Bing.Wallpaper.Mediator.Images.Queries
 
         public async Task<FildImageResultModel> Handle(FindByImageIdQuery request, CancellationToken cancellationToken)
         {
+            var message = string.Empty;
+
             var record = await dbContext.Images
                 .Include(x => x.Metadata)
                 .Where(x => x.Id == request.Id)
@@ -56,14 +58,16 @@ namespace Bing.Wallpaper.Mediator.Images.Queries
 
             if (record == null)
             {
-                throw new DefaultHttpStatusException(HttpStatusCode.NotFound, "File record does not find.");
+                message = "File record does not find.";
+                throw new ApiException(HttpStatusCode.NotFound, message);
             }
 
             var fileInfo = new FileInfo(record.FilePath);
 
             if (!fileInfo.Exists)
             {
-                throw new DefaultHttpStatusException(HttpStatusCode.NotFound, "File does not exist.");
+                message = "File does not exist.";
+                throw new ApiException(HttpStatusCode.NotFound, message);
             }
 
             if (ImageTypes.Thumbnail.Equals(request.Type?.ToLower() ?? string.Empty))
@@ -96,7 +100,8 @@ namespace Bing.Wallpaper.Mediator.Images.Queries
 
             if (buffer == null)
             {
-                throw new DefaultHttpStatusException(HttpStatusCode.NotFound, "File does not exist.");
+                message = "File does not exist.";
+                throw new ApiException(HttpStatusCode.NotFound, message);
             }
 
             return new FildImageResultModel

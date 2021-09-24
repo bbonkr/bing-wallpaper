@@ -23,6 +23,10 @@ namespace Bing.Wallpaper.Mediator.Models
         public string Copyright { get; set; }
 
         public string CopyrightLink { get; set; }
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
     }
 
     public class ImageItemDetailModel : ImageItemModel
