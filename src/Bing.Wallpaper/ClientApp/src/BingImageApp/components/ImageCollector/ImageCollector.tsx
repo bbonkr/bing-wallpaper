@@ -1,20 +1,47 @@
-import React from 'react';
-import { useBingImagesApi } from '../../hooks/useBingImagesApi/useBingImagesApi';
+import React, { useState } from 'react';
 import { Content, Section } from '../Layouts';
 import Loading from '../Loading';
 import { CollectorForm } from './CollectorForm';
+import { useSWRConfig } from 'swr';
+import { ApiClient } from '../../services';
+import { ApiResponseModel } from '../../models';
+import { UiHelper } from '../../lib/UiHelper';
 
 export const ImageCollector = () => {
-    const {
-        collectRequest,
-        isLoadingCollectImages,
-        resetCollectErrorRequest,
-        collectImagesError,
-        collectResult,
-    } = useBingImagesApi();
+    const [isLoadingCollectImages, setIsLoadingCollectImages] = useState(false);
+    const [collectResult, setCollectResult] = useState<ApiResponseModel>();
+    const [hasError, setHasError] = useState(false);
+
+    const { mutate } = useSWRConfig();
 
     const handleCollect = (startIndex: number, take: number) => {
-        collectRequest({ startIndex: startIndex, take: take });
+        setIsLoadingCollectImages((_) => true);
+        setHasError((_) => false);
+        mutate(
+            ['POST:/api/bingImages'],
+            (_: any) => {
+                return new ApiClient().bingImage
+                    .apiv10BingImagesCollectImages({
+                        startIndex: startIndex,
+                        take: take,
+                    })
+                    .then((res) => res.data);
+            },
+            false,
+        )
+            .then((res) => {
+                console.info('mutate result', res);
+                const data: ApiResponseModel = res;
+                setCollectResult((_) => data);
+            })
+            .catch((res) => {
+                const data: ApiResponseModel = res;
+                setCollectResult((_) => data);
+                setHasError((_) => true);
+            })
+            .finally(() => {
+                setIsLoadingCollectImages(false);
+            });
     };
 
     return (
@@ -34,12 +61,19 @@ export const ImageCollector = () => {
             <Section>
                 {isLoadingCollectImages ? (
                     <Loading message="Collecting ..." />
-                ) : collectImagesError ? (
-                    <div className="is-flex-grow-1 is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
-                        {collectImagesError?.message}
-                    </div>
                 ) : (
-                    <div className="is-flex-grow-1 is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
+                    <div
+                        className={UiHelper.getClassNames(
+                            ...[
+                                'is-flex-grow-1',
+                                'is-flex',
+                                'is-flex-direction-column',
+                                'is-justify-content-center',
+                                'is-align-items-center',
+                                hasError ? 'has-text-danger' : 'has-text-info',
+                            ].filter(Boolean),
+                        )}
+                    >
                         {collectResult?.message}
                     </div>
                 )}
