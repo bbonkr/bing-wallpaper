@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
-import { ApiResponseModel, ImageItemModel } from '../../../api/api';
+import { ObjectApiResponseModel, ImageItemModel } from '../../../api/api';
 import { imagesActions, ImagesActions } from '../actions/images';
 
 export const isLoadingImages = createReducer<boolean, ImagesActions>(false)
@@ -11,7 +11,7 @@ export const isLoadingImages = createReducer<boolean, ImagesActions>(false)
     );
 
 export const loadImagesError = createReducer<
-    ApiResponseModel | null,
+    ObjectApiResponseModel | null,
     ImagesActions
 >(null)
     .handleAction(

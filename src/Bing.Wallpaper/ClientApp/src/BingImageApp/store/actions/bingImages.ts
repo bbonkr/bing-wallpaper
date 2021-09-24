@@ -1,6 +1,6 @@
 import { ActionType, createAction, createAsyncAction } from 'typesafe-actions';
 import {
-    ApiResponseModel,
+    ObjectApiResponseModel,
     BingImageServiceGetRequestModel,
 } from '../../../api/api';
 
@@ -8,7 +8,11 @@ export const collectImages = createAsyncAction(
     'collect-images/reuqest',
     'collect-images/success',
     'collect-images/failure',
-)<BingImageServiceGetRequestModel, ApiResponseModel, ApiResponseModel>();
+)<
+    BingImageServiceGetRequestModel,
+    ObjectApiResponseModel,
+    ObjectApiResponseModel
+>();
 
 export const resetCollectImagesError = createAction(
     'collect-images/reset-error',

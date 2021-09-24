@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
-import { ApiResponseModel } from '../../../api/api';
+import { ObjectApiResponseModel } from '../../../api/api';
 import { bingImagesActions, BingImagesActions } from '../actions/bingImages';
 
 export const isLoadingCollectImages = createReducer<boolean, BingImagesActions>(
@@ -19,7 +19,7 @@ export const isLoadingCollectImages = createReducer<boolean, BingImagesActions>(
     );
 
 export const collectResult = createReducer<
-    ApiResponseModel | null,
+    ObjectApiResponseModel | null,
     BingImagesActions
 >(null)
     .handleAction(
@@ -36,7 +36,7 @@ export const collectResult = createReducer<
     );
 
 export const collectImagesError = createReducer<
-    ApiResponseModel | null,
+    ObjectApiResponseModel | null,
     BingImagesActions
 >(null)
     .handleAction(
