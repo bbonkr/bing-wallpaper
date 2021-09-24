@@ -1,50 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { Content, Section } from '../Layouts';
-import { useLogsApi } from '../../hooks/useLogsApi';
 import { LogFilter, FormState } from './LogFilter';
+import useSWRInfinite from 'swr/infinite';
+import { ApiClient } from '../../services';
+
 import './style.css';
 
 export const LogsContent = () => {
     const COLUMNS_COUNT = 3;
-    const [page, setPage] = useState(1);
     const take = 10;
     const [formState, setFormState] = useState<FormState>();
+    const [hasMoreLogs, setHasMoreLogs] = useState(true);
 
-    const { logs, isLoadingLogs, hasMoreLogs, loadLogsRequest } = useLogsApi();
+    const { data, error, isValidating, size, setSize } = useSWRInfinite(
+        (index: number) => {
+            const page = index + 1;
+
+            return [
+                `/api/logs?page=${page}&level=${
+                    formState?.values.level ?? ''
+                }&keyword=${formState?.values.keyword ?? ''}`,
+                page,
+                formState?.values.level,
+                formState?.values.keyword,
+            ];
+        },
+        (_: any, page: number, level, keyword) => {
+            return new ApiClient().logs
+                .apiv10LogsGetAll(page, take, level, keyword)
+                .then((res) => res.data.data);
+        },
+    );
 
     const handleClickLoadMore = () => {
         if (hasMoreLogs) {
-            loadLogsRequest({
-                page: page + 1,
-                take: take,
-                keyword: formState?.values.keyword ?? '',
-                level: formState?.values.level ?? '',
-            });
-            setPage((state) => state + 1);
+            setSize((prevSize) => prevSize + 1);
         }
     };
 
     const handleSubmit = (formState: FormState) => {
-        const { keyword, level } = formState.values;
-        loadLogsRequest({
-            page: 1,
-            take: take,
-            keyword: keyword,
-            level: level,
-        });
-
-        setPage((_) => 1);
-        setFormState((prevState) => ({
+        setFormState((_) => ({
             ...formState,
         }));
+
+        setSize(1);
     };
 
     useEffect(() => {
-        if ((logs ?? []).length === 0) {
-            loadLogsRequest({ page: page, take: take, keyword: '', level: '' });
-            setPage((_) => 1);
+        if (data) {
+            var latestSet = data.find(
+                (_, index, arr) => index === arr.length - 1,
+            );
+            setHasMoreLogs((prevState) => {
+                let endOfList = false;
+
+                if (latestSet) {
+                    endOfList = latestSet.currentPage === latestSet.totalPages;
+                }
+                const hasMore = !endOfList;
+                if (prevState !== hasMore) {
+                    return hasMore;
+                }
+                return prevState;
+            });
         }
-    }, []);
+    }, [data]);
+
+    useEffect(() => {
+        if (error) {
+            console.error(
+                '[ERROR] Error occurred when data has been fetching.',
+                error,
+            );
+        }
+    }, [error]);
 
     return (
         <Content classNames={[]}>
@@ -55,7 +84,7 @@ export const LogsContent = () => {
                 heroColor="is-info"
             />
             <Section>
-                <LogFilter onSubmit={handleSubmit} isLoading={isLoadingLogs} />
+                <LogFilter onSubmit={handleSubmit} isLoading={isValidating} />
             </Section>
             <Section classNames={[]}>
                 <div className="table-container">
@@ -72,16 +101,18 @@ export const LogsContent = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {logs && logs.length > 0 ? (
-                                logs.map((log) => (
-                                    <tr key={log.id}>
-                                        <td>{log.logged}</td>
-                                        <td>{log.level}</td>
-                                        <td className="content-wrap">
-                                            {log.message}
-                                        </td>
-                                    </tr>
-                                ))
+                            {data && data.length > 0 ? (
+                                data.map((responseData) =>
+                                    responseData?.items?.map((log) => (
+                                        <tr key={log.id}>
+                                            <td>{log.logged}</td>
+                                            <td>{log.level}</td>
+                                            <td className="content-wrap">
+                                                {log.message}
+                                            </td>
+                                        </tr>
+                                    )),
+                                )
                             ) : (
                                 <tr>
                                     <td
@@ -106,20 +137,23 @@ export const LogsContent = () => {
                         )}
                     </table>
                 </div>
-                {hasMoreLogs && (
-                    <div>
-                        <button
-                            className={`button is-fullwidth ${
-                                isLoadingLogs ? 'is-loading' : ''
-                            }`}
-                            onClick={handleClickLoadMore}
-                            disabled={isLoadingLogs}
-                            title="Load more logs"
-                        >
-                            Load more
-                        </button>
-                    </div>
-                )}
+
+                <div>
+                    <button
+                        className={`button is-fullwidth ${
+                            isValidating ? 'is-loading' : ''
+                        }`}
+                        onClick={handleClickLoadMore}
+                        disabled={isValidating || !hasMoreLogs}
+                        title="Load more logs"
+                    >
+                        <span>
+                            {hasMoreLogs
+                                ? 'Load more'
+                                : 'End of the image list'}
+                        </span>
+                    </button>
+                </div>
             </Section>
         </Content>
     );

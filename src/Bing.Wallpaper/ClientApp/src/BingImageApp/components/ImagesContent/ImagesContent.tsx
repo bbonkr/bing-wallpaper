@@ -52,7 +52,11 @@ export const ImagesContent = () => {
     }, [data]);
 
     useEffect(() => {
-        if (error) console.error(`[ERROR] `, error);
+        if (error)
+            console.error(
+                `[ERROR] Error occurred when data has been fetching.`,
+                error,
+            );
     }, [error]);
 
     useEffect(() => {
