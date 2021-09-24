@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System;
 
 namespace Bing.Wallpaper
@@ -32,6 +33,7 @@ namespace Bing.Wallpaper
         public void ConfigureServices(IServiceCollection services)
         {
             services.ConfigureAppOptions(Configuration);
+            
             services.Configure<MvcOptions>(options => {
                 options.CacheProfiles.Add("File-Response-Cache", new CacheProfile
                 {

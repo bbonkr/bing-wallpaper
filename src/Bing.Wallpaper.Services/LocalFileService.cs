@@ -103,6 +103,11 @@ namespace Bing.Wallpaper.Services
                         responseStream.Close();
                     }
 
+                    var (width, height) = imageFileService.GetImageResolution(filePath);
+
+                    result.Width = width;
+                    result.Height = height;
+
                     await imageFileService.GenerateThumbnailAsync(filePath);
 
                     break;

@@ -38,7 +38,7 @@ namespace Bing.Wallpaper.Controllers
 
         [HttpPost]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<object>))]
         public async Task<IActionResult> CollectImagesAsync(BingImageServiceGetRequestModel model)
         {
 

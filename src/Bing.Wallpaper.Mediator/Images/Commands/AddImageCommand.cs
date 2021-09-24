@@ -2,6 +2,7 @@
 using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Services;
+using kr.bbon.Core;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -66,21 +68,21 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
             {
                 message = "An exception occurred while collecting image information.";
                 logger.LogInformation(message);
-                throw new Exception(message);
+                throw new ApiException(System.Net.HttpStatusCode.ServiceUnavailable, message);
             }
 
             if (!String.IsNullOrEmpty(bingImages.Message))
             {
                 message = $"Image information collection procedure message: {bingImages.Message}";
                 logger.LogInformation(message);
-                throw new Exception(bingImages.Message);
+                throw new ApiException(HttpStatusCode.ServiceUnavailable, message);
             }
 
             if (bingImages.Images.Count == 0)
             {
                 message = "There are no collection results.";
                 logger.LogInformation(message);
-                throw new Exception(message);
+                throw new ApiException(HttpStatusCode.NotFound, message);
             }
 
             var result = new List<ImageInfo>();
@@ -111,6 +113,8 @@ namespace Bing.Wallpaper.Mediator.Images.Commands
                         Origin = image.GetSourceTitle(),
                         Copyright = image.Copyright,
                         CopyrightLink = image.CopyrightLink,
+                        Width = savedFile.Width,
+                        Height = savedFile.Height,
                     }
                 });
 
