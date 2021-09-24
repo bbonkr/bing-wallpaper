@@ -26,9 +26,8 @@ export const Header = ({ menuRoutes }: HeaderProps) => {
     };
 
     const handleWindowResize = () => {
-        const headerNavElement = document.querySelector<HTMLDivElement>(
-            '#header-nav',
-        );
+        const headerNavElement =
+            document.querySelector<HTMLDivElement>('#header-nav');
         if (headerNavElement) {
             const styles = window.getComputedStyle(headerNavElement);
             const displayValue = styles.getPropertyValue('display');
@@ -154,7 +153,7 @@ export const Header = ({ menuRoutes }: HeaderProps) => {
                                     className="button"
                                     href="https://github.com/bbonkr/bing-wallpaper"
                                     target="_blank"
-                                    rel="external"
+                                    rel="noreferrer noopener"
                                     title="Navigate to github bing-wallpaper page"
                                 >
                                     <FaGithub />

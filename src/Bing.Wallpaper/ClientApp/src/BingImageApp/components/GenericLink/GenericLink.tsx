@@ -39,6 +39,11 @@ export const GenericLink = ({
             className={`${UiHelper.getClassNames(...(classNames ?? []))}`}
             href={record.href}
             target={record.target || '_blank'}
+            rel={
+                (record.target || '_blank') === '_blank'
+                    ? 'noreferrer noopener'
+                    : ''
+            }
             onClick={handleClick}
         >
             {children ?? (
