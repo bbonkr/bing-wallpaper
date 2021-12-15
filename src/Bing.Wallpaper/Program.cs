@@ -26,6 +26,7 @@ using Bing.Wallpaper.Jobs.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure services
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.ConfigureAppOptions(builder.Configuration);
 
 builder.Services.Configure<MvcOptions>(options => {
