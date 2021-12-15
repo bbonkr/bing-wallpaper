@@ -4,10 +4,9 @@ using Bing.Wallpaper.Services.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Bing.Wallpaper.Services
+namespace Bing.Wallpaper.Services;
+
+public interface IImageService<T> where T : ImageModel
 {
-    public interface IImageService<T> where T : ImageModel
-    {
-        Task<ImagesModel<T>> Get(BingImageServiceGetRequestModel model);
-    }
+    Task<ImagesModel<T>> Get(BingImageServiceGetRequestModel model);
 }

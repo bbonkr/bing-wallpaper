@@ -5,12 +5,11 @@ using Bing.Wallpaper.Services.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Bing.Wallpaper.Services
-{
-    public interface ILocalFileService
-    {
-        Task<LocalFileModel> SaveAsync(ImageModel image);
+namespace Bing.Wallpaper.Services;
 
-        Task<byte[]> ReadAsync(string filePath);
-    }
+public interface ILocalFileService
+{
+    Task<LocalFileModel> SaveAsync(ImageModel image);
+
+    Task<byte[]> ReadAsync(string filePath);
 }

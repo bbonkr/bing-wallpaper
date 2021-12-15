@@ -17,106 +17,104 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bing.Wallpaper.Mediator.Images.Queries
+namespace Bing.Wallpaper.Mediator.Images.Queries;
+
+public class FindByImageIdQuery : IRequest<FildImageResultModel>
 {
+    public string Id { get; set; }
 
-    public class FindByImageIdQuery : IRequest<FildImageResultModel>
+    public string Type { get; set; }
+}
+
+public class FindByImageIdQueryHandler : IRequestHandler<FindByImageIdQuery, FildImageResultModel>
+{
+    public FindByImageIdQueryHandler(
+        DefaultDatabaseContext dbContext,
+        ILocalFileService fileService,
+        IMapper mapper,
+        IOptionsMonitor<CollectorOptions> appOptionsAccessor,
+        IImageFileService imageFileService,
+        ILogger<FindByImageIdQueryHandler> logger)
     {
-        public string Id { get; set; }
-
-        public string Type { get; set; }
+        this.dbContext = dbContext;
+        this.fileService = fileService;
+        this.collectorOptions = appOptionsAccessor.CurrentValue ?? throw new ArgumentException(CollectorOptions.ExceptionMessage, nameof(appOptionsAccessor));
+        this.mapper = mapper;
+        this.imageFileService = imageFileService;
+        this.logger = logger;
     }
 
-    public class FindByImageIdQueryHandler : IRequestHandler<FindByImageIdQuery, FildImageResultModel>
+    public async Task<FildImageResultModel> Handle(FindByImageIdQuery request, CancellationToken cancellationToken)
     {
-        public FindByImageIdQueryHandler(
-            DefaultDatabaseContext dbContext,
-            ILocalFileService fileService,
-            IMapper mapper,
-            IOptionsMonitor<CollectorOptions> appOptionsAccessor,
-            IImageFileService imageFileService,
-            ILogger<FindByImageIdQueryHandler> logger)
+        var message = string.Empty;
+
+        var record = await dbContext.Images
+            .Include(x => x.Metadata)
+            .Where(x => x.Id == request.Id)
+            .AsNoTracking()
+            .Select(x => mapper.Map<ImageItemDetailModel>(x))
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (record == null)
         {
-            this.dbContext = dbContext;
-            this.fileService = fileService;
-            this.collectorOptions = appOptionsAccessor.CurrentValue ?? throw new ArgumentException(CollectorOptions.ExceptionMessage, nameof(appOptionsAccessor));
-            this.mapper = mapper;
-            this.imageFileService = imageFileService;
-            this.logger = logger;
+            message = "File record does not find.";
+            throw new ApiException(HttpStatusCode.NotFound, message);
         }
 
-        public async Task<FildImageResultModel> Handle(FindByImageIdQuery request, CancellationToken cancellationToken)
+        var fileInfo = new FileInfo(record.FilePath);
+
+        if (!fileInfo.Exists)
         {
-            var message = string.Empty;
+            message = "File does not exist.";
+            throw new ApiException(HttpStatusCode.NotFound, message);
+        }
 
-            var record = await dbContext.Images
-                .Include(x => x.Metadata)
-                .Where(x => x.Id == request.Id)
-                .AsNoTracking()
-                .Select(x => mapper.Map<ImageItemDetailModel>(x))
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (record == null)
+        if (ImageTypes.Thumbnail.Equals(request.Type?.ToLower() ?? string.Empty))
+        {
+            try
             {
-                message = "File record does not find.";
-                throw new ApiException(HttpStatusCode.NotFound, message);
-            }
+                var thumbnailPath = collectorOptions.ThumbnailPath;
 
-            var fileInfo = new FileInfo(record.FilePath);
-
-            if (!fileInfo.Exists)
-            {
-                message = "File does not exist.";
-                throw new ApiException(HttpStatusCode.NotFound, message);
-            }
-
-            if (ImageTypes.Thumbnail.Equals(request.Type?.ToLower() ?? string.Empty))
-            {
-                try
+                string thumbnailFilePath;
+                if (!imageFileService.HasThumbnail(fileInfo.FullName))
                 {
-                    var thumbnailPath = collectorOptions.ThumbnailPath;
-
-                    string thumbnailFilePath;
-                    if (!imageFileService.HasThumbnail(fileInfo.FullName))
-                    {
-                        thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
-                        fileInfo = new FileInfo(thumbnailFilePath);
-                    }
-                    else
-                    {
-                        thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
-                    }
-
+                    thumbnailFilePath = await imageFileService.GenerateThumbnailAsync(fileInfo.FullName);
                     fileInfo = new FileInfo(thumbnailFilePath);
                 }
-                catch (Exception ex)
+                else
                 {
-                    logger.LogError(ex, ex.Message);
-                    fileInfo = new FileInfo(record.FilePath);
+                    thumbnailFilePath = imageFileService.GetThumbnailFilePath(fileInfo.FullName);
                 }
+
+                fileInfo = new FileInfo(thumbnailFilePath);
             }
-
-            var buffer = await fileService.ReadAsync(fileInfo.FullName);
-
-            if (buffer == null)
+            catch (Exception ex)
             {
-                message = "File does not exist.";
-                throw new ApiException(HttpStatusCode.NotFound, message);
+                logger.LogError(ex, ex.Message);
+                fileInfo = new FileInfo(record.FilePath);
             }
-
-            return new FildImageResultModel
-            {
-                Buffer = buffer,
-                ContentType = record.ContentType,
-                FileName = $"{record.FileName}{record.FileExtension}",
-            };
         }
 
-        private readonly DefaultDatabaseContext dbContext;
-        private readonly ILocalFileService fileService;
-        private readonly CollectorOptions collectorOptions;
-        private readonly IImageFileService imageFileService;
-        private readonly IMapper mapper;
-        private readonly ILogger logger;
+        var buffer = await fileService.ReadAsync(fileInfo.FullName);
+
+        if (buffer == null)
+        {
+            message = "File does not exist.";
+            throw new ApiException(HttpStatusCode.NotFound, message);
+        }
+
+        return new FildImageResultModel
+        {
+            Buffer = buffer,
+            ContentType = record.ContentType,
+            FileName = $"{record.FileName}{record.FileExtension}",
+        };
     }
+
+    private readonly DefaultDatabaseContext dbContext;
+    private readonly ILocalFileService fileService;
+    private readonly CollectorOptions collectorOptions;
+    private readonly IImageFileService imageFileService;
+    private readonly IMapper mapper;
+    private readonly ILogger logger;
 }
