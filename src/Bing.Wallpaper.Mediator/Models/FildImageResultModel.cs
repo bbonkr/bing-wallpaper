@@ -1,11 +1,10 @@
-﻿namespace Bing.Wallpaper.Mediator.Models
+﻿namespace Bing.Wallpaper.Mediator.Models;
+
+public class FildImageResultModel
 {
-    public class FildImageResultModel
-    {
-        public byte[] Buffer { get; set; }
+    public byte[] Buffer { get; set; }
 
-        public string ContentType { get; set; }
+    public string ContentType { get; set; }
 
-        public string FileName { get; set; }
-    }
+    public string FileName { get; set; }
 }

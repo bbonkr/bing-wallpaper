@@ -1,7 +1,6 @@
-﻿namespace Bing.Wallpaper.Mediator.Models
+﻿namespace Bing.Wallpaper.Mediator.Models;
+
+public class ImageTypes
 {
-    public class ImageTypes
-    {
-        public static string Thumbnail = "thumbnail";
-    }
+    public static string Thumbnail = "thumbnail";
 }

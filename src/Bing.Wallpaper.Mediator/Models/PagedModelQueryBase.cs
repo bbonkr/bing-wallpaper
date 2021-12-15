@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bing.Wallpaper.Mediator.Models
+namespace Bing.Wallpaper.Mediator.Models;
+
+public abstract class PagedModelQueryBase
 {
-    public abstract class PagedModelQueryBase
-    {
-        public int Page { get; set; } = 1;
+    public int Page { get; set; } = 1;
 
-        public int Limit { get; set; } = 10;
+    public int Limit { get; set; } = 10;
 
-        public string Keyword { get; set; } = "";
-    }
+    public string Keyword { get; set; } = "";
 }
