@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bing.Wallpaper.Controllers
+namespace Bing.Wallpaper.Controllers;
+
+[Controller]
+public class HomeController : Controller
 {
-    [Controller]
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

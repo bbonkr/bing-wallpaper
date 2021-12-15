@@ -1,4 +1,5 @@
-﻿using Bing.Wallpaper.Options;
+﻿using Bing.Wallpaper.Mediator.DependencyInjection;
+using Bing.Wallpaper.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,34 +9,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bing.Wallpaper.Jobs
+namespace Bing.Wallpaper.Jobs.DependencyInjection;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection AddBingImageCollectingJob(this IServiceCollection services, IConfiguration configuation)
     {
-        public static IServiceCollection AddBingImageCollectingJob(this IServiceCollection services, IConfiguration configuation)
+        var collectorOptions = new CollectorOptions();
+        var collectionOptionsConfiguration = configuation.GetSection(CollectorOptions.Name);
+        collectionOptionsConfiguration.Bind(collectorOptions);
+
+        if (string.IsNullOrWhiteSpace(collectorOptions.Schedule))
         {
-            var collectorOptions = new CollectorOptions();
-            var collectionOptionsConfiguration = configuation.GetSection(CollectorOptions.Name);
-            collectionOptionsConfiguration.Bind(collectorOptions);
+            Console.WriteLine("Please check your appsettings. 👁👁");
+            Console.WriteLine(CollectorOptions.ExceptionMessage);
 
-            if (string.IsNullOrWhiteSpace(collectorOptions.Schedule))
+            throw new ArgumentException(CollectorOptions.ExceptionMessage, nameof(CollectorOptions.Schedule));
+        }
+
+        services.AddScheduler(builder =>
+        {
+            builder.Services
+            .AddLogging()
+            .AddDomainService(configuation)
+            .Configure<CollectorOptions>(configuation.GetSection(CollectorOptions.Name))
+            ;
+
+            builder.AddJob<BingImageJob>(sectionName: "bing-image-collect-job", configure: options =>
             {
-                Console.WriteLine("Please check your appsettings. 👁👁");
-                Console.WriteLine(CollectorOptions.ExceptionMessage);
-
-                throw new ArgumentException(CollectorOptions.ExceptionMessage, nameof(CollectorOptions.Schedule));
-            }
-
-            services.AddScheduler(builder =>
-            {
-                builder.Services
-                .AddLogging()
-                .AddDomainService(configuation)
-                .Configure<CollectorOptions>(configuation.GetSection(CollectorOptions.Name))
-                ;
-
-                builder.AddJob<BingImageJob>(sectionName: "bing-image-collect-job", configure: options =>
-                {
                     /*
                       * -------------------------------------------------------------------------------------------------------------
                       *                                        Allowed values    Allowed special characters   Comment
@@ -51,17 +52,17 @@ namespace Bing.Wallpaper.Jobs
                       * -------------------------------------------------------------------------------------------------------------
                      */
 
-                    options.CronSchedule = collectorOptions.Schedule;
-                    options.CronTimeZone = TimeZoneInfo.Local.Id;
-                    options.RunImmediately = false;
-                });
-
-                builder.UnobservedTaskExceptionHandler = (sender, e) => {
-                    Console.WriteLine("Schedule Job got a exception", e.Exception);
-                };
+                options.CronSchedule = collectorOptions.Schedule;
+                options.CronTimeZone = TimeZoneInfo.Local.Id;
+                options.RunImmediately = false;
             });
 
-            return services;
-        }
+            builder.UnobservedTaskExceptionHandler = (sender, e) =>
+            {
+                Console.WriteLine("Schedule Job got a exception", e.Exception);
+            };
+        });
+
+        return services;
     }
 }

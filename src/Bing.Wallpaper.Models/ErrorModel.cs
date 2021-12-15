@@ -1,37 +1,36 @@
 ﻿using System.Net;
 
-namespace Bing.Wallpaper.Models
+namespace Bing.Wallpaper.Models;
+
+public class ErrorModel
 {
-    public class ErrorModel
+    public int StatusCode { get; set; }
+
+    public string Message { get; set; }
+
+    public object Details { get; set; }
+
+    public ErrorModel InnerError { get; set; }
+
+    public static ErrorModel GetErrorModel(int code, string message, object details = default, ErrorModel innerError = default)
     {
-        public int StatusCode { get; set; }
-
-        public string Message { get; set; }
-
-        public object Details { get; set; }
-
-        public ErrorModel InnerError { get; set; }
-
-        public static ErrorModel GetErrorModel(int code, string message, object details = default, ErrorModel innerError = default)
+        return new ErrorModel
         {
-            return new ErrorModel
-            {
-                StatusCode = code,
-                Message = message,
-                Details = details,
-                InnerError = innerError,
-            };
-        }
+            StatusCode = code,
+            Message = message,
+            Details = details,
+            InnerError = innerError,
+        };
+    }
 
-        public static ErrorModel GetErrorModel(HttpStatusCode code, string message, object details = default, ErrorModel innerError = default)
+    public static ErrorModel GetErrorModel(HttpStatusCode code, string message, object details = default, ErrorModel innerError = default)
+    {
+        return new ErrorModel
         {
-            return new ErrorModel
-            {
-                StatusCode = (int)code,
-                Message = message,
-                Details = details,
-                InnerError = innerError,
-            };
-        }
+            StatusCode = (int)code,
+            Message = message,
+            Details = details,
+            InnerError = innerError,
+        };
     }
 }

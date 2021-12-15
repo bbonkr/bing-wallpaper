@@ -20,8 +20,7 @@ namespace Bing.Wallpaper.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new ImageInfoConfiguration());
-            modelBuilder.ApplyConfiguration(new AppLogConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 }
