@@ -36,7 +36,7 @@ public class LogsQueryHandler : IRequestHandler<LogsQuery, IPagedModel<LogModel>
             .WhereDependsOn(!string.IsNullOrWhiteSpace(request.Level), x => x.Level == request.Level)
             .WhereDependsOn(!string.IsNullOrWhiteSpace(request.Keyword), x => EF.Functions.Like(x.Message, $"%{request.Keyword.Trim()}%"))
             .AsNoTracking()
-            .OrderByDescending(x => x.Logged)
+            .OrderByDescending(x => x.TimeStamp)
             .Select(x => mapper.Map<LogModel>(x))
             .ToPagedModelAsync(request.Page, request.Limit, cancellationToken);
 

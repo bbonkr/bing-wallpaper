@@ -16,8 +16,8 @@ public class LogProfile : Profile
     {
         var javascriptDateConvert = new JavascriptDateConverter();
 
-        CreateMap<AppLog, LogModel>()
-            .ForMember(dest => dest.Logged, opt => opt.MapFrom(src => src.Logged.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")))
-            .ForMember(dest => dest.LoggedAt, opt => opt.MapFrom(src => javascriptDateConvert.ToJavascriptDateMilliseconds(src.Logged)));
+        CreateMap<Log, LogModel>()
+            .ForMember(dest => dest.TimeStamp, opt => opt.MapFrom(src => javascriptDateConvert.ToJavascriptDateMilliseconds(src.TimeStamp)))
+            .ForMember(dest => dest.ResolvedAt, opt => opt.MapFrom(src => javascriptDateConvert.ToJavascriptDateMilliseconds(src.ResolvedAt)));
     }
 }
