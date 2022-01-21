@@ -54,12 +54,12 @@ public class BingImageJob : IScheduledJob
             var result = await mediator.Send(command);
 
             watch.Stop();
-            logger.LogInformation($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Completed. Count of collecting images is {result.CollectedCount:n0}");
+            logger.LogInformation($"{TAG} {Name} @{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Completed. Count of collecting images is {result.CollectedCount:n0}");
         }
         catch (Exception ex)
         {
             watch.Stop();
-            logger.LogWarning($"{TAG} {Name} @{DateTime.Now:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Incompleted ({ex.Message})");
+            logger.LogWarning($"{TAG} {Name} @{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} Elapsed:{watch.Elapsed} Incompleted ({ex.Message})");
         }
         finally
         {

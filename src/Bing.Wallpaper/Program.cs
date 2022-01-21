@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 
-using NLog.Web;
+//using NLog.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Bing.Wallpaper.Jobs;
@@ -184,19 +184,26 @@ app.UseEndpoints(endpoints =>
     endpoints.MapFallbackToController("Index", "Home");
 });
 
-// Start
-var loggerInstance = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+// Run web application
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateBootstrapLogger(); // Two-stage initialization https://github.com/serilog/serilog-aspnetcore#two-stage-initialization
+
+Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine("[Serilog DEBUG] {1:yyyy-MM-dd HH:mm:ss} {0}", msg, DateTime.UtcNow));
+
 try
 {
+    Log.Information("Starting web host");
     app.Run();
 }
 catch (Exception ex)
 {
-
-    loggerInstance.Error(ex, "Stopped webapp because of exception");
+    Log.Fatal(ex, "Host terminated unexpectedly");
 }
 finally
 {
-    NLog.LogManager.Flush();
-    NLog.LogManager.Shutdown();
+    Log.CloseAndFlush();
 }

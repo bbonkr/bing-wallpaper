@@ -40,7 +40,6 @@ public static class ApplicationBuilderExtensions
                 var httpMethod = httpContext.Request.Method;
                 var requestUri = httpContext.Request.Path;
                 string userAgent = null;
-                string tenantId = null;
                 StringValues userAgentValues;
                 
                 if (httpContext.Request.Headers.TryGetValue("User-Agent", out userAgentValues))
@@ -70,9 +69,6 @@ public static class ApplicationBuilderExtensions
                     query = httpContext.Request.QueryString.Value.ToString();
                 }
 
-                diagnosticContext.Set("IsDeleted", false);
-                diagnosticContext.Set("CreatedAt", DateTime.UtcNow);
-                diagnosticContext.Set("UpdatedAt", DateTime.UtcNow);
                 diagnosticContext.Set("UserIp", ip);
                 diagnosticContext.Set("RequestUri", requestUri);
                 diagnosticContext.Set("HttpMethod", httpMethod);
@@ -80,7 +76,6 @@ public static class ApplicationBuilderExtensions
                 diagnosticContext.Set("QueryString", query);
                 diagnosticContext.Set("IsResolved", false);
                 diagnosticContext.Set("ResolvedAt", null);
-                diagnosticContext.Set("TenantId", tenantId);
                 diagnosticContext.Set("UserAgent", userAgent);
             };
         });
