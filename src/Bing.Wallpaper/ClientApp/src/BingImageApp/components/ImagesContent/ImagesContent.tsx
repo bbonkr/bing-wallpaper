@@ -20,7 +20,7 @@ export const ImagesContent = () => {
         },
         (_: any, page: number) =>
             new ApiClient().images
-                .apiv10ImagesGetAll(page, take)
+                .apiv10ImagesGetAll({ page, take })
                 .then((res) => res.data.data),
         {},
     );

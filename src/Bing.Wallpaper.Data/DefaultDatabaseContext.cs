@@ -14,7 +14,9 @@ namespace Bing.Wallpaper.Data
 
         public DbSet<ImageInfo> Images { get; set; }
 
-        public DbSet<AppLog> Logs { get; set; }
+        //public DbSet<AppLog> Logs { get; set; }
+
+        public DbSet<Log> Logs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

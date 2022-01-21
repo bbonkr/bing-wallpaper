@@ -31,7 +31,7 @@ public static class ServiceCollectionExtensions
         {
             builder.Services
             .AddLogging()
-            .AddDomainService(configuation)
+            .AddDomainService()
             .Configure<CollectorOptions>(configuation.GetSection(CollectorOptions.Name))
             ;
 
@@ -56,7 +56,7 @@ public static class ServiceCollectionExtensions
                 options.CronTimeZone = TimeZoneInfo.Local.Id;
                 options.RunImmediately = false;
             });
-
+            
             builder.UnobservedTaskExceptionHandler = (sender, e) =>
             {
                 Console.WriteLine("Schedule Job got a exception", e.Exception);

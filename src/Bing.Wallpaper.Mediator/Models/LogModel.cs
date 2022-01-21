@@ -8,48 +8,37 @@ namespace Bing.Wallpaper.Mediator.Models;
 
 public class LogModel
 {
-    /// <summary>
-    /// 식별자
-    /// </summary>
-    public string Id { get; set; }
+    public long Id { get; set; }
 
-    /// <summary>
-    /// 장치
-    /// </summary>
-    public string MachineName { get; set; }
-
-    /// <summary>
-    /// 작성시각
-    /// </summary>
-    public string Logged { get; set; }
-
-    /// <summary>
-    /// 작성시각 밀리초
-    /// </summary>
-    public double LoggedAt { get; set; }
-
-    /// <summary>
-    /// 로그 레벨
-    /// </summary>
-    public string Level { get; set; }
-
-    /// <summary>
-    /// 메시지
-    /// </summary>
     public string Message { get; set; }
 
-    /// <summary>
-    /// 로거
-    /// </summary>
-    public string Logger { get; set; }
+    public string MessageTemplate { get; set; }
 
-    /// <summary>
-    /// 사이트
-    /// </summary>
-    public string Callsite { get; set; }
+    public string Level { get; set; }
 
-    /// <summary>
-    /// 예외
-    /// </summary>
+    public long TimeStamp { get; set; }
+
     public string Exception { get; set; }
+
+    public string LogEvent { get; set; }    // JSON data
+
+    public string Payload { get; set; }
+
+    public string QueryString { get; set; }
+
+    public string UserRoles { get; set; }
+
+    public string UserIp { get; set; }
+
+    public string RequestUri { get; set; }
+
+    public string HttpMethod { get; set; }
+
+    public bool? IsResolved { get; set; }
+
+    public string UserAgent { get; set; }
+
+    public string Errors { get; set; }
+
+    public long? ResolvedAt { get; set; }
 }

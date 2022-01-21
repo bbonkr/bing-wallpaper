@@ -1,7 +1,7 @@
 import { ActionType, createAction, createAsyncAction } from 'typesafe-actions';
 import {
     ObjectApiResponseModel,
-    LogModelIPagedModelApiResponseModel,
+    LogModelPagedModelApiResponseModel,
 } from '../../../api/api';
 import { LoadLogsRequestModel } from '../../models';
 
@@ -11,7 +11,7 @@ export const loadLogs = createAsyncAction(
     'load-logs/failure',
 )<
     LoadLogsRequestModel,
-    LogModelIPagedModelApiResponseModel,
+    LogModelPagedModelApiResponseModel,
     ObjectApiResponseModel
 >();
 

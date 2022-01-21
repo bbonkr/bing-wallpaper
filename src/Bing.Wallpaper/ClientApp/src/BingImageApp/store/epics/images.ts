@@ -17,7 +17,7 @@ export const loadImagesEpic: Epic<
         switchMap((action) => {
             const { page, take } = action.payload;
             return from(
-                api.images.apiv10ImagesGetAll(page, take, undefined),
+                api.images.apiv10ImagesGetAll({ page, take }, undefined),
             ).pipe(
                 map((response) =>
                     imagesActions.loadImages.success(response.data),

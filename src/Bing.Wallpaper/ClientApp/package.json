@@ -8,7 +8,7 @@
         "watch": "webpack --watch --progress",
         "dev": "webpack --watch --progress",
         "build": "cross-env NODE_ENV=production webpack",
-        "gen": "openapi-generator-cli generate -i http://localhost:5000/swagger/v1/swagger.json -g typescript-axios -o src/api"
+        "gen": "cross-env TS_POST_PROCESS_FILE=true openapi-generator-cli generate -i http://localhost:33541/swagger/v1/swagger.json -g typescript-axios -o src/api -c ./openapi.config.json --enable-post-process-file"
     },
     "keywords": [],
     "author": "Pon Cheol Ku <dev@bbon.kr> (http://bbon.kr)",
@@ -16,6 +16,7 @@
     "dependencies": {
         "axios": "^0.21.4",
         "bulma": "^0.9.2",
+        "dayjs": "^1.10.7",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-icons": "^4.2.0",
@@ -33,7 +34,7 @@
         "@babel/preset-env": "^7.14.2",
         "@babel/preset-react": "^7.13.13",
         "@babel/preset-typescript": "^7.12.7",
-        "@openapitools/openapi-generator-cli": "^2.4.4",
+        "@openapitools/openapi-generator-cli": "^2.4.25",
         "@types/lodash": "^4.14.169",
         "@types/node": "^15.3.0",
         "@types/react": "^17.0.5",

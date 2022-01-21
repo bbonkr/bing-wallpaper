@@ -22,7 +22,7 @@ EF Core 3 부터 전역 또는 로컬 도구로 설치되어야 합니다.
 $ dotnet tool install --global dotnet-ef
 ```
 
-```
+```bash
 $ dotnet ef
                      _/\__
                ---==/    \\
@@ -79,13 +79,13 @@ UPDATE 2020-11-14: .NET 5 사용
 
 이전 EF 도구가 설치되어 있는 경우 아래 명령으로 .NET 5 EF 도구로 업데이트할 수 있습니다.
 
-```
+```bash
 $ dotnet tool update --global dotnet-ef
 ```
 
 업데이트된 EF 도구의 버전을 확인합니다.
 
-```
+```bash
 $ dotnet ef
 
                      _/\__
@@ -119,6 +119,16 @@ Use "dotnet ef [command] --help" for more information about a command.
 ```powershell
 PS> ./ef-migration-add.ps1 "Add some fields"
 ```
+
+```bash
+$ ./ef-migration-add.sh "Add some fields"
+```
+
+> ef-migration-add.sh 파일을 사용하기 위해서는 실행 권한이 있어야 합니다.
+> ```bash
+> $ chmod u+x ./ef-migration-add.sh
+> ```
+
 
 ## 실행
 

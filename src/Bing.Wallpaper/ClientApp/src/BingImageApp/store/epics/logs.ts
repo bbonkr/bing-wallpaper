@@ -18,10 +18,12 @@ export const loadLogsEpic: Epic<
             const { page, take, level, keyword } = action.payload;
             return from(
                 api.logs.apiv10LogsGetAll(
-                    page,
-                    take,
-                    level,
-                    keyword,
+                    {
+                        page,
+                        take,
+                        level,
+                        keyword,
+                    },
                     undefined,
                 ),
             ).pipe(
