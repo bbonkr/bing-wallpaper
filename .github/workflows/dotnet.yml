@@ -40,12 +40,18 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: package-version
-        run: grep '<Version>' < src/Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
-        id: get_package_version
+      # - name: package-version
+      #   run: grep '<Version>' < src/Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
+      #   id: get_package_version
 
-      - name: set-version  
-        run: echo "PACKAGE_VERSION=${{ steps.get_package_version.outputs.version }}" >> $GITHUB_ENV        
+      # - name: set-version  
+      #   run: echo "PACKAGE_VERSION=${{ steps.get_package_version.outputs.version }}" >> $GITHUB_ENV        
+
+      - name: get-version
+        id: get_version
+        uses: bbonkr/get-version-action@v1.0.1
+        with:
+          project: src/Bing.Wallpaper/Bing.Wallpaper.csproj
 
       # - name: Repository Dispatch
       #   uses: peter-evans/repository-dispatch@v1
@@ -55,20 +61,28 @@ jobs:
       #     event-type: start-docker-job
       #     client-payload: '{ "version": "${{ env.PACKAGE_VERSION }}" }'
 
+      - uses: bbonkr/git-tag-check-action@v1.0.5
+        id: git_tag_check
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          tag: "v${{ steps.get_version.outputs.version }}"
+
       - name: package-version-to-git-tag
         uses: pkgdeps/git-tag-action@v2
+        if: ${{ steps.git_tag_check.outputs.tag == "" }}
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           github_repo: ${{ github.repository }}
-          version: ${{ env.PACKAGE_VERSION }}
+          version: ${{ steps.get_version.outputs.version }}
           git_commit_sha: ${{ github.sha }}
           git_tag_prefix: "v"
       - name: Release Drafter
         id: release_drafter
         uses: release-drafter/release-drafter@v5
+        if: ${{ steps.git_tag_check.outputs.tag == "" }}
         with:
           config-name: release-drafter.yml
-          version: ${{ env.PACKAGE_VERSION }}
+          version: "v${{ steps.get_version.outputs.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
