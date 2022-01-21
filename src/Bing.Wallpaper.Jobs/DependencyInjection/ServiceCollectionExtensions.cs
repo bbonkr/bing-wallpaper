@@ -31,7 +31,7 @@ public static class ServiceCollectionExtensions
         {
             builder.Services
             .AddLogging()
-            .AddDomainService(configuation)
+            .AddDomainService()
             .Configure<CollectorOptions>(configuation.GetSection(CollectorOptions.Name))
             ;
 

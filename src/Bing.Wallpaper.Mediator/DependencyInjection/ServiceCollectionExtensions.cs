@@ -14,9 +14,9 @@ namespace Bing.Wallpaper.Mediator.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDomainService(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDomainService(this IServiceCollection services)
     {
-        services.AddApplicationServices(configuration);
+        services.AddApplicationServices();
         var thisAssembly = typeof(PlaceHolder).Assembly;
 
         services.AddAutoMapper(thisAssembly);

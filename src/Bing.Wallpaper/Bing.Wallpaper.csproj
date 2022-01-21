@@ -16,10 +16,18 @@
         <Content Remove="ClientApp\**" />
         <EmbeddedResource Remove="ClientApp\**" />
         <None Remove="ClientApp\**" />
+        <None Remove="Serilog.AspNetCore" />
+        <None Remove="Serilog.Sinks.MSSqlServer" />
+        <None Remove="Extensions\" />
+        <None Remove="Extensions\DependencyInjection\" />
+        <None Remove="FluentValidation.AspNetCore" />
+        <None Remove="Infrastructure\" />
+        <None Remove="Infrastructure\Validations\" />
+        <None Remove="Infrastructure\Filters\" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
         <PackageReference Include="CronScheduler.AspNetCore" Version="3.0.1" />
         <PackageReference Include="kr.bbon.AspNetCore" Version="1.2.0" />
         <PackageReference Include="kr.bbon.EntityFrameworkCore.Extensions" Version="1.3.0" />
@@ -34,6 +42,9 @@
         <PackageReference Include="NLog" Version="4.7.13" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+        <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.1" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     </ItemGroup>
 
     <ItemGroup>
@@ -50,6 +61,11 @@
     <ItemGroup>
         <Folder Include="wwwroot\js\" />
         <Folder Include="wwwroot\css\" />
+        <Folder Include="Extensions\" />
+        <Folder Include="Extensions\DependencyInjection\" />
+        <Folder Include="Infrastructure\" />
+        <Folder Include="Infrastructure\Validations\" />
+        <Folder Include="Infrastructure\Filters\" />
     </ItemGroup>
 
 </Project>
