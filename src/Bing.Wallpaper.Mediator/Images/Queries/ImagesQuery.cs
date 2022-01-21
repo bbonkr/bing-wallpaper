@@ -16,11 +16,11 @@ using System.Threading.Tasks;
 
 namespace Bing.Wallpaper.Mediator.Images.Queries;
 
-public class ImagesQuery : PagedModelQueryBase, IRequest<IPagedModel<ImageItemModel>>
+public class ImagesQuery : PagedModelQueryBase, IRequest<PagedModel<ImageItemModel>>
 {
 }
 
-public class ImageQueryHandler : IRequestHandler<ImagesQuery, IPagedModel<ImageItemModel>>
+public class ImageQueryHandler : IRequestHandler<ImagesQuery, PagedModel<ImageItemModel>>
 {
     public ImageQueryHandler(DefaultDatabaseContext dbContext, IMapper mapper, ILogger<ImageQueryHandler> logger)
     {
@@ -28,7 +28,7 @@ public class ImageQueryHandler : IRequestHandler<ImagesQuery, IPagedModel<ImageI
         this.mapper = mapper;
         this.logger = logger;
     }
-    public async Task<IPagedModel<ImageItemModel>> Handle(ImagesQuery request, CancellationToken cancellationToken)
+    public async Task<PagedModel<ImageItemModel>> Handle(ImagesQuery request, CancellationToken cancellationToken)
     {
         logger.LogInformation("Query images {@request}", request);
 
