@@ -46,7 +46,7 @@ public class FilesController : ApiControllerBase
 
         var result = await mediator.Send(query);
 
-        logger.LogInformation($"Download: {result.FileName}");
+        logger.LogInformation("Download: {filename}", result.FileName);
 
         return File(result.Buffer, result.ContentType, result.FileName);
     }
@@ -62,6 +62,8 @@ public class FilesController : ApiControllerBase
         var query = new FindByImageFileNameQuery { FileName = fileName, Type = type, };
 
         var result = await mediator.Send(query);
+
+        logger.LogInformation("Download: {filename}", result.FileName);
 
         var contentTypeProvider = new FileExtensionContentTypeProvider();
         var contentType = "application/octet-stream";

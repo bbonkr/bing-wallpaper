@@ -139,6 +139,8 @@ public class AddImageCommandHandler : IRequestHandler<AddImageCommand, AddImageC
             dbContext.Images.AddRange(result.ToArray());
 
             affectedCount = await dbContext.SaveChangesAsync(cancellationToken);
+
+            logger.LogInformation("Images added. ({affectedCount})", affectedCount);
         }
 
         return new AddImageCommandResult

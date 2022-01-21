@@ -16,7 +16,9 @@ export const collectImagesEpic: Epic<
         filter(isActionOf(bingImagesActions.collectImages.request)),
         switchMap((action) => {
             return from(
-                api.bingImage.apiv10BingImagesCollectImages(action.payload),
+                api.bingImage.apiv10BingImagesCollectImages({
+                    bingImageServiceGetRequestModel: action.payload,
+                }),
             ).pipe(
                 map((response) =>
                     bingImagesActions.collectImages.success(response.data),

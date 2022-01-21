@@ -6,6 +6,7 @@ using kr.bbon.Core.Models;
 using kr.bbon.EntityFrameworkCore.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +22,16 @@ public class ImagesQuery : PagedModelQueryBase, IRequest<IPagedModel<ImageItemMo
 
 public class ImageQueryHandler : IRequestHandler<ImagesQuery, IPagedModel<ImageItemModel>>
 {
-    public ImageQueryHandler(DefaultDatabaseContext dbContext, IMapper mapper)
+    public ImageQueryHandler(DefaultDatabaseContext dbContext, IMapper mapper, ILogger<ImageQueryHandler> logger)
     {
         this.dbContext = dbContext;
         this.mapper = mapper;
+        this.logger = logger;
     }
     public async Task<IPagedModel<ImageItemModel>> Handle(ImagesQuery request, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Query images {@request}", request);
+
         var result = await dbContext.Images
             .Where(x => true)
             .Include(x => x.Metadata)
@@ -48,4 +52,5 @@ public class ImageQueryHandler : IRequestHandler<ImagesQuery, IPagedModel<ImageI
 
     private readonly DefaultDatabaseContext dbContext;
     private readonly IMapper mapper;
+    private readonly ILogger logger;
 }

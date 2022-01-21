@@ -82,7 +82,7 @@ builder.Host.UseSerilog(
 
 // Configure services
 builder.Configuration.AddEnvironmentVariables();
-builder.Services.ConfigureAppOptions();
+builder.Services.ConfigureAppOptions(builder.Configuration);
 
 builder.Services.Configure<MvcOptions>(options =>
 {
