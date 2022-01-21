@@ -45,15 +45,10 @@ var columnOptions = new ColumnOptions
     AdditionalColumns = new List<SqlColumn>
     {
         // https://github.com/serilog/serilog-sinks-mssqlserver#custom-property-columns
-        new SqlColumn { ColumnName = "Payload", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true,},
-        new SqlColumn { ColumnName = "TenantId", DataType = SqlDbType.NVarChar, DataLength = 36, AllowNull = true,},
+        new SqlColumn { ColumnName = "Payload", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true,},        
         new SqlColumn { ColumnName = "RequestUri", DataType = SqlDbType.NVarChar, DataLength =-1, AllowNull = true},
-        new SqlColumn { ColumnName = "UserId", DataType = SqlDbType.NVarChar, DataLength = 36, AllowNull = true },
-        new SqlColumn { ColumnName = "UserRoles", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true },
         new SqlColumn { ColumnName = "Errors", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true },
 
-
-        new SqlColumn { ColumnName= "UserName", DataType = SqlDbType.NVarChar, DataLength = 512, AllowNull = true },
         new SqlColumn { ColumnName = "UserIp", DataType = SqlDbType.NVarChar, DataLength = 128, AllowNull = true},
         new SqlColumn { ColumnName = "QueryString", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true},
         new SqlColumn { ColumnName = "UserAgent", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true },
@@ -115,10 +110,6 @@ builder.Services
 
 builder.Services.AddValidatorsFromAssemblies(assemblies);
 
-// builder.Services.AddDomainService(); 
-//builder.Services.AddMediatR(typeof(Bing.Wallpaper.Mediator.PlaceHolder).Assembly);
-//builder.Services.AddAutoMapper(assemblies);
-
 builder.Services.AddForwardedHeaders();
 builder.Services.AddValidatorIntercepter();
 
@@ -145,11 +136,13 @@ builder.Host.UseSerilog(
 // Configure
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
-    databaseContext.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
+//    databaseContext.Database.Migrate();
+//}
+
+app.UseDatabaseMigration<DefaultDatabaseContext>();
 
 if (app.Environment.IsDevelopment())
 {
