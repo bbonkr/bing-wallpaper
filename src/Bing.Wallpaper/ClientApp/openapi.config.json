@@ -1,0 +1,5 @@
+{
+    "useSingleRequestParameter": true,
+    "withInterfaces": false,
+    "withSeparateModelsAndApi": false
+}

@@ -34,7 +34,7 @@ public class ImagesController : ApiControllerBase
 
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<IPagedModel<ImageItemModel>>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<PagedModel<ImageItemModel>>))]
     public async Task<IActionResult> GetAllAsync(int page = 1, int take = 10)
     {
         var query = new ImagesQuery
@@ -47,6 +47,8 @@ public class ImagesController : ApiControllerBase
         var records = await mediator.Send(query);
 
         return StatusCode(StatusCodes.Status200OK, records);
+
+        //return records;
     }
 
     private readonly IMediator mediator;

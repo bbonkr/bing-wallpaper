@@ -40,8 +40,7 @@ public class BingImageService : IImageService<BingImage>
                 {
                     AllowTrailingCommas = true,
                     PropertyNameCaseInsensitive = true,
-                    IgnoreNullValues = true,
-                    IgnoreReadOnlyProperties = true,
+                    IgnoreReadOnlyProperties = true, 
                 });
 
                 return result;

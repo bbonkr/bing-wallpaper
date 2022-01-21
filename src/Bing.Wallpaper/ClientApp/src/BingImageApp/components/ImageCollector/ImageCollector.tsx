@@ -22,8 +22,10 @@ export const ImageCollector = () => {
             (_: any) => {
                 return new ApiClient().bingImage
                     .apiv10BingImagesCollectImages({
-                        startIndex: startIndex,
-                        take: take,
+                        bingImageServiceGetRequestModel: {
+                            startIndex: startIndex,
+                            take: take,
+                        },
                     })
                     .then((res) => res.data);
             },

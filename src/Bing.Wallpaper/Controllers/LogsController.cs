@@ -30,7 +30,7 @@ public class LogsController : ApiControllerBase
 
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<IPagedModel<LogModel>>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<PagedModel<LogModel>>))]
     public async Task<IActionResult> GetAllAsync(int page = 1, int take = 10, string level = "", string keyword = "")
     {
         var query = new LogsQuery

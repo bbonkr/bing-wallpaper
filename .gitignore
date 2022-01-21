@@ -334,7 +334,7 @@ out/
 */**/internal-nlog.txt
 
 .env
-.config/
+# .config/
 appsettings.*.json
 
 # thumbnail directory

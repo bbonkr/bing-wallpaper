@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { Content, Section } from '../Layouts';
 import { LogFilter, FormState } from './LogFilter';
 import useSWRInfinite from 'swr/infinite';
@@ -27,7 +28,7 @@ export const LogsContent = () => {
         },
         (_: any, page: number, level, keyword) => {
             return new ApiClient().logs
-                .apiv10LogsGetAll(page, take, level, keyword)
+                .apiv10LogsGetAll({ page, take, level, keyword })
                 .then((res) => res.data.data);
         },
     );
@@ -105,7 +106,11 @@ export const LogsContent = () => {
                                 data.map((responseData) =>
                                     responseData?.items?.map((log) => (
                                         <tr key={log.id}>
-                                            <td>{log.logged}</td>
+                                            <td>
+                                                {dayjs(log.timeStamp).format(
+                                                    'YYYY-MM-DD HH:mm:ss',
+                                                )}
+                                            </td>
                                             <td>{log.level}</td>
                                             <td className="content-wrap">
                                                 {log.message}
