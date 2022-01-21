@@ -16,14 +16,6 @@
         <Content Remove="ClientApp\**" />
         <EmbeddedResource Remove="ClientApp\**" />
         <None Remove="ClientApp\**" />
-        <None Remove="Serilog.AspNetCore" />
-        <None Remove="Serilog.Sinks.MSSqlServer" />
-        <None Remove="Extensions\" />
-        <None Remove="Extensions\DependencyInjection\" />
-        <None Remove="FluentValidation.AspNetCore" />
-        <None Remove="Infrastructure\" />
-        <None Remove="Infrastructure\Validations\" />
-        <None Remove="Infrastructure\Filters\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -58,11 +50,6 @@
     <ItemGroup>
         <Folder Include="wwwroot\js\" />
         <Folder Include="wwwroot\css\" />
-        <Folder Include="Extensions\" />
-        <Folder Include="Extensions\DependencyInjection\" />
-        <Folder Include="Infrastructure\" />
-        <Folder Include="Infrastructure\Validations\" />
-        <Folder Include="Infrastructure\Filters\" />
     </ItemGroup>
 
 </Project>

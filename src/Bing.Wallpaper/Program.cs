@@ -16,7 +16,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 
-//using NLog.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Bing.Wallpaper.Jobs;
@@ -65,6 +64,21 @@ var assemblies = new List<Assembly> {
 };
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Logger
+builder.Host.UseSerilog(
+    configureLogger: (context, services, configuration) => configuration
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.MSSqlServer(
+            connectionString: context.Configuration.GetConnectionString("Default"),
+            sinkOptions: mssqlSinkOptions,
+            columnOptions: columnOptions),
+    writeToProviders: true);
+
 
 // Configure services
 builder.Configuration.AddEnvironmentVariables();
@@ -117,30 +131,9 @@ var defaultVersion = new ApiVersion(1, 0);
 
 builder.Services.AddApiVersioningAndSwaggerGen(defaultVersion);
 
-// Logger
-// builder.Host.UseNLog();
-
-builder.Host.UseSerilog(
-    configureLogger: (context, services, configuration) => configuration
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
-        .ReadFrom.Configuration(context.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .WriteTo.MSSqlServer(
-            connectionString: context.Configuration.GetConnectionString("Default"),
-            sinkOptions: mssqlSinkOptions,
-            columnOptions: columnOptions),
-    writeToProviders: true);
 
 // Configure
 var app = builder.Build();
-
-//using (var scope = app.Services.CreateScope())
-//{
-//    var databaseContext = scope.ServiceProvider.GetService<DefaultDatabaseContext>();
-//    databaseContext.Database.Migrate();
-//}
 
 app.UseDatabaseMigration<DefaultDatabaseContext>();
 
