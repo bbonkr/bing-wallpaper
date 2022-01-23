@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Options;
 using Bing.Wallpaper;
-using kr.bbon.AspNetCore.DependencyInjection;
+using kr.bbon.AspNetCore.Extensions.DependencyInjection;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -82,7 +82,7 @@ builder.Host.UseSerilog(
 
 // Configure services
 builder.Configuration.AddEnvironmentVariables();
-builder.Services.ConfigureAppOptions(builder.Configuration);
+builder.Services.ConfigureAppOptions();
 
 builder.Services.Configure<MvcOptions>(options =>
 {
