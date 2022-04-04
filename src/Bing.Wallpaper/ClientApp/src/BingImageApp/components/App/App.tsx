@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Redirect } from '../Redirect';
 import { Provider } from 'react-redux';
 import { Header, Footer } from '../Layouts';
 import { Container } from '../Layouts';
@@ -57,18 +58,20 @@ export const App = () => {
                             'is-flex-direction-column',
                         ]}
                     >
-                        <Switch>
+                        <Routes>
                             {menuRoutes.map((route) => (
-                                <Route path={route.href} exact key={route.href}>
-                                    {route.Component}
-                                </Route>
+                                <Route
+                                    path={route.href}
+                                    key={route.href}
+                                    element={route.Component}
+                                />
                             ))}
 
                             <Route path="/404">
                                 <NotFound />
                             </Route>
                             <Redirect to="/404" />
-                        </Switch>
+                        </Routes>
                     </Container>
                     <Footer onClickScrollToTop={handleClickScrollToTop} />
                     <FullSizeImage />
