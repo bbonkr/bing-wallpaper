@@ -2,6 +2,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
 WORKDIR /app 
 EXPOSE 80
 EXPOSE 443 
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+
+RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib
 
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
@@ -39,9 +43,6 @@ COPY --from=build /app/out ./
 
 RUN mkdir -p /app/images
 RUN mkdir -p /app/thumbnails
-
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
-ENV DOTNET_RUNNING_IN_CONTAINER=true
 
 # ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
 ENTRYPOINT ["./Bing.Wallpaper"]
