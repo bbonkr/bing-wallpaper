@@ -1,14 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const environmentName = process.env.NODE_ENV || 'development';
-
-const isDevelpoment = () => {
-    return environmentName !== 'production';
-};
-
 module.exports = {
-    mode: isDevelpoment() ? 'development' : environmentName,
+    // mode: isDevelpoment() ? 'development' : environmentName,
     // devtool: isDevelpoment() ? 'inline-source-map' : 'hidden-source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
@@ -35,7 +29,7 @@ module.exports = {
             },
         ],
     },
-    plugins: [new webpack.LoaderOptionsPlugin({ dev: isDevelpoment() })],
+    plugins: [new webpack.LoaderOptionsPlugin()],
     output: {
         filename: '[name]/[name].bundle.js',
         path: path.join(path.resolve(__dirname, '..'), 'wwwroot', 'js'),

@@ -5,9 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "watch": "webpack --watch --progress",
-        "dev": "webpack --watch --progress",
-        "build": "cross-env NODE_ENV=production webpack",
+        "watch": "webpack --watch --progress --mode development",
+        "dev": "webpack --watch --progress --mode development",
+        "build": "webpack --mode production",
         "gen": "cross-env TS_POST_PROCESS_FILE=true openapi-generator-cli generate -i http://localhost:33541/swagger/v1/swagger.json -g typescript-axios -o src/api -c ./openapi.config.json --enable-post-process-file"
     },
     "keywords": [],

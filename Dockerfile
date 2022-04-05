@@ -1,3 +1,9 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
+WORKDIR /app 
+EXPOSE 80
+EXPOSE 443 
+
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
@@ -19,15 +25,20 @@ RUN cd src/Bing.Wallpaper/ClientApp && npm ci && npm run build
 
 # RUN dotnet restore
 # copy everything else and build app
-RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out
+RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out \
+    --runtime alpine-x64 \
+    --self-contained true \
+    /p:PublishTrimmed=true \
+    /p:PublishSingleFile=true
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
-
+# FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
+FROM base as final
 WORKDIR /app
 COPY --from=build /app/out ./
 
 RUN mkdir -p /app/images
 RUN mkdir -p /app/thumbnails
 
-ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
+# ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
+ENTRYPOINT ["./Bing.Wallpaper"]
