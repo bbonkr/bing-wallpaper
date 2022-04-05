@@ -28,8 +28,8 @@ COPY . .
 RUN cd src/Bing.Wallpaper/ClientApp && npm ci && npm run build
 
 # RUN dotnet publish
-RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out \
-    --runtime alpine-x64 
+RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out 
+# --runtime alpine-x64 
 # --self-contained true \
 # /p:PublishTrimmed=true \
 # /p:PublishSingleFile=true
