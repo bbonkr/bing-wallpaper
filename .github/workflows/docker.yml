@@ -18,9 +18,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+        uses: actions/checkout@v3
       -
         name: Docker meta
         id: meta
@@ -70,14 +68,17 @@ jobs:
       -
         name: Build and push
         uses: docker/build-push-action@v2
+        id: docker_build
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64
 
       -
         name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+        run: |
+          echo ${{ steps.docker_build.outputs.digest }}
 
 
