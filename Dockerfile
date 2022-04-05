@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
 # install node.js
-RUN curl -sL https://deb.nodesource.com/setup_14.x |  bash -
+RUN curl -sL https://deb.nodesource.com/setup_16.x |  bash -
 RUN apt-get install -y nodejs
 
 # copy csproj and restore as distinct layers
@@ -12,10 +12,10 @@ COPY . .
 # RUN curl -o /usr/local/share/ca-certificates/verisign.crt -SsL https://crt.sh/?d=1039083 && update-ca-certificates
 
 # npm update 
-RUN npm install -g npm
+# RUN npm install -g npm
 
 # Build client
-RUN cd src/Bing.Wallpaper/ClientApp && npm install && npm run build
+RUN cd src/Bing.Wallpaper/ClientApp && npm ci && npm run build
 
 # RUN dotnet restore
 # copy everything else and build app
