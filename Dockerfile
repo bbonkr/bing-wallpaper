@@ -1,6 +1,6 @@
-# FROM alpine:latest as base
+FROM alpine:latest as base
 # FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
+# FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
 
 WORKDIR /app 
 EXPOSE 80
@@ -11,10 +11,10 @@ EXPOSE 443
 
 # Runtime configuration options for globalization
 # https://docs.microsoft.com/en-us/dotnet/core/runtime-config/globalization
-# ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
 ENV DOTNET_RUNNING_IN_CONTAINER 1
 
-# RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib
+RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib
 
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
@@ -34,12 +34,11 @@ COPY . .
 RUN cd src/Bing.Wallpaper/ClientApp && npm ci && npm run build
 
 # RUN dotnet publish
-RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out 
-# --runtime alpine-x64 \
-# --self-contained false \ 
-# /p:PublishTrimmed=true 
-# /p:PublishSingleFile=true
-
+RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out \
+    --runtime linux-x64 \
+    --self-contained true  
+# /p:PublishSingleFile=true 
+# /p:PublishTrimmed=true \
 
 # FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 FROM base as final
@@ -49,5 +48,5 @@ COPY --from=build /app/out ./
 RUN mkdir -p /app/images
 RUN mkdir -p /app/thumbnails
 
-ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
-# ENTRYPOINT ["./Bing.Wallpaper"]
+# ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
+ENTRYPOINT ["./Bing.Wallpaper"]
