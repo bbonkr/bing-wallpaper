@@ -11,7 +11,7 @@ EXPOSE 443
 
 # Runtime configuration options for globalization
 # https://docs.microsoft.com/en-us/dotnet/core/runtime-config/globalization
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+# ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
 ENV DOTNET_RUNNING_IN_CONTAINER 1
 
 # RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib
@@ -34,9 +34,9 @@ COPY . .
 RUN cd src/Bing.Wallpaper/ClientApp && npm ci && npm run build
 
 # RUN dotnet publish
-RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out \
-    --runtime linux-x64 \
-    --self-contained true  
+RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out 
+# --runtime linux-x64 \
+# --self-contained true  
 # /p:PublishSingleFile=true 
 # /p:PublishTrimmed=true \
 
