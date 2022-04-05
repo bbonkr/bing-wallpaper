@@ -48,5 +48,5 @@ COPY --from=build /app/out ./
 RUN mkdir -p /app/images
 RUN mkdir -p /app/thumbnails
 
-# ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
-ENTRYPOINT ["./Bing.Wallpaper"]
+ENTRYPOINT ["dotnet", "Bing.Wallpaper.dll"]
+# ENTRYPOINT ["./Bing.Wallpaper"]
