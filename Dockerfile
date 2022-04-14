@@ -1,7 +1,8 @@
 # FROM alpine:latest as base
 # FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
 # FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS base
+# FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
 
 WORKDIR /app 
 EXPOSE 5000
