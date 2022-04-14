@@ -67,10 +67,8 @@ export const App = () => {
                                 />
                             ))}
 
-                            <Route path="/404">
-                                <NotFound />
-                            </Route>
-                            <Redirect to="/404" />
+                            <Route path="/404" element={<NotFound />} />
+                            <Route path="*" element={<Redirect to="/404" />} />
                         </Routes>
                     </Container>
                     <Footer onClickScrollToTop={handleClickScrollToTop} />
