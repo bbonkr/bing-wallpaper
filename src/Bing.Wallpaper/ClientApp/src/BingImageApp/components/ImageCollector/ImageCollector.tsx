@@ -32,7 +32,7 @@ export const ImageCollector = () => {
             false,
         )
             .then((res) => {
-                console.info('mutate result', res);
+                // console.info('mutate result', res);
                 const data: ApiResponseModel = res;
                 setCollectResult((_) => data);
             })

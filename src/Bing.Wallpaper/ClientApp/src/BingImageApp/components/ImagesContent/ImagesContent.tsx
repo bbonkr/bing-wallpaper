@@ -15,7 +15,7 @@ export const ImagesContent = () => {
     const { data, error, isValidating, size, setSize } = useSWRInfinite(
         (index: number) => {
             const page = index + 1;
-            console.info('useSWRInfinite, getKey page => ', page);
+            // console.info('useSWRInfinite, getKey page => ', page);
             return [`/api/images?page=${page}`, page];
         },
         (_: any, page: number) =>

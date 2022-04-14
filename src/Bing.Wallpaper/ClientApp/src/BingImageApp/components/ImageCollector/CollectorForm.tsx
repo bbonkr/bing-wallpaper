@@ -37,16 +37,16 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
         e.preventDefault();
 
         if (formState && formState.startIndex && formState.take) {
-            console.info('formState', formState);
+            // console.info('formState', formState);
             if (onCollect) {
                 onCollect(formState.startIndex, formState.take);
             }
         }
     };
 
-    useEffect(() => {
-        console.info('formState', formState);
-    }, [formState]);
+    // useEffect(() => {
+    //     console.info('formState', formState);
+    // }, [formState]);
 
     return (
         <form className="box" onSubmit={handleSubmit}>
