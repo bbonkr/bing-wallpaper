@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +44,7 @@ var columnOptions = new ColumnOptions
     AdditionalColumns = new List<SqlColumn>
     {
         // https://github.com/serilog/serilog-sinks-mssqlserver#custom-property-columns
-        new SqlColumn { ColumnName = "Payload", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true,},        
+        new SqlColumn { ColumnName = "Payload", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true,},
         new SqlColumn { ColumnName = "RequestUri", DataType = SqlDbType.NVarChar, DataLength =-1, AllowNull = true},
         new SqlColumn { ColumnName = "Errors", DataType = SqlDbType.NVarChar, DataLength = -1, AllowNull = true },
 
@@ -64,6 +64,23 @@ var assemblies = new List<Assembly> {
 };
 
 var builder = WebApplication.CreateBuilder(args);
+
+//var dotnetRunningInContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER");
+//var isDotnetRunningInContainer = new string[] { "true", "1" }.Contains((dotnetRunningInContainer ?? string.Empty).ToLower());
+//if (isDotnetRunningInContainer)
+//{
+//    // I don't want to use inotify when runs in container
+//    builder.Host.ConfigureAppConfiguration((_, configuration) =>
+//    {
+//        foreach (var source in configuration.Sources)
+//        {
+//            if (source is FileConfigurationSource fileConfigurationSource)
+//            {
+//                fileConfigurationSource.ReloadOnChange = false;
+//            }
+//        }
+//    });
+//}
 
 // Logger
 builder.Host.UseSerilog(

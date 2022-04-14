@@ -13,6 +13,8 @@ services:
     environment:
       - TZ=Asia/Seoul
       - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - ASPNETCORE_URLS=http://+:5000
       - ConnectionStrings__Default=<database connection string here>
       - Collector__DestinationPath=/app/images
       - Collector__ThumbnailPath=/app/thumbnails

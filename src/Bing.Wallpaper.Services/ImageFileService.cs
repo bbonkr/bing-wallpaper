@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
 using ImageMagick;
 using System.IO;
 using Microsoft.Extensions.Options;
 using Bing.Wallpaper.Options;
+
 
 namespace Bing.Wallpaper.Services;
 
@@ -30,6 +30,8 @@ public class ImageFileService : IImageFileService
     public ImageFileService(IOptionsMonitor<CollectorOptions> collectorOptionsMonitor)
     {
         collectorOptions = collectorOptionsMonitor.CurrentValue ?? throw new ArgumentException(CollectorOptions.ExceptionMessage, nameof(collectorOptionsMonitor));
+
+        //MagickNET.Initialize();
     }
 
     public Task<string> GenerateThumbnailAsync(string imageFilePath, string thumbnailDirectory)
@@ -40,6 +42,7 @@ public class ImageFileService : IImageFileService
 
         if (!File.Exists(thumbnailFilePath))
         {
+            //MagickNET.SetNativeLibraryDirectory(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
             using (var image = new MagickImage(imageFilePath))
             {
                 //image.Resize(120, 0);
