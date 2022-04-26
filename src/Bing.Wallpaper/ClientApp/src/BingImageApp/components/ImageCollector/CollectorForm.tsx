@@ -1,6 +1,4 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 type FormState = {
     startIndex?: number;
@@ -53,14 +51,14 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
             <div className="field">
                 <label className="label is-hidden-tablet">Collect</label>
                 <div className="field-body">
-                    <div className="field has-addons">
-                        <div className="control">
+                    <div className="columns is-mobile is-gapless">
+                        <div className="column is-4">
                             <div
                                 className={`select ${
                                     formState?.startIndex
                                         ? 'is-success'
                                         : 'is-danger'
-                                } `}
+                                }`}
                             >
                                 <select
                                     placeholder="Select start index"
@@ -84,11 +82,11 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
                                 </select>
                             </div>
                         </div>
-                        <div className="control">
+                        <div className="column is-4 ">
                             <div
                                 className={`select ${
                                     formState?.take ? 'is-success' : 'is-danger'
-                                } `}
+                                }`}
                             >
                                 <select
                                     placeholder="Select items count"
@@ -112,7 +110,7 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
                                 </select>
                             </div>
                         </div>
-                        <div className="control">
+                        <div className="column is-4 ">
                             <button
                                 type="submit"
                                 className={`button ${
