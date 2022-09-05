@@ -35,7 +35,7 @@
         "@babel/preset-env": "^7.14.2",
         "@babel/preset-react": "^7.13.13",
         "@babel/preset-typescript": "^7.12.7",
-        "@openapitools/openapi-generator-cli": "^2.4.25",
+        "@openapitools/openapi-generator-cli": "^2.5.2",
         "@types/lodash": "^4.14.169",
         "@types/node": "^15.3.0",
         "@types/react": "^18.0.8",
