@@ -7,7 +7,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Bing.Wallpaper.Mediator\Bing.Wallpaper.Mediator.csproj" />
 		<ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
-		<PackageReference Include="CronScheduler.AspNetCore" Version="3.0.1" />
+		<PackageReference Include="CronScheduler.AspNetCore" Version="3.1.0" />
 	</ItemGroup>
 
 </Project>
