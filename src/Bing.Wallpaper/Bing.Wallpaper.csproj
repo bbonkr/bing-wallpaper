@@ -2,9 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Version>2.1.17</Version>
+		<Version>2.1.18</Version>
 	</PropertyGroup>
-
 	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
