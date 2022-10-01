@@ -21,9 +21,7 @@ public class BingImageJob : IScheduledJob
 {
     const string TAG = "[JOB - BING TODAY IMAGE]";
 
-    public BingImageJob(
-        IServiceProvider provider
-        )
+    public BingImageJob(IServiceProvider provider)
     {
         this.provider = provider;
     }

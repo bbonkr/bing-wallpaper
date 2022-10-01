@@ -1,23 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="kr.bbon.Core" Version="1.4.7" />
-    <PackageReference Include="kr.bbon.EntityFrameworkCore.Extensions" Version="1.4.5" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="FluentValidation" Version="11.2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
-    <ProjectReference Include="..\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="FluentValidation" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+		<PackageReference Include="kr.bbon.Core" Version="1.4.7" />
+		<PackageReference Include="kr.bbon.EntityFrameworkCore.Extensions" Version="1.4.7" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="FluentValidation" Version="11.2.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
+		<ProjectReference Include="..\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="FluentValidation" />
+	</ItemGroup>
 </Project>

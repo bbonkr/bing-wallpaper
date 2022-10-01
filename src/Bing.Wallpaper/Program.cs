@@ -85,6 +85,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Logger
 builder.Host.UseSerilog(
     configureLogger: (context, services, configuration) => configuration
+        .MinimumLevel.Information()
         .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
