@@ -89,8 +89,15 @@ public class AddImageCommandHandler : IRequestHandler<AddImageCommand, AddImageC
 
         foreach (var image in bingImages.Images)
         {
-            if (dbContext.Images.Any(x => x.Hash == image.Hsh))
+            // Not working!
+            //if (dbContext.Images.Any(x => x.Hash == image.Hsh))
+            //{
+            //    continue;
+            //}
+
+            if (dbContext.Images.Any(x => x.Url == image.Url))
             {
+                logger.LogInformation("This image was collected already. {url}", image.Url);
                 continue;
             }
 

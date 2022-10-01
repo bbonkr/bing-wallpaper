@@ -37,30 +37,30 @@ public static class ServiceCollectionExtensions
 
             builder.AddJob<BingImageJob>(sectionName: "bing-image-collect-job", configure: options =>
             {
-                    /*
-                      * -------------------------------------------------------------------------------------------------------------
-                      *                                        Allowed values    Allowed special characters   Comment
-                      *
-                      * ┌───────────── second (optional)       0-59              * , - /                      
-                      * │ ┌───────────── minute                0-59              * , - /                      
-                      * │ │ ┌───────────── hour                0-23              * , - /                      
-                      * │ │ │ ┌───────────── day of month      1-31              * , - / L W ?                
-                      * │ │ │ │ ┌───────────── month           1-12 or JAN-DEC   * , - /                      
-                      * │ │ │ │ │ ┌───────────── day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
-                      * │ │ │ │ │ │
-                      * * * * * * *                     
-                      * -------------------------------------------------------------------------------------------------------------
-                     */
+                /*
+                  * -------------------------------------------------------------------------------------------------------------
+                  *                                        Allowed values    Allowed special characters   Comment
+                  *
+                  * ┌───────────── second (optional)       0-59              * , - /                      
+                  * │ ┌───────────── minute                0-59              * , - /                      
+                  * │ │ ┌───────────── hour                0-23              * , - /                      
+                  * │ │ │ ┌───────────── day of month      1-31              * , - / L W ?                
+                  * │ │ │ │ ┌───────────── month           1-12 or JAN-DEC   * , - /                      
+                  * │ │ │ │ │ ┌───────────── day of week   0-6  or SUN-SAT   * , - / # L ?                Both 0 and 7 means SUN
+                  * │ │ │ │ │ │
+                  * * * * * * *                     
+                  * -------------------------------------------------------------------------------------------------------------
+                 */
 
                 options.CronSchedule = collectorOptions.Schedule;
                 options.CronTimeZone = TimeZoneInfo.Local.Id;
                 options.RunImmediately = false;
             });
-            
-            builder.UnobservedTaskExceptionHandler = (sender, e) =>
+
+            builder.AddUnobservedTaskExceptionHandler(serviceProvider => (sender, e) =>
             {
                 Console.WriteLine("Schedule Job got a exception", e.Exception);
-            };
+            });
         });
 
         return services;
