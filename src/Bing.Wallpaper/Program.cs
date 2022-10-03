@@ -32,6 +32,9 @@ using FluentValidation.AspNetCore;
 using System.Reflection;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
+using kr.bbon.Core.Models;
 
 var mssqlSinkOptions = new MSSqlServerSinkOptions
 {
@@ -102,6 +105,13 @@ builder.Host.UseSerilog(
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.ConfigureAppOptions();
 
+builder.Services.AddOptions<JsonSerializerOptions>()
+    .Configure(options =>
+    {
+        options.AllowTrailingCommas = true;
+        options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
+
 builder.Services.Configure<MvcOptions>(options =>
 {
     options.CacheProfiles.Add("File-Response-Cache", new CacheProfile
@@ -135,12 +145,33 @@ builder.Services
         options.Filters.Add<ApiExceptionHandlerWithLoggingFilter>();
     })
     .ConfigureDefaultJsonOptions()
-    .AddFluentValidation(options =>
-    {
-        options.RegisterValidatorsFromAssemblies(assemblies);
-    });
+     .ConfigureApiBehaviorOptions(options =>
+     {
+         options.InvalidModelStateResponseFactory = context =>
+         {
+             PathString path = context.HttpContext.Request.Path;
+             string method = context.HttpContext.Request.Method;
+             string displayName = context.ActionDescriptor.DisplayName ?? string.Empty;
 
-builder.Services.AddValidatorsFromAssemblies(assemblies);
+             var errors = context.ModelState.Values
+                 .SelectMany(x => x.Errors)
+                 .Select(error => JsonSerializer.Deserialize<ErrorModel>(error.ErrorMessage));
+
+             var responseStatusCode = StatusCodes.Status400BadRequest;
+             var responseModel = kr.bbon.AspNetCore.Models.ApiResponseModelFactory.Create(responseStatusCode, "Payload is invalid", errors);
+
+             responseModel.Path = path.ToString();
+             responseModel.Method = method;
+             responseModel.Instance = displayName;
+
+             context.HttpContext.Response.StatusCode = responseStatusCode;
+
+             return new ObjectResult(responseModel);
+         };
+     });
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidators();
 
 builder.Services.AddForwardedHeaders();
 builder.Services.AddValidatorIntercepter();
