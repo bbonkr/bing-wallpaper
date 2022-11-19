@@ -10,6 +10,7 @@ using Bing.Wallpaper.Options;
 
 using CronScheduler.Extensions.Scheduler;
 using kr.bbon.Core;
+using kr.bbon.Core.Extensions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

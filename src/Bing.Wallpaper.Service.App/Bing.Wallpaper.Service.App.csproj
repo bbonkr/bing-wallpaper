@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,27 +21,27 @@
     </Content>
   </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-        <PackageReference Include="NLog" Version="5.0.4" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.0.4" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="NLog" Version="5.0.5" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj" />
-      <ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
-      <ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
-      <ProjectReference Include="..\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj" />
+    <ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
+    <ProjectReference Include="..\Bing.Wallpaper.Options\Bing.Wallpaper.Options.csproj" />
+    <ProjectReference Include="..\Bing.Wallpaper.Services\Bing.Wallpaper.Services.csproj" />
+  </ItemGroup>
 </Project>

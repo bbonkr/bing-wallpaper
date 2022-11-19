@@ -3,7 +3,7 @@ using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Mediator.Models;
 using Bing.Wallpaper.Options;
 using Bing.Wallpaper.Services;
-using kr.bbon.Core;
+using kr.bbon.Core.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

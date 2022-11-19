@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using kr.bbon.Core;
+using kr.bbon.Core.Exceptions;
 using kr.bbon.Core.Models;
 using MediatR;
 
