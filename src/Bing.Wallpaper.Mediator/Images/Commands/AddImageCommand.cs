@@ -2,7 +2,7 @@
 using Bing.Wallpaper.Entities;
 using Bing.Wallpaper.Models;
 using Bing.Wallpaper.Services;
-using kr.bbon.Core;
+using kr.bbon.Core.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
