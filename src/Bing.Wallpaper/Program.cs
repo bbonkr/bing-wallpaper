@@ -213,11 +213,10 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    //endpoints.MapControllers();
-
     endpoints.MapDefaultControllerRoute();
     endpoints.MapFallbackToController("Index", "Home");
 });
+
 
 // Run web application
 

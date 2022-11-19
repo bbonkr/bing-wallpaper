@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using kr.bbon.AspNetCore.Filters;
-using kr.bbon.Core;
+using kr.bbon.Core.Exceptions;
 using kr.bbon.Core.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
