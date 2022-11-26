@@ -14,7 +14,7 @@
     "author": "Pon Cheol Ku <dev@bbon.kr> (http://bbon.kr)",
     "license": "MIT",
     "dependencies": {
-        "axios": "^0.27.0",
+        "axios": "^1.2.0",
         "bulma": "^0.9.3",
         "dayjs": "^1.11.6",
         "react": "^18.2.0",
