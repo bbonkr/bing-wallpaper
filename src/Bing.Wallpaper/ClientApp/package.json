@@ -47,7 +47,7 @@
         "babel-loader": "^8.2.5",
         "babel-plugin-transform-remove-console": "^6.9.4",
         "cross-env": "^7.0.3",
-        "css-loader": "^5.2.4",
+        "css-loader": "^6.7.2",
         "eslint": "^7.26.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.0.0",
