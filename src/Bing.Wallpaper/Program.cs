@@ -190,6 +190,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwaggerUIWithApiVersioning();
+    app.UseCors(config =>
+    {
+        config.AllowAnyHeader();
+        config.AllowAnyMethod();
+        config.AllowAnyOrigin();
+    });
 
     using (var scope = app.Services.CreateScope())
     {
