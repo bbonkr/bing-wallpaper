@@ -42,7 +42,7 @@
         "@types/react-dom": "^18.0.3",
         "@types/react-redux": "^7.1.16",
         "@typescript-eslint/eslint-plugin": "^5.44.0",
-        "@typescript-eslint/parser": "^5.44.0",
+        "@typescript-eslint/parser": "^5.54.1",
         "ansi-regex": "^6.0.1",
         "babel-loader": "^8.2.5",
         "babel-plugin-transform-remove-console": "^6.9.4",
