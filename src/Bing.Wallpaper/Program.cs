@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Options;
-using Bing.Wallpaper;
 using kr.bbon.AspNetCore.Extensions.DependencyInjection;
 
 using Microsoft.AspNetCore.Builder;
@@ -18,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Bing.Wallpaper.Jobs;
 using Bing.Wallpaper.Mediator.DependencyInjection;
 using Bing.Wallpaper.Jobs.DependencyInjection;
 using Serilog.Sinks.MSSqlServer;
@@ -26,12 +23,9 @@ using System.Data;
 using Serilog;
 using Serilog.Events;
 using Bing.Wallpaper.Extensions.DependencyInjection;
-using System.Text.Json.Serialization;
 using Bing.Wallpaper.Infrastructure.Filters;
 using FluentValidation.AspNetCore;
 using System.Reflection;
-using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using kr.bbon.Core.Models;

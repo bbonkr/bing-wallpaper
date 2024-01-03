@@ -7,13 +7,16 @@ on:
     tags:
       - "!*"
 
+env:
+  DOTNET_VERSION: 8.0.x
+  NODE_VERSION: 18
+
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
@@ -21,12 +24,12 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: build ClientApp
         run: |
@@ -44,8 +47,8 @@ jobs:
       #   run: grep '<Version>' < src/Bing.Wallpaper/Bing.Wallpaper.csproj | echo "::set-output name=version::$(sed 's/.*<Version>\(.*\)<\/Version>/\1/')"
       #   id: get_package_version
 
-      # - name: set-version  
-      #   run: echo "PACKAGE_VERSION=${{ steps.get_package_version.outputs.version }}" >> $GITHUB_ENV        
+      # - name: set-version
+      #   run: echo "PACKAGE_VERSION=${{ steps.get_package_version.outputs.version }}" >> $GITHUB_ENV
 
       - name: get-version
         id: get_version
@@ -68,5 +71,3 @@ jobs:
           version: ${{ steps.get_version.outputs.version }}
           git_commit_sha: ${{ github.sha }}
           git_tag_prefix: "v"
-
-
