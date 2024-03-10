@@ -20,7 +20,10 @@ public static class ServiceCollectionExtensions
         var thisAssembly = typeof(PlaceHolder).Assembly;
 
         services.AddAutoMapper(thisAssembly);
-        services.AddMediatR(thisAssembly);
+        services.AddMediatR(configuration =>
+        {
+            configuration.RegisterServicesFromAssemblies(thisAssembly);
+        });
 
         return services;
     }

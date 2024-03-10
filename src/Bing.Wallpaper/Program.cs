@@ -29,6 +29,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using kr.bbon.Core.Models;
+using Asp.Versioning;
 
 var mssqlSinkOptions = new MSSqlServerSinkOptions
 {
@@ -55,10 +56,6 @@ var columnOptions = new ColumnOptions
 };
 columnOptions.Store.Remove(StandardColumn.Properties);
 columnOptions.Store.Add(StandardColumn.LogEvent);
-
-var assemblies = new List<Assembly> {
-    typeof(Bing.Wallpaper.Mediator.PlaceHolder).Assembly,
-};
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -174,7 +171,6 @@ var defaultVersion = new ApiVersion(1, 0);
 
 builder.Services.AddApiVersioningAndSwaggerGen(defaultVersion);
 
-
 // Configure
 var app = builder.Build();
 
@@ -216,6 +212,8 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
     endpoints.MapFallbackToController("Index", "Home");
 });
+
+
 
 
 // Run web application
