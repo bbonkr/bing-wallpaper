@@ -3,9 +3,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Bing.Wallpaper.Data.Configurations;
 
@@ -13,9 +10,7 @@ internal class AppLogConfiguration : IEntityTypeConfiguration<AppLog>
 {
     public void Configure(EntityTypeBuilder<AppLog> builder)
     {
-        builder.ToTable("AppLogs");
-
-        builder.HasComment("로깅 NLog");
+        builder.ToTable("AppLogs", null, tableBuilder => tableBuilder.HasComment("로깅 NLog"));
 
         builder.HasKey(x => x.Id);
 

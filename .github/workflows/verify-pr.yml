@@ -3,23 +3,27 @@ name: Verify PR
 on:
   pull_request:
 
+env:
+  DOTNET_VERSION: 8.0.x
+  NODE_VERSION: 18
+
 jobs:
   build:
     name: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: build ClientApp
         run: |
@@ -32,6 +36,3 @@ jobs:
 
       - name: Build ASP.NET Core app
         run: dotnet build --no-restore
-
-
-
