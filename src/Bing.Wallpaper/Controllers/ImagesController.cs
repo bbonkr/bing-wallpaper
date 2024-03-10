@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-
+using Asp.Versioning;
 using Bing.Wallpaper.Mediator.Images.Queries;
 using Bing.Wallpaper.Mediator.Models;
 

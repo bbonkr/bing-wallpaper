@@ -7,11 +7,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,15 +16,15 @@ namespace Bing.Wallpaper.Mediator.Images.Commands;
 
 public class AddImageCommand : IRequest<AddImageCommandResult>
 {
-    public AddImageCommand(int startIndex = 1, int take = 8)
+    public AddImageCommand(int? startIndex = 1, int? take = 8)
     {
-        StartIndex = startIndex;
-        Take = take;
+        StartIndex = startIndex ?? 1;
+        Take = take ?? 8;
     }
 
-    public int StartIndex { get; set; } = 1;
+    public int StartIndex { get; set; }
 
-    public int Take { get; set; } = 8;
+    public int Take { get; set; }
 }
 
 public class AddImageCommandResult
