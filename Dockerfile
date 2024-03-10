@@ -8,27 +8,32 @@ EXPOSE 5000
 ENV DOTNET_RUNNING_IN_CONTAINER 1
 ENV ASPNETCORE_URLS=http://+:5000
 
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/aspnet:8.0-jammy AS build
-WORKDIR /app
+# FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build
+WORKDIR /src
 
 # install node.js
-RUN curl -sL https://deb.nodesource.com/setup_18.x |  bash -
-RUN apt-get install -y nodejs
+# https://github.com/nodesource/distributions?tab=readme-ov-file#using-ubuntu-1
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x |  bash - &&\ 
+    apt-get install -y nodejs
 
 # copy csproj and restore as distinct layers
 COPY . .
 
 # Build client
-RUN cd src/Bing.Wallpaper/ClientApp && npm ci && npm run build
+RUN cd src/Bing.Wallpaper/ClientApp &&\
+    npm ci &&\ 
+    npm run build
 
 # RUN dotnet publish
-RUN cd src/Bing.Wallpaper && dotnet restore && dotnet publish -c Release -o /app/out \
+RUN dotnet restore src/Bing.Wallpaper/Bing.Wallpaper.csproj &&\ 
+    dotnet publish src/Bing.Wallpaper/Bing.Wallpaper.csproj -c Release -o ./out \
     --runtime linux-x64 \
     --no-self-contained
 
-FROM base as final
+FROM base AS final
 WORKDIR /app
-COPY --from=build /app/out ./
+COPY --from=build /src/out .
 
 RUN mkdir -p /app/images
 RUN mkdir -p /app/thumbnails
