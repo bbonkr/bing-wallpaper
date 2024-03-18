@@ -44,7 +44,7 @@ public class ImageQueryHandler : IRequestHandler<ImagesQuery, PagedModel<ImageIt
         {
             var tokens = item.FileName.Split(".");
             item.FileName = string.Join(".", tokens.Take(tokens.Length - 1));
-            item.FileExtension = $".{tokens.Last()}";
+            item.FileExtension = $".{tokens.LastOrDefault() ?? string.Empty}";
         }
 
         return result;

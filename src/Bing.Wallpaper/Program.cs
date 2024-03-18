@@ -30,6 +30,8 @@ using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using kr.bbon.Core.Models;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Bing.Wallpaper.Infrastructure.Helpers.HealthCheck;
 
 var mssqlSinkOptions = new MSSqlServerSinkOptions
 {
@@ -91,7 +93,6 @@ builder.Host.UseSerilog(
             columnOptions: columnOptions),
     writeToProviders: true);
 
-
 // Configure services
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.ConfigureAppOptions();
@@ -135,7 +136,7 @@ builder.Services
     {
         options.Filters.Add<ApiExceptionHandlerWithLoggingFilter>();
     })
-    .ConfigureDefaultJsonOptions()
+    // .ConfigureDefaultJsonOptions()
      .ConfigureApiBehaviorOptions(options =>
      {
          options.InvalidModelStateResponseFactory = context =>
@@ -168,8 +169,10 @@ builder.Services.AddForwardedHeaders();
 builder.Services.AddValidatorIntercepter();
 
 var defaultVersion = new ApiVersion(1, 0);
-
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioningAndSwaggerGen(defaultVersion);
+
+builder.Services.AddHealthChecks();
 
 // Configure
 var app = builder.Build();
@@ -179,7 +182,14 @@ app.UseDatabaseMigration<DefaultDatabaseContext>();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwaggerUIWithApiVersioning();
+    app.UseSwaggerUIWithApiVersioning(options =>
+    {
+        options.EnableDeepLinking();
+        options.EnableFilter();
+        options.EnablePersistAuthorization();
+        options.EnableTryItOutByDefault();
+        options.EnableValidator();
+    });
     app.UseCors(config =>
     {
         config.AllowAnyHeader();
@@ -207,14 +217,19 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapDefaultControllerRoute();
+//     endpoints.MapFallbackToController("Index", "Home");
+// });
+
+app.MapControllers();
+
+app.MapHealthChecks(HealthCheckHelper.HEALTH_CHECK_ROUTE, new HealthCheckOptions
 {
-    endpoints.MapDefaultControllerRoute();
-    endpoints.MapFallbackToController("Index", "Home");
+    AllowCachingResponses = false,
+    ResponseWriter = HealthCheckHelper.ResponseWriter,
 });
-
-
-
 
 // Run web application
 

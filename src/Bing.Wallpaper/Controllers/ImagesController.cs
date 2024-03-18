@@ -5,7 +5,6 @@ using Bing.Wallpaper.Mediator.Models;
 
 using kr.bbon.AspNetCore;
 using kr.bbon.AspNetCore.Filters;
-using kr.bbon.AspNetCore.Models;
 using kr.bbon.AspNetCore.Mvc;
 using kr.bbon.Core.Models;
 
@@ -22,6 +21,7 @@ namespace Bing.Wallpaper.Controllers;
 [Area(DefaultValues.AreaName)]
 [Route(DefaultValues.RouteTemplate)]
 [ApiExceptionHandlerFilter]
+[Produces(DefaultValues.ContentTypeApplicationJson)]
 public class ImagesController : ApiControllerBase
 {
     public ImagesController(
@@ -32,10 +32,17 @@ public class ImagesController : ApiControllerBase
         this.logger = logger;
     }
 
+    /// <summary>
+    /// Get images
+    /// </summary>
+    /// <param name="page"></param>
+    /// <param name="take"></param>
+    /// <returns></returns>
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponseModel<PagedModel<ImageItemModel>>))]
-    public async Task<IActionResult> GetAllAsync(int page = 1, int take = 10)
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedModel<ImageItemModel>>> GetAllAsync(int page = 1, int take = 10)
     {
         var query = new ImagesQuery
         {
@@ -46,9 +53,7 @@ public class ImagesController : ApiControllerBase
 
         var records = await mediator.Send(query);
 
-        return StatusCode(StatusCodes.Status200OK, records);
-
-        //return records;
+        return Ok(records);
     }
 
     private readonly IMediator mediator;
