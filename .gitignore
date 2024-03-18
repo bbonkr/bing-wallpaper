@@ -341,3 +341,5 @@ appsettings.*.json
 thumbnails/
 
 **/wwwroot/js/
+
+.mono/
