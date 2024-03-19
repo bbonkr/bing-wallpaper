@@ -2,7 +2,8 @@ import { ActionType, createAction, createAsyncAction } from 'typesafe-actions';
 import {
     ObjectApiResponseModel,
     ImageItemModel,
-    ImageItemModelPagedModelApiResponseModel,
+    // ImageItemModelPagedModelApiResponseModel,
+    ImageItemModelPagedModel,
 } from '../../../api/api';
 import { LoadImagesRequestModel } from '../../models';
 
@@ -10,11 +11,7 @@ export const loadImages = createAsyncAction(
     'load-images/request',
     'load-images/success',
     'load-images/failure',
-)<
-    LoadImagesRequestModel,
-    ImageItemModelPagedModelApiResponseModel,
-    ObjectApiResponseModel
->();
+)<LoadImagesRequestModel, ImageItemModelPagedModel, ObjectApiResponseModel>();
 
 export const resetLoadImagesError = createAction('load-images/reset-error')();
 
