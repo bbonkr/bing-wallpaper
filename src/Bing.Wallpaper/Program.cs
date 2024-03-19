@@ -25,7 +25,6 @@ using Serilog.Events;
 using Bing.Wallpaper.Extensions.DependencyInjection;
 using Bing.Wallpaper.Infrastructure.Filters;
 using FluentValidation.AspNetCore;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using kr.bbon.Core.Models;
@@ -136,7 +135,7 @@ builder.Services
     {
         options.Filters.Add<ApiExceptionHandlerWithLoggingFilter>();
     })
-    // .ConfigureDefaultJsonOptions()
+     // .ConfigureDefaultJsonOptions()
      .ConfigureApiBehaviorOptions(options =>
      {
          options.InvalidModelStateResponseFactory = context =>
@@ -217,13 +216,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// app.UseEndpoints(endpoints =>
-// {
-//     endpoints.MapDefaultControllerRoute();
-//     endpoints.MapFallbackToController("Index", "Home");
-// });
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapDefaultControllerRoute();
+    endpoints.MapFallbackToController("Index", "Home");
+});
 
-app.MapControllers();
 
 app.MapHealthChecks(HealthCheckHelper.HEALTH_CHECK_ROUTE, new HealthCheckOptions
 {
