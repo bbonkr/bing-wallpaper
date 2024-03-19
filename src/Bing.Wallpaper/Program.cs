@@ -25,11 +25,12 @@ using Serilog.Events;
 using Bing.Wallpaper.Extensions.DependencyInjection;
 using Bing.Wallpaper.Infrastructure.Filters;
 using FluentValidation.AspNetCore;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using kr.bbon.Core.Models;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Bing.Wallpaper.Infrastructure.Helpers.HealthCheck;
 
 var mssqlSinkOptions = new MSSqlServerSinkOptions
 {
@@ -91,7 +92,6 @@ builder.Host.UseSerilog(
             columnOptions: columnOptions),
     writeToProviders: true);
 
-
 // Configure services
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.ConfigureAppOptions();
@@ -135,7 +135,7 @@ builder.Services
     {
         options.Filters.Add<ApiExceptionHandlerWithLoggingFilter>();
     })
-    .ConfigureDefaultJsonOptions()
+     // .ConfigureDefaultJsonOptions()
      .ConfigureApiBehaviorOptions(options =>
      {
          options.InvalidModelStateResponseFactory = context =>
@@ -168,8 +168,10 @@ builder.Services.AddForwardedHeaders();
 builder.Services.AddValidatorIntercepter();
 
 var defaultVersion = new ApiVersion(1, 0);
-
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiVersioningAndSwaggerGen(defaultVersion);
+
+builder.Services.AddHealthChecks();
 
 // Configure
 var app = builder.Build();
@@ -179,7 +181,14 @@ app.UseDatabaseMigration<DefaultDatabaseContext>();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwaggerUIWithApiVersioning();
+    app.UseSwaggerUIWithApiVersioning(options =>
+    {
+        options.EnableDeepLinking();
+        options.EnableFilter();
+        options.EnablePersistAuthorization();
+        options.EnableTryItOutByDefault();
+        options.EnableValidator();
+    });
     app.UseCors(config =>
     {
         config.AllowAnyHeader();
@@ -214,7 +223,11 @@ app.UseEndpoints(endpoints =>
 });
 
 
-
+app.MapHealthChecks(HealthCheckHelper.HEALTH_CHECK_ROUTE, new HealthCheckOptions
+{
+    AllowCachingResponses = false,
+    ResponseWriter = HealthCheckHelper.ResponseWriter,
+});
 
 // Run web application
 

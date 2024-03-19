@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImagesList, ListContainer } from './ImagesList';
 import { Content, Section } from '../Layouts';
 import { FaSync } from 'react-icons/fa';
@@ -15,13 +15,12 @@ export const ImagesContent = () => {
     const { data, error, isValidating, size, setSize } = useSWRInfinite(
         (index: number) => {
             const page = index + 1;
-            // console.info('useSWRInfinite, getKey page => ', page);
             return [`/api/images?page=${page}`, page];
         },
         (_: any, page: number) =>
             new ApiClient().images
                 .apiv10ImagesGetAll({ page, take })
-                .then((res) => res.data.data),
+                .then((res) => res.data),
         {},
     );
 

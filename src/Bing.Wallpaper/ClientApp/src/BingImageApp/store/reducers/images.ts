@@ -32,17 +32,17 @@ export const images = createReducer<
     ImageItemModel[] | undefined,
     ImagesActions
 >([]).handleAction([imagesActions.loadImages.success], (state, action) => {
-    if (action.payload.data?.currentPage === 1) {
-        return action.payload.data.items ?? [];
+    if (action.payload?.currentPage === 1) {
+        return action.payload.items ?? [];
     } else {
-        return [...(state ?? []).concat(...(action.payload.data?.items ?? []))];
+        return [...(state ?? []).concat(...(action.payload?.items ?? []))];
     }
 });
 
 export const hasMoreImages = createReducer<boolean, ImagesActions>(true)
     .handleAction([imagesActions.loadImages.success], (state, action) => {
-        const itemsCount = (action.payload.data?.items ?? []).length;
-        const limit = action.payload.data?.limit ?? 0;
+        const itemsCount = (action.payload?.items ?? []).length;
+        const limit = action.payload?.limit ?? 0;
         return limit === itemsCount;
     })
     .handleAction(

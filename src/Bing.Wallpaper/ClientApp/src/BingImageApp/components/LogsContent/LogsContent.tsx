@@ -26,7 +26,12 @@ export const LogsContent = () => {
                 formState?.values.keyword,
             ];
         },
-        (_: any, page: number, level, keyword) => {
+        (
+            _: any,
+            page: number,
+            level: string | undefined,
+            keyword: string | undefined,
+        ) => {
             return new ApiClient().logs
                 .apiv10LogsGetAll({ page, take, level, keyword })
                 .then((res) => res.data.data);
@@ -49,7 +54,7 @@ export const LogsContent = () => {
 
     useEffect(() => {
         if (data) {
-            var latestSet = data.find(
+            const latestSet = data.find(
                 (_, index, arr) => index === arr.length - 1,
             );
             setHasMoreLogs((prevState) => {
