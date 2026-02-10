@@ -1,14 +1,12 @@
-﻿using Bing.Wallpaper.Entities;
-using Bing.Wallpaper.Models;
-using Bing.Wallpaper.Options;
-using Bing.Wallpaper.Services.Models;
-
-using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bing.Wallpaper.Models;
+using Bing.Wallpaper.Options;
+using Bing.Wallpaper.Services.Models;
+using Microsoft.Extensions.Options;
 
 namespace Bing.Wallpaper.Services;
 
@@ -79,7 +77,7 @@ public class LocalFileService : ILocalFileService
 
                     fileNameWithoutExtension = String.Join(".", fileNamesToken.Take(fileNamesToken.Length - 1));
 
-                    fileExtension = $".{ fileName.Split('.').LastOrDefault() }";
+                    fileExtension = $".{fileName.Split('.').LastOrDefault()}";
                 }
 
                 var saveFileName = $"{fileNameWithoutExtension}-{now.Ticks}{fileExtension}";

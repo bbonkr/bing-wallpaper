@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ImageMagick;
-using System.IO;
-using Microsoft.Extensions.Options;
 using Bing.Wallpaper.Options;
+using ImageMagick;
+using Microsoft.Extensions.Options;
 
 
 namespace Bing.Wallpaper.Services;
@@ -64,8 +64,8 @@ public class ImageFileService : IImageFileService
         {
             using (var image = new MagickImage(imageFilePath))
             {
-                w = image.Width;
-                h = image.Height;
+                w = (int)image.Width;
+                h = (int)image.Height;
             }
         }
 

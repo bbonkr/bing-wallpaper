@@ -343,3 +343,4 @@ thumbnails/
 **/wwwroot/js/
 
 .mono/
+.aspire/
