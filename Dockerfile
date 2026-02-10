@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-jammy AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 
 WORKDIR /app 
 EXPOSE 5000
@@ -9,7 +9,7 @@ ENV DOTNET_RUNNING_IN_CONTAINER 1
 ENV ASPNETCORE_URLS=http://+:5000
 
 # FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:10.0-jammy AS build
-FROM mcr.microsoft.com/dotnet/sdk:10.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # install node.js
