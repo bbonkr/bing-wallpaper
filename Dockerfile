@@ -14,7 +14,7 @@ WORKDIR /src
 
 # install node.js
 # https://github.com/nodesource/distributions?tab=readme-ov-file#using-ubuntu-1
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x |  bash - &&\ 
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x |  bash - &&\ 
     apt-get install -y nodejs
 
 # copy csproj and restore as distinct layers
