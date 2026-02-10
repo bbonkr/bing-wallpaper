@@ -13,8 +13,8 @@ env:
   MAIN_BRANCH_NAME: main
   DEFAULT_BRANCH_NAME: dev
   PROJECT_NAME: "" # Repository project only; ORG project not supported
-  DOTNET_VERSION: 8.0.x
-  NODE_VERSION: 18
+  DOTNET_VERSION: 10.0.x
+  NODE_VERSION: 24
 
 jobs:
   build: # make sure build/ci work properly
@@ -22,15 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -58,7 +58,7 @@ jobs:
       next_version: ${{ steps.next_version_proposal.outputs.next_version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "get next version name"
         uses: bbonkr/next-version-proposal-action@v1
@@ -68,7 +68,6 @@ jobs:
           pr: ${{ github.event.pull_request.number }}
           major_labels: "major,next"
           minor_labels: "enhancement,feature"
-          patch_labels: "bug,documentation,chore,dependencies"
           next_version_prefix: "v"
 
       - name: "Create tag"
@@ -91,7 +90,7 @@ jobs:
     if: ${{ needs.create-tag.outputs.next_version != '' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Logging
         run: |
@@ -99,7 +98,7 @@ jobs:
 
       - name: create GitHub Release
         id: release_drafter
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6
         if: ${{ needs.create-tag.outputs.next_version != '' }}
         with:
           config-name: release-drafter.yml
@@ -114,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get overview of PULL_REQUEST
         uses: bbonkr/get-overview-of-pull-requests-action@v1

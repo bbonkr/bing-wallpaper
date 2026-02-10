@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Version>2.3.3</Version>
 	</PropertyGroup>
 	<PropertyGroup>
@@ -31,6 +31,7 @@
 		<PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="../Bing.Wallpaper.AppHost.ServiceDefaults/Bing.Wallpaper.AppHost.ServiceDefaults.csproj" />
 		<ProjectReference Include="..\Bing.Wallpaper.Data.SqlServer\Bing.Wallpaper.Data.SqlServer.csproj" />
 		<ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
 		<ProjectReference Include="..\Bing.Wallpaper.Entities\Bing.Wallpaper.Entities.csproj" />

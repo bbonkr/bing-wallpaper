@@ -4,8 +4,8 @@ on:
   pull_request:
 
 env:
-  DOTNET_VERSION: 8.0.x
-  NODE_VERSION: 18
+  DOTNET_VERSION: 10.0.x
+  NODE_VERSION: 24
 
 jobs:
   build:
@@ -13,15 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
 
