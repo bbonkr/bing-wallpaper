@@ -1,0 +1,26 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Apps/">
+    <Project Path="src/Bing.Wallpaper.AppHost/Bing.Wallpaper.AppHost.csproj" />
+    <Project Path="src/Bing.Wallpaper.Service.App/Bing.Wallpaper.Service.App.csproj" />
+    <Project Path="src/Bing.Wallpaper/Bing.Wallpaper.csproj" />
+  </Folder>
+  <Folder Name="/Docker/">
+    <File Path="docker-compose.service.yml" />
+    <File Path="docker-compose.webapp.yml" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="src/Bing.Wallpaper.AppHost.ServiceDefaults/Bing.Wallpaper.AppHost.ServiceDefaults.csproj" />
+  <Project Path="src/Bing.Wallpaper.Data.SqlServer/Bing.Wallpaper.Data.SqlServer.csproj" />
+  <Project Path="src/Bing.Wallpaper.Data/Bing.Wallpaper.Data.csproj" />
+  <Project Path="src/Bing.Wallpaper.Entities/Bing.Wallpaper.Entities.csproj" />
+  <Project Path="src/Bing.Wallpaper.Jobs/Bing.Wallpaper.Jobs.csproj" />
+  <Project Path="src/Bing.Wallpaper.Mediator/Bing.Wallpaper.Mediator.csproj" />
+  <Project Path="src/Bing.Wallpaper.Models/Bing.Wallpaper.Models.csproj" />
+  <Project Path="src/Bing.Wallpaper.Options/Bing.Wallpaper.Options.csproj" />
+  <Project Path="src/Bing.Wallpaper.Services/Bing.Wallpaper.Services.csproj" />
+</Solution>

@@ -31,6 +31,7 @@ using kr.bbon.Core.Models;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Bing.Wallpaper.Infrastructure.Helpers.HealthCheck;
+using Bing.Wallpaper.AppHost.ServiceDefaults;
 
 var mssqlSinkOptions = new MSSqlServerSinkOptions
 {
@@ -76,6 +77,8 @@ var builder = WebApplication.CreateBuilder(args);
 //        }
 //    });
 //}
+
+builder.AddServiceDefaults();
 
 // Logger
 builder.Host.UseSerilog(

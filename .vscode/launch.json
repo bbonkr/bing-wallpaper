@@ -9,6 +9,12 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/src/Bing.Wallpaper/Bing.WallPaper.csproj"
+        },
+        {
+            "type": "aspire",
+            "request": "launch",
+            "name": "Aspire: Launch AppHost",
+            "program": "${workspaceFolder}/src/Bing.Wallpaper.AppHost/Bing.Wallpaper.AppHost.csproj",
         }
     ]
 }
