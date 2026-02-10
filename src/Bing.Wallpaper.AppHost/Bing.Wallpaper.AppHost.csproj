@@ -1,0 +1,13 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.1">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>9abcf80c-0798-4ea0-9feb-d6bf01535301</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bing.Wallpaper\Bing.Wallpaper.csproj" />
+  </ItemGroup>
+</Project>
