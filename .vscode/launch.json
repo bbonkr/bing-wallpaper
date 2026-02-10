@@ -14,7 +14,7 @@
             "type": "aspire",
             "request": "launch",
             "name": "Aspire: Launch AppHost",
-            "program": "${workspaceFolder}/Bing.Wallpaper.AppHost/Bing.Wallpaper.AppHost.csproj",
+            "program": "${workspaceFolder}/src/Bing.Wallpaper.AppHost/Bing.Wallpaper.AppHost.csproj",
         }
     ]
 }
