@@ -63,11 +63,11 @@ public class FilesController : ApiControllerBase
 
         var result = await mediator.Send(query);
 
-        logger.LogInformation("Download: {filename}", result.FileName);
+        logger.LogInformation("Download: {Filename}", result.FileName);
 
         var contentTypeProvider = new FileExtensionContentTypeProvider();
-        var contentType = "application/octet-stream";
-        if (!contentTypeProvider.TryGetContentType(result.FileName, out contentType))
+
+        if (!contentTypeProvider.TryGetContentType(result.FileName, out string contentType))
         {
             contentType = "application/octet-stream";
         }
