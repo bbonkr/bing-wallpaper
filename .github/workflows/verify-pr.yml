@@ -25,11 +25,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: build ClientApp
         run: |
           cd src/Bing.Wallpaper/ClientApp
-          npm ci
-          npm run build
+          pnpm install --frozen-lockfile
+          pnpm run build
 
       - name: Restore dependencies
         run: dotnet restore

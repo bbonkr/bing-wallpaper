@@ -5,16 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C#: Bing.WallPaper Debug",
-            "type": "dotnet",
+            "name": "C#: Bing.Wallpaper Debug (launchSettings)",
+            "type": "coreclr",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/src/Bing.Wallpaper/Bing.WallPaper.csproj"
+            "preLaunchTask": "build Bing.Wallpaper",
+            "program": "${workspaceFolder}/src/Bing.Wallpaper/bin/Debug/net10.0/Bing.Wallpaper.dll",
+            "cwd": "${workspaceFolder}/src/Bing.Wallpaper",
+            "launchSettingsFilePath": "${workspaceFolder}/src/Bing.Wallpaper/Properties/launchSettings.json",
+            "launchSettingsProfile": "Bing.Wallpaper",
+            "launchBrowser": {
+                "enabled": true
+            }
         },
         {
             "type": "aspire",
             "request": "launch",
             "name": "Aspire: Launch AppHost",
-            "program": "${workspaceFolder}/src/Bing.Wallpaper.AppHost/Bing.Wallpaper.AppHost.csproj",
+            "program": "${workspaceFolder}/src/Bing.Wallpaper.AppHost/Bing.Wallpaper.AppHost.csproj"
         }
     ]
 }
