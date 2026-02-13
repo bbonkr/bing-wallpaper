@@ -345,3 +345,4 @@ thumbnails/
 .mono/
 .aspire/
 .llms/
+.pnpm-store/

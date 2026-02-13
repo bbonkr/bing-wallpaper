@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Text.Json;
 using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 using Bing.Wallpaper.AppHost.ServiceDefaults;
 using Bing.Wallpaper.Data;
 using Bing.Wallpaper.Extensions.DependencyInjection;
@@ -218,16 +217,11 @@ app.UseRequestLogging();
 // Use proxy
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-    endpoints.MapFallbackToController("Index", "Home");
-});
-
+app.MapDefaultControllerRoute();
+app.MapFallbackToController("Index", "Home");
 
 app.MapHealthChecks(HealthCheckHelper.HEALTH_CHECK_ROUTE, new HealthCheckOptions
 {

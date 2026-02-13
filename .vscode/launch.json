@@ -12,7 +12,10 @@
             "program": "${workspaceFolder}/src/Bing.Wallpaper/bin/Debug/net10.0/Bing.Wallpaper.dll",
             "cwd": "${workspaceFolder}/src/Bing.Wallpaper",
             "launchSettingsFilePath": "${workspaceFolder}/src/Bing.Wallpaper/Properties/launchSettings.json",
-            "launchSettingsProfile": "Bing.Wallpaper"
+            "launchSettingsProfile": "Bing.Wallpaper",
+            "launchBrowser": {
+                "enabled": true
+            }
         },
         {
             "type": "aspire",

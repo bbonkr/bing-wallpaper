@@ -1,14 +1,15 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using MediatR;
-using FluentValidation.AspNetCore;
-using Bing.Wallpaper.Infrastructure.Validations;
-using FluentValidation;
 using System.Collections.Generic;
 using System.Reflection;
+using Bing.Wallpaper.Infrastructure.Validations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bing.Wallpaper.Extensions.DependencyInjection;
 
+#nullable enable
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddValidatorIntercepter(this IServiceCollection services)
@@ -36,3 +37,5 @@ public static class ServiceCollectionExtensions
         return services;
     }
 }
+
+#nullable restore
