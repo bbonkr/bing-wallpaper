@@ -17,8 +17,8 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
     });
 
     const handleChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        var value = e.currentTarget.value;
-        var name = e.currentTarget.name;
+        const value = e.currentTarget.value;
+        const name = e.currentTarget.name;
 
         let numberValue: number | undefined = parseInt(value, 10);
         if (Number.isNaN(numberValue)) {
@@ -60,14 +60,13 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
                                         : 'is-danger'
                                 }`}
                             >
-                                <select
-                                    placeholder="Select start index"
+                                <select                                    
                                     name="startIndex"
                                     onChange={handleChangeSelect}
                                     value={formState?.startIndex}
                                 >
                                     <option>Select start index</option>
-                                    {Array(10)
+                                    {new Array(10)
                                         .fill(1)
                                         .map((x, index) => {
                                             return (
@@ -88,14 +87,13 @@ export const CollectorForm = ({ isLoading, onCollect }: CollectorFormProps) => {
                                     formState?.take ? 'is-success' : 'is-danger'
                                 }`}
                             >
-                                <select
-                                    placeholder="Select items count"
+                                <select                                    
                                     name="take"
                                     onChange={handleChangeSelect}
                                     value={formState?.take}
                                 >
                                     <option>Select items count</option>
-                                    {Array(8)
+                                    {new Array(8)
                                         .fill(1)
                                         .map((x, index) => {
                                             return (

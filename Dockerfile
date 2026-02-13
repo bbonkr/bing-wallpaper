@@ -15,15 +15,16 @@ WORKDIR /src
 # install node.js
 # https://github.com/nodesource/distributions?tab=readme-ov-file#using-ubuntu-1
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x |  bash - &&\ 
-    apt-get install -y nodejs
+    apt-get install -y nodejs && \
+    npm i -g pnpm
 
 # copy csproj and restore as distinct layers
 COPY . .
 
 # Build client
 RUN cd src/Bing.Wallpaper/ClientApp &&\
-    npm ci &&\ 
-    npm run build
+    pnpm install --frozen-lockfile &&\ 
+    pnpm run build
 
 # RUN dotnet publish
 RUN dotnet restore src/Bing.Wallpaper/Bing.Wallpaper.csproj &&\ 

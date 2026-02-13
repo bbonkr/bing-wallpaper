@@ -65,8 +65,7 @@ export const LogFilter = ({
                     <div className="field has-addons">
                         <div className="control">
                             <div className="select">
-                                <select
-                                    placeholder="Level"
+                                <select                                    
                                     name="level"
                                     value={formState.values.level}
                                     onChange={handleFormChange}
