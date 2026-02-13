@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build Bing.Wallpaper",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Bing.Wallpaper/Bing.Wallpaper.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

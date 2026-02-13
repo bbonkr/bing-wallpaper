@@ -46,7 +46,7 @@ public class FilesController : ApiControllerBase
 
         var result = await mediator.Send(query);
 
-        logger.LogInformation("Download: {filename}", result.FileName);
+        logger.LogInformation("Download: {Filename}", result.FileName);
 
         return File(result.Buffer, result.ContentType, result.FileName);
     }

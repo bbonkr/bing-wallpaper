@@ -1,37 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-
+using System.Text.Json;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+using Bing.Wallpaper.AppHost.ServiceDefaults;
 using Bing.Wallpaper.Data;
+using Bing.Wallpaper.Extensions.DependencyInjection;
+using Bing.Wallpaper.Infrastructure.Filters;
+using Bing.Wallpaper.Infrastructure.Helpers.HealthCheck;
+using Bing.Wallpaper.Jobs.DependencyInjection;
+using Bing.Wallpaper.Mediator.DependencyInjection;
 using Bing.Wallpaper.Options;
+using FluentValidation.AspNetCore;
 using kr.bbon.AspNetCore.Extensions.DependencyInjection;
-
+using kr.bbon.Core.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Bing.Wallpaper.Mediator.DependencyInjection;
-using Bing.Wallpaper.Jobs.DependencyInjection;
-using Serilog.Sinks.MSSqlServer;
-using System.Data;
 using Serilog;
 using Serilog.Events;
-using Bing.Wallpaper.Extensions.DependencyInjection;
-using Bing.Wallpaper.Infrastructure.Filters;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Http;
-using System.Text.Json;
-using kr.bbon.Core.Models;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Bing.Wallpaper.Infrastructure.Helpers.HealthCheck;
-using Bing.Wallpaper.AppHost.ServiceDefaults;
+using Serilog.Sinks.MSSqlServer;
 
 var mssqlSinkOptions = new MSSqlServerSinkOptions
 {
@@ -97,7 +95,7 @@ builder.Host.UseSerilog(
 
 // Configure services
 builder.Configuration.AddEnvironmentVariables();
-builder.Services.ConfigureAppOptions();
+// builder.Services.ConfigureAppOptions();
 
 builder.Services.AddOptions<JsonSerializerOptions>()
     .Configure(options =>
@@ -172,7 +170,19 @@ builder.Services.AddValidatorIntercepter();
 
 var defaultVersion = new ApiVersion(1, 0);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddApiVersioningAndSwaggerGen(defaultVersion);
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = defaultVersion;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+})
+.AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
+builder.Services.AddSwaggerDocumentation();
 
 builder.Services.AddHealthChecks();
 
@@ -184,14 +194,7 @@ app.UseDatabaseMigration<DefaultDatabaseContext>();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    app.UseSwaggerUIWithApiVersioning(options =>
-    {
-        options.EnableDeepLinking();
-        options.EnableFilter();
-        options.EnablePersistAuthorization();
-        options.EnableTryItOutByDefault();
-        options.EnableValidator();
-    });
+    app.UseSwaggerDocumentation();
     app.UseCors(config =>
     {
         config.AllowAnyHeader();
