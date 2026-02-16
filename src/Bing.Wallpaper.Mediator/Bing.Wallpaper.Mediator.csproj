@@ -7,7 +7,7 @@
 		<PackageReference Include="AutoMapper" Version="15.1.0" />
 		<PackageReference Include="kr.bbon.Core" Version="1.7.0" />
 		<PackageReference Include="kr.bbon.EntityFrameworkCore.Extensions" Version="1.5.3" />
-		<PackageReference Include="FluentValidation" Version="8.3.0" />
+		<PackageReference Include="FluentValidation" Version="12.1.1" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
 	</ItemGroup>
 	<ItemGroup>
