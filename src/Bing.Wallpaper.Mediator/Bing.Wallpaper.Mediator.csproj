@@ -8,7 +8,7 @@
 		<PackageReference Include="kr.bbon.Core" Version="1.7.0" />
 		<PackageReference Include="kr.bbon.EntityFrameworkCore.Extensions" Version="1.5.3" />
 		<PackageReference Include="FluentValidation" Version="8.3.0" />
-		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="MediatR" Version="14.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Bing.Wallpaper.Data\Bing.Wallpaper.Data.csproj" />
