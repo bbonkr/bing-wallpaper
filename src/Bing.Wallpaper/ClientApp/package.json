@@ -46,7 +46,7 @@
         "@typescript-eslint/eslint-plugin": "^5.62.0",
         "@typescript-eslint/parser": "^5.62.0",
         "ansi-regex": "^6.2.2",
-        "babel-loader": "^8.4.1",
+        "babel-loader": "^10.0.0",
         "babel-plugin-transform-remove-console": "^6.9.4",
         "cross-env": "^7.0.3",
         "css-loader": "^6.11.0",
