@@ -33,7 +33,7 @@ export const ImageCollector = () => {
         setHasError((_) => false);
         mutate(
             ['POST:/api/bingImages'],
-            (_: any) => {
+            () => {
                 return new ApiClient().bingImage
                     .apiv10BingImagesCollectImages({
                         bingImageServiceGetRequestModel: {

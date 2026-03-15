@@ -3,6 +3,7 @@ import { UiHelper } from '../../lib/UiHelper';
 import { Content } from './Content';
 import { CardMediaContent } from './CardMediaContent';
 import { ImageModel } from '../../models';
+import { Image as AppImage } from '../Image';
 
 interface CardMedia {
     image?: ImageModel;
@@ -31,7 +32,11 @@ export const Card = ({
             {cardImage && (
                 <div className="card-image">
                     <figure>
-                        <img src={cardImage.src} alt={cardImage.alt} />
+                        <AppImage
+                            imageSrc={cardImage.src}
+                            alt={cardImage.alt}
+                            title={cardImage.alt}
+                        />
                     </figure>
                 </div>
             )}

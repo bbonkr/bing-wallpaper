@@ -1,5 +1,6 @@
 import React from 'react';
 import { ImageModel } from '../../models';
+import { Image as AppImage } from '../Image';
 
 interface CardMediaContent {
     title: string;
@@ -17,7 +18,11 @@ export const CardMediaContent = ({ image, content }: CardMediaContentProps) => {
             {image && (
                 <div className="media-left">
                     <figure>
-                        <img src={image.src} alt={image.alt} />
+                        <AppImage
+                            imageSrc={image.src}
+                            alt={image.alt}
+                            title={image.alt}
+                        />
                     </figure>
                 </div>
             )}

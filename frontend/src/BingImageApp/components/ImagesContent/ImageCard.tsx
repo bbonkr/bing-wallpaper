@@ -28,10 +28,8 @@ export const ImageCard = ({ image }: ImageCardProps) => {
                         `${image.fileName}`,
                         'thumbnail',
                     )}
-                    imgProps={{
-                        title: image.title ?? image.fileName ?? '',
-                        alt: image.title ?? image.fileName ?? '',
-                    }}
+                    title={image.title ?? image.fileName ?? ''}
+                    alt={image.title ?? image.fileName ?? ''}
                 />
                 <figcaption className="card-title-over-image rounded-bottom">
                     {image.title ?? image.fileName}

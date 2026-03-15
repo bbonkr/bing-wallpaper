@@ -3,7 +3,7 @@ export interface ApiResponseModelBase {
     message?: string;
 }
 
-export interface ApiResponseModel<TData = {}> extends ApiResponseModelBase {
+export interface ApiResponseModel<TData = unknown> extends ApiResponseModelBase {
     statusCode: number;
     message?: string;
     data?: TData;

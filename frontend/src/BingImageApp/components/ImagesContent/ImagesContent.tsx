@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ImagesList, ListContainer } from './ImagesList';
 import { Content, Section } from '../Layouts';
 import { FaSync } from 'react-icons/fa';
@@ -8,21 +8,34 @@ import { ApiClient } from '../../services';
 import Loading from '../Loading';
 
 export const ImagesContent = () => {
-    const [hasMoreImages, setHasMoreImages] = useState(true);
-
     const take = 10;
 
-    const { data, error, isValidating, size, setSize } = useSWRInfinite(
+    const { data, error, isValidating, setSize } = useSWRInfinite(
         (index: number) => {
             const page = index + 1;
             return [`/api/images?page=${page}`, page];
         },
-        (_: any, page: number) =>
-            new ApiClient().images
+        (_key: string, page: number) => {
+            void _key;
+            return new ApiClient().images
                 .apiv10ImagesGetAll({ page, take })
-                .then((res) => res.data),
+                .then((res) => res.data);
+        },
         {},
     );
+
+    const hasMoreImages = useMemo(() => {
+        if (!data || data.length === 0) {
+            return true;
+        }
+
+        const latestSet = data[data.length - 1];
+        if (!latestSet) {
+            return true;
+        }
+
+        return (latestSet.currentPage ?? 0) < (latestSet.totalPages ?? 0);
+    }, [data]);
 
     const handleClickLoadMore = () => {
         if (hasMoreImages) {
@@ -33,27 +46,6 @@ export const ImagesContent = () => {
     const handleClickRefresh = () => {
         setSize((_) => 1);
     };
-
-    useEffect(() => {
-        if (data) {
-            const latestSet = data.find(
-                (_, index, arr) => index === arr.length - 1,
-            );
-
-            setHasMoreImages((prevState) => {
-                let endOfList = false;
-                if (latestSet) {
-                    endOfList = latestSet.currentPage === latestSet.totalPages;
-                }
-                const hasMore = !endOfList;
-                if (prevState !== hasMore) {
-                    return hasMore;
-                }
-
-                return prevState;
-            });
-        }
-    }, [data]);
 
     useEffect(() => {
         if (error)

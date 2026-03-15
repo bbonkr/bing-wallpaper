@@ -82,10 +82,8 @@ export const FullSizeImage = () => {
                             'thumbnail',
                         )}
                         isRequestFullScreen={isRequestedFullScreen}
-                        imgProps={{
-                            title: fullSizeImage.title ?? '',
-                            alt: fullSizeImage?.fileName ?? '',
-                        }}
+                        title={fullSizeImage.title ?? ''}
+                        alt={fullSizeImage.title ?? fullSizeImage?.fileName ?? ''}
                         onRequestedFullscreen={handleRequestedFullScreen}
                         onLoaded={handleImageElementLoaded}
                     />
