@@ -6,13 +6,12 @@ import {
     BingImagesApi,
 } from '../../api/api';
 import { Configuration } from '../../api/configuration';
+import { getApiOrigin } from './ApiUrl';
 
 export class ApiClient {
     constructor() {
         const configuration: Configuration = new Configuration({
-            basePath:
-                process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/+$/, '') ??
-                '/api/v1.0',
+            basePath: getApiOrigin(),
         });
         const axiosInstance = this.getAxiosInstance();
         axiosInstance.interceptors.response.use(

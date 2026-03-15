@@ -184,6 +184,7 @@ $ docker-compose up -d --build
 - `DESTINATION_PATH`: 이미지 저장 디렉터리(호스트 경로)
 - `THUMBNAIL_PATH`: 썸네일 저장 디렉터리(호스트 경로)
 - `COLLECTOR__SCHEDULE`(선택): cron 형식 스케줄, 기본값 `0 0 1 * * *`
+- `NEXT_PUBLIC_API_BASE_URL`(선택): frontend 빌드 시 주입할 API base URL, 기본값 `http://localhost:5000/api/v1.0`
 
 #### 실행
 

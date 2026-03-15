@@ -15,6 +15,9 @@ RUN pnpm install --frozen-lockfile
 FROM base AS builder
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_BASE_URL=/api/v1.0
+ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -35,6 +38,6 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null || exit 1
+  CMD node -e "fetch('http://127.0.0.1:3000/').then((res) => process.exit(res.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 CMD ["pnpm", "start", "-p", "3000"]

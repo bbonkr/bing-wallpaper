@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useImagesApi } from '../../hooks/useImagesApi';
 import { FaExpandArrowsAlt, FaTimes } from 'react-icons/fa';
 import { Image } from '../Image';
+import { buildFileUrl } from '../../services';
 
 export const FullSizeImage = () => {
     const { fullSizeImage, hideFullSizeImage } = useImagesApi();
@@ -75,12 +76,11 @@ export const FullSizeImage = () => {
                 </div>
                 <figure>
                     <Image
-                        imageSrc={`/api/v1.0/files/${encodeURIComponent(
+                        imageSrc={buildFileUrl(fullSizeImage.fileName ?? '')}
+                        imageThumbnailSrc={buildFileUrl(
                             fullSizeImage.fileName ?? '',
-                        )}`}
-                        imageThumbnailSrc={`/api/v1.0/files/${encodeURIComponent(
-                            fullSizeImage.fileName ?? '',
-                        )}?type=thumbnail`}
+                            'thumbnail',
+                        )}
                         isRequestFullScreen={isRequestedFullScreen}
                         imgProps={{
                             title: fullSizeImage.title ?? '',

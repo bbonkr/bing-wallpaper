@@ -1,7 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import { Image } from '../Image';
 import { ImageItemModel } from '../../../api/api';
 import { useImagesApi } from '../../hooks/useImagesApi';
+import { buildFileUrl } from '../../services';
 
 
 interface ImageCardProps {
@@ -22,12 +23,11 @@ export const ImageCard = ({ image }: ImageCardProps) => {
         >
             <figure className="is-position-relative">
                 <Image
-                    imageSrc={`/api/v1.0/files/${encodeURIComponent(
+                    imageSrc={buildFileUrl(`${image.fileName}`)}
+                    imageThumbnailSrc={buildFileUrl(
                         `${image.fileName}`,
-                    )}`}
-                    imageThumbnailSrc={`/api/v1.0/files/${encodeURIComponent(
-                        `${image.fileName}`,
-                    )}?type=thumbnail`}
+                        'thumbnail',
+                    )}
                     imgProps={{
                         title: image.title ?? image.fileName ?? '',
                         alt: image.title ?? image.fileName ?? '',
