@@ -37,10 +37,11 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: build ClientApp
+      - name: build frontend
         run: |
-          cd src/Bing.Wallpaper/ClientApp
+          cd frontend
           pnpm install --frozen-lockfile
+          pnpm run lint
           pnpm run build
 
       - name: Restore dependencies

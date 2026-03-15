@@ -25,14 +25,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Docker meta
-        id: meta
+      - name: Docker meta (backend)
+        id: meta_backend
         uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
           images: |
             ${{ secrets.DOCKER_REGISTRY_URI }}/${{ github.repository }}
-          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+
+      - name: Docker meta (frontend)
+        id: meta_frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.DOCKER_REGISTRY_URI }}/${{ github.repository }}-frontend
           tags: |
             type=schedule
             type=ref,event=branch
@@ -62,16 +75,31 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
 
-      - name: Build and push
+      - name: Build and push (backend)
         uses: docker/build-push-action@v5
-        id: docker_build
+        id: docker_build_backend
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta_backend.outputs.tags }}
+          labels: ${{ steps.meta_backend.outputs.labels }}
           platforms: linux/amd64
 
-      - name: Image digest
+      - name: Build and push (frontend)
+        uses: docker/build-push-action@v5
+        id: docker_build_frontend
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta_frontend.outputs.tags }}
+          labels: ${{ steps.meta_frontend.outputs.labels }}
+          platforms: linux/amd64
+
+      - name: Image digest (backend)
         run: |
-          echo ${{ steps.docker_build.outputs.digest }}
+          echo ${{ steps.docker_build_backend.outputs.digest }}
+
+      - name: Image digest (frontend)
+        run: |
+          echo ${{ steps.docker_build_frontend.outputs.digest }}

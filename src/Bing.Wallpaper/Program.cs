@@ -185,6 +185,31 @@ builder.Services.AddSwaggerDocumentation();
 
 builder.Services.AddHealthChecks();
 
+const string frontendCorsPolicyName = "FrontendCorsPolicy";
+var allowedCorsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?.Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .Select(origin => origin.Trim())
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray() ?? Array.Empty<string>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(frontendCorsPolicyName, policy =>
+    {
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+
+        if (allowedCorsOrigins.Length > 0)
+        {
+            policy.WithOrigins(allowedCorsOrigins);
+        }
+        else if (builder.Environment.IsDevelopment())
+        {
+            policy.AllowAnyOrigin();
+        }
+    });
+});
+
 // Configure
 var app = builder.Build();
 
@@ -194,12 +219,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwaggerDocumentation();
-    app.UseCors(config =>
-    {
-        config.AllowAnyHeader();
-        config.AllowAnyMethod();
-        config.AllowAnyOrigin();
-    });
 
     using (var scope = app.Services.CreateScope())
     {
@@ -210,6 +229,10 @@ if (app.Environment.IsDevelopment())
         logger.LogDebug($"[Options: Collector] values: {Environment.NewLine}{options}");
     }
 }
+else if (allowedCorsOrigins.Length == 0)
+{
+    app.Logger.LogWarning("No CORS origins configured. Set 'Cors:AllowedOrigins' to allow frontend access in non-development environments.");
+}
 
 // Logging
 app.UseRequestLogging();
@@ -217,6 +240,7 @@ app.UseRequestLogging();
 // Use proxy
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseCors(frontendCorsPolicyName);
 
 app.UseAuthorization();
 

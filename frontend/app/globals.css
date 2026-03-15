@@ -1,0 +1,12 @@
+@import 'bulma/css/bulma.css';
+@import '../src/styles/legacy-app.css';
+@import '../src/BingImageApp/components/Image/style.css';
+@import '../src/BingImageApp/components/ImagesContent/style.css';
+@import '../src/BingImageApp/components/FullSizeImage/style.css';
+@import '../src/BingImageApp/components/LogsContent/style.css';
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}

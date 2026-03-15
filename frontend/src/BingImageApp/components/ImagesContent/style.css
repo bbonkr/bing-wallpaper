@@ -1,0 +1,40 @@
+.is-position-relative {
+    position: relative;
+    min-height: 140px;
+}
+
+figure.is-position-relative{
+    margin: 0 !important;
+}
+
+.is-position-relative img {
+    width: 100%;
+    padding: 0;
+    -webkit-filter: blur(0.15rem);
+    filter: blur(0.15rem);
+}
+
+.is-position-relative img.loaded {
+    filter: none;
+}
+
+.card-title-over-image {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    background-color: #000000a2;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.card-title-over-image p,
+figcaption.card-title-over-image {
+    color: #efefef;
+    padding: .3rem .6rem;
+}
+
+.clickable {
+    cursor: pointer;
+}

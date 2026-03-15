@@ -1,0 +1,7 @@
+{
+  "npmName": "@bbonkr/bing-wallpaper-api",
+  "supportsES6": true,
+  "withSeparateModelsAndApi": true,
+  "apiPackage": "api",
+  "modelPackage": "models"
+}
