@@ -7,3 +7,5 @@
 .Microsoft.DotNet.ImageBuilder
 .github/
 .config/
+frontend/node_modules
+frontend/.next

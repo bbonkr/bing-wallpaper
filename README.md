@@ -174,3 +174,26 @@ $ cp docker-compose.webapp.yml docker-compose.yml
 $ docker-compose up -d --build
 ```
 
+### 백엔드/프론트엔드 분리 배포로 실행 (Next.js 전환)
+
+`docker-compose.fullstack.yml`를 사용하면 backend(`:5000`)와 frontend(`:3000`)를 별도 컨테이너로 실행할 수 있습니다.
+
+#### 필수 환경 변수
+
+- `CONNECTIONSTRINGS__DEFAULT`: SQL Server 연결 문자열
+- `DESTINATION_PATH`: 이미지 저장 디렉터리(호스트 경로)
+- `THUMBNAIL_PATH`: 썸네일 저장 디렉터리(호스트 경로)
+- `COLLECTOR__SCHEDULE`(선택): cron 형식 스케줄, 기본값 `0 0 1 * * *`
+- `NEXT_PUBLIC_API_BASE_URL`(선택): frontend 빌드 시 주입할 API base URL, 기본값 `http://localhost:5000/api/v1.0`
+
+#### 실행
+
+```bash
+$ docker compose -f docker-compose.fullstack.yml up -d --build
+```
+
+#### 접속
+
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:5000/api/v1.0`
+- Backend Health: `http://localhost:5000/healthz`

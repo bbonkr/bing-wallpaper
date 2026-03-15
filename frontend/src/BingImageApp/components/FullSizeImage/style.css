@@ -1,0 +1,52 @@
+.full-size-image-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000000a2;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.full-size-image-container>img {
+    margin-left: auto;
+    margin-right: auto;
+    justify-self: center;
+    align-self: center;
+    flex: 1;
+    object-fit: cover;
+    object-position: center;
+}
+
+.full-size-image-container .tools {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem;
+    background-color: #1f1f1f;
+    color: #f1f1f1;
+}
+
+.full-size-image-container .tools div>p {
+    color: #efefef;
+}
+
+.full-size-image-container figure {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-size-image-container figure > img {
+    max-height: 90vh;
+}
+
+.full-size-image-container figure>figcaption {
+    background-color: #1f1f1f;
+    color: #f1f1f1;
+    padding: 0.3rem .6rem;
+    text-align: center;
+}

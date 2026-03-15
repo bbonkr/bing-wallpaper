@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  bing_wallpaper:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: bbonkr/bing-wallpaper:latest
+    container_name: bing_wallpaper
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - TZ=Asia/Seoul
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_RUNNING_IN_CONTAINER=true
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__Default=${CONNECTIONSTRINGS__DEFAULT}
+      - Collector__DestinationPath=/app/images
+      - Collector__ThumbnailPath=/app/thumbnails
+      - Collector__Schedule=${COLLECTOR__SCHEDULE:-0 0 1 * * *}
+      - Cors__AllowedOrigins__0=http://localhost:3000
+    volumes:
+      - ${DESTINATION_PATH}:/app/images
+      - ${THUMBNAIL_PATH}:/app/thumbnails
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  bing_wallpaper_frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:5000/api/v1.0}
+    image: bbonkr/bing-wallpaper-frontend:latest
+    container_name: bing_wallpaper_frontend
+    restart: always
+    depends_on:
+      bing_wallpaper:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - TZ=Asia/Seoul
+      - NODE_ENV=production
+      - INTERNAL_API_BASE_URL=http://bing_wallpaper:5000/api/v1.0
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then((res) => process.exit(res.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s

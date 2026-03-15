@@ -1,0 +1,15 @@
+.log-table tr th:first-child {
+    width: 11rem;
+}
+
+.log-table .content-wrap {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+@media screen and (max-width: 321px) {
+    .log-table .content-wrap {
+        white-space: initial;
+        overflow-wrap: initial;
+    }
+}
