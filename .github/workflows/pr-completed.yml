@@ -41,6 +41,7 @@ jobs:
         run: |
           cd frontend
           pnpm install --frozen-lockfile
+          pnpm run lint
           pnpm run build
 
       - name: Restore dependencies

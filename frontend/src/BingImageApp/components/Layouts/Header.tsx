@@ -3,6 +3,7 @@ import { LinkModel } from '../../models';
 import { GenericLink } from '../GenericLink';
 import { AppOptions } from '../../constants';
 import { FaGithub } from 'react-icons/fa';
+import Image from 'next/image';
 interface HeaderProps {
     menuRoutes: LinkModel[];
 }
@@ -64,7 +65,6 @@ export const Header = ({ menuRoutes }: HeaderProps) => {
         // }
 
         window.addEventListener('resize', handleWindowResize);
-        handleWindowResize();
 
         return () => {
             // if (observer) {
@@ -104,7 +104,12 @@ export const Header = ({ menuRoutes }: HeaderProps) => {
                         classNames={['navbar-item']}
                         onClick={handleClickMenu}
                     >
-                        <img src="/bbon-icon-48.png" width="auto" height="28" />{' '}
+                        <Image
+                            src="/bbon-icon-48.png"
+                            width={28}
+                            height={28}
+                            alt="bbon icon"
+                        />{' '}
                         <span className="ml-3">{AppOptions.Title}</span>
                     </GenericLink>
                     <a

@@ -11,8 +11,7 @@ export interface LogModel {
     exception: string;
 }
 
-export interface LogsApiResponseModel
-    extends ApiResponseModel<PagedModel<LogModel>> {}
+export type LogsApiResponseModel = ApiResponseModel<PagedModel<LogModel>>;
 
 export interface LoadLogsRequestModel {
     page: number;

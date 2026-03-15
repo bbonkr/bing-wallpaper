@@ -3,6 +3,8 @@ import React, { useEffect, useState, useRef } from 'react';
 
 export interface ImageProps {
     imgProps?: React.ImgHTMLAttributes<HTMLImageElement>;
+    alt: string;
+    title?: string;
     imageSrc?: string;
     imageThumbnailSrc?: string;
     isRequestFullScreen?: boolean;
@@ -12,6 +14,8 @@ export interface ImageProps {
 }
 
 export const Image = ({
+    alt,
+    title,
     imageSrc,
     imageThumbnailSrc,
     isRequestFullScreen,
@@ -96,10 +100,18 @@ export const Image = ({
     }, [isRequestFullScreen]);
 
     return (
+        // This component keeps native <img> because fullscreen/intersection behavior
+        // relies on direct DOM image APIs.
+        // eslint-disable-next-line @next/next/no-img-element
         <img
             {...imgProps}
             ref={imageRef}
-            src={imgProps?.src ?? (imageLoaded ? imageSrc : imageThumbnailSrc)}
+            src={
+                imgProps?.src ??
+                (imageThumbnailSrc ? (imageLoaded ? imageSrc : imageThumbnailSrc) : imageSrc)
+            }
+            alt={alt}
+            title={title}
             className={`${imgProps?.className ?? ''} ${
                 imageSrc && imageThumbnailSrc ? 'lazy-load-image' : ''
             } ${imageLoaded ? 'loaded' : ''} ${onClick ? 'is-clickable' : ''}`}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { Content, Section } from '../Layouts';
 import { LogFilter, FormState } from './LogFilter';
@@ -10,7 +10,6 @@ export const LogsContent = () => {
     const COLUMNS_COUNT = 3;
     const take = 10;
     const [formState, setFormState] = useState<FormState>();
-    const [hasMoreLogs, setHasMoreLogs] = useState(true);
 
     const { data, error, isValidating, size, setSize } = useSWRInfinite(
         (index: number) => {
@@ -26,16 +25,30 @@ export const LogsContent = () => {
             ];
         },
         (
-            _: any,
+            _key: string,
             page: number,
             level: string | undefined,
             keyword: string | undefined,
         ) => {
+            void _key;
             return new ApiClient().logs
                 .apiv10LogsGetAll({ page, take, level, keyword })
                 .then((res) => res.data.data);
         },
     );
+
+    const hasMoreLogs = useMemo(() => {
+        if (!data || data.length === 0) {
+            return true;
+        }
+
+        const latestSet = data[data.length - 1];
+        if (!latestSet) {
+            return true;
+        }
+
+        return (latestSet.currentPage ?? 0) < (latestSet.totalPages ?? 0);
+    }, [data]);
 
     const handleClickLoadMore = () => {
         if (hasMoreLogs) {
@@ -50,26 +63,6 @@ export const LogsContent = () => {
 
         setSize((_) => 1);
     };
-
-    useEffect(() => {
-        if (data) {
-            const latestSet = data.find(
-                (_, index, arr) => index === arr.length - 1,
-            );
-            setHasMoreLogs((prevState) => {
-                let endOfList = false;
-
-                if (latestSet) {
-                    endOfList = latestSet.currentPage === latestSet.totalPages;
-                }
-                const hasMore = !endOfList;
-                if (prevState !== hasMore) {
-                    return hasMore;
-                }
-                return prevState;
-            });
-        }
-    }, [data]);
 
     useEffect(() => {
         if (error) {
