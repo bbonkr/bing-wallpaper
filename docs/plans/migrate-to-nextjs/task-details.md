@@ -4,6 +4,12 @@
 ### 목표
 기존 동작을 기준선으로 고정해 회귀를 빠르게 탐지한다.
 
+### 파일 단위 체크리스트
+- [x] `docs/plans/migrate-to-nextjs/task-plan.md` 최신화 확인
+- [x] `docs/plans/migrate-to-nextjs/task-details.md` 최신화 확인
+- [x] `src/Bing.Wallpaper/ClientApp/src/BingImageApp/components/App/App.tsx` 기준 라우트 스냅샷 기록
+- [x] 기존 번들 경로 기록 (`src/Bing.Wallpaper/wwwroot/js/bingImageApp/bingImageApp.bundle.js`)
+
 ### 작업
 1. 현재 라우트/기능 목록 스냅샷 작성
 - 기준: `src/Bing.Wallpaper/ClientApp/src/BingImageApp/components/App/App.tsx`
@@ -27,6 +33,15 @@
 ## B. Next.js 앱 부트스트랩 (Phase 1)
 ### 목표
 `frontend/`에 실행 가능한 Next.js 앱 골격을 만든다.
+
+### 파일 단위 체크리스트
+- [x] `frontend/package.json` 생성/초기화 (Next.js, React, TypeScript, ESLint, scripts)
+- [x] `frontend/next.config.*` 생성 (기본 설정)
+- [x] `frontend/tsconfig.json` 생성
+- [x] `frontend/app/layout.tsx` 생성
+- [x] `frontend/app/page.tsx` 생성
+- [x] `frontend/app/globals.css` 생성 (Bulma/공통 스타일 반영)
+- [x] `frontend/public/*` 정적 자산 복사 (`favicon.ico`, `bbon-icon*.png`)
 
 ### 작업
 1. `frontend/` 생성 및 초기화
@@ -53,12 +68,24 @@
 ### 체크포인트
 - `pnpm dev`, `pnpm build` 성공
 - 기본 페이지 렌더링 성공
+- 진행 메모 (2026-03-15): `pnpm build`, `pnpm lint` 성공
 
 ---
 
 ## C. 화면/라우팅/상태 이관 (Phase 2)
 ### 목표
 기존 사용자 경로를 Next 라우트로 동일하게 제공한다.
+
+### 파일 단위 체크리스트
+- [x] `frontend/app/collector/page.tsx` 생성
+- [x] `frontend/app/logs/page.tsx` 생성
+- [x] `frontend/app/not-found.tsx` 생성
+- [x] `frontend/src/BingImageApp/components/**` 이관 (Header, Footer, Container, FullSizeImage 포함)
+- [x] `frontend/src/BingImageApp/store/actions/**` 이관
+- [x] `frontend/src/BingImageApp/store/reducers/**` 이관
+- [x] `frontend/src/BingImageApp/store/epics/**` 이관
+- [x] `frontend/src/BingImageApp/store/index.ts` 이관/수정 (Next 환경 대응)
+- [x] `react-router-dom` 의존 제거 반영 (`frontend/package.json`)
 
 ### 작업
 1. 라우팅 매핑
@@ -86,12 +113,20 @@
 ### 체크포인트
 - 주요 경로 이동 정상
 - 기존 기능 동등성(이미지 목록/수집/로그 조회/404) 확보
+- 진행 메모 (2026-03-15): Next App Router 페이지(`/`, `/collector`, `/logs`, `not-found`)를 legacy 컴포넌트 기반으로 연결 완료
 
 ---
 
 ## D. API 통신 및 백엔드 연동 (Phase 3)
 ### 목표
 분리 배포 환경에서도 안정적으로 API를 호출한다.
+
+### 파일 단위 체크리스트
+- [x] `frontend/src/api/**` 이관 (OpenAPI 생성 결과 포함)
+- [x] `frontend/src/services/**` 또는 대응 경로 이관 (`frontend/src/BingImageApp/services`, `ApiClient` 포함)
+- [x] `frontend/.env.example` 생성 (`NEXT_PUBLIC_API_BASE_URL` 명시)
+- [x] `frontend/package.json` scripts 갱신 (`gen`, `build`, `start` 확인)
+- [x] `src/Bing.Wallpaper/Program.cs` CORS 정책 수정 (운영 origin 명시 허용)
 
 ### 작업
 1. API 클라이언트 이전
@@ -112,6 +147,7 @@
 ### 체크포인트
 - 브라우저 네트워크 탭에서 CORS 오류 없음
 - 4xx/5xx 시 기존과 동등한 에러 처리 동작
+- 진행 메모 (2026-03-15): `Cors:AllowedOrigins` 기반 정책 추가, 개발 환경에서만 `AllowAnyOrigin` fallback 허용
 
 ---
 
@@ -119,12 +155,21 @@
 ### 목표
 프론트엔드/백엔드를 독립 이미지로 빌드 및 배포한다.
 
+### 파일 단위 체크리스트
+- [x] `frontend/Dockerfile` 생성
+- [x] `docker-compose.fullstack.yml` 생성
+- [x] 루트 `Dockerfile` 수정 (`ClientApp` 빌드 단계 제거)
+- [x] `README.md`에 분리 배포 실행 방법 반영
+- [x] `frontend/Dockerfile`에 `HEALTHCHECK` 추가
+- [x] `docker-compose.fullstack.yml`에 health 기반 `depends_on` 반영
+
 ### 작업
 1. 프론트엔드 Dockerfile 추가 (`frontend/Dockerfile`)
 - multi-stage build 권장
 - builder: pnpm install + next build
 - runner: next start
 - 포트: `3000`
+- `HEALTHCHECK` 추가 (`/` 또는 별도 health endpoint)
 
 2. Compose 구성 추가/개편
 - 예시 파일: `docker-compose.fullstack.yml` (신규 권장)
@@ -134,6 +179,33 @@
 - frontend env
   - `NEXT_PUBLIC_API_BASE_URL=http://localhost:5000/api/v1.0` (외부 접속 기준)
   - 내부 네트워크 통신 필요 시 별도 서버사이드 URL 변수 추가
+- frontend 서비스에 health 기반 `depends_on` 연계 (백엔드 또는 역순 의존 정책에 맞춰 적용)
+
+### HEALTHCHECK/depends_on 예시 스니펫
+```dockerfile
+# frontend/Dockerfile (runner stage)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null || exit 1
+```
+
+```yaml
+# docker-compose.fullstack.yml
+services:
+  bing_wallpaper:
+    # backend 서비스 정의
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5000/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  bing_wallpaper_frontend:
+    # frontend 서비스 정의
+    depends_on:
+      bing_wallpaper:
+        condition: service_healthy
+```
 
 3. 기존 Dockerfile 정리
 - 백엔드 Dockerfile에서 ClientApp 빌드 단계 제거
@@ -145,6 +217,7 @@
 ### 체크포인트
 - `docker compose -f docker-compose.fullstack.yml up -d --build` 성공
 - `http://localhost:3000` 접근 + API 연동 정상
+- 진행 메모 (2026-03-15): 로컬 환경에 `docker` CLI가 없어 compose 실기동 검증은 보류. 파일 생성/구성 및 빌드 단계까지 완료.
 
 ---
 
@@ -152,10 +225,17 @@
 ### 목표
 구 버전 의존을 제거하고 운영 가능한 상태로 마감한다.
 
+### 파일 단위 체크리스트
+- [x] `src/Bing.Wallpaper/ClientApp/**` 제거 또는 `legacy/` 이동 결정 반영
+- [x] `README.md` 업데이트 (frontend 개발/배포 절차)
+- [x] `docs/plans/migrate-to-nextjs/task-plan.md` 완료 상태 갱신
+- [x] `docs/plans/migrate-to-nextjs/task-details.md` 체크리스트 완료 반영
+
 ### 작업
 1. 구 ClientApp 정리
 - 즉시 삭제 또는 `legacy/` 이동 중 하나 선택
 - 최소 요건: 백엔드 빌드가 ClientApp 산출물에 더 이상 의존하지 않음
+- 결정(2026-03-15): `src/Bing.Wallpaper/ClientApp`은 컷오버 안정화 기간 동안 read-only legacy로 유지. 백엔드 Docker 빌드 의존은 제거 완료.
 
 2. 문서 업데이트
 - `README.md`에 frontend 개발/배포 절차 추가
@@ -186,3 +266,26 @@
 6. Phase 5
 
 각 Phase 완료 시점에 빌드/실행 검증을 통과하지 못하면 다음 Phase 진행 금지.
+
+---
+
+## 추가 권장사항
+1. 런타임 API 변수 이원화
+- `NEXT_PUBLIC_API_BASE_URL`(브라우저 요청)와 `INTERNAL_API_BASE_URL`(서버사이드 요청)을 분리한다.
+
+2. CORS 최소화
+- 가능한 경우 Next `rewrites`로 `/api` 프록시를 우선 적용해 CORS 설정 복잡도를 낮춘다.
+
+3. CI 스모크 테스트 자동화
+- 최소 파이프라인: `frontend build` -> `docker compose up -d --build` -> 핵심 라우트/API 헬스 체크
+
+4. Docker 이미지 태깅 규칙
+- `latest` 외에 `git sha` 또는 `semver` 태그를 병행해 롤백 가능성을 높인다.
+
+5. 컷오버(구 ClientApp 제거) 기준 사전 합의
+- 예시: 운영 1주 무사고 + 핵심 시나리오 100% 통과 시 구 앱 제거 또는 `legacy/` 이관
+
+6. OpenAPI 생성 안정화
+- OpenAPI generator 버전 및 옵션 고정, CI에서 생성 결과 드리프트 감지
+7. frontend 컨테이너 HEALTHCHECK 적용
+- `frontend/Dockerfile`에 healthcheck를 추가하고 compose에서 health 상태를 기준으로 의존 서비스 기동 순서를 제어한다.

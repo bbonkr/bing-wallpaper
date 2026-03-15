@@ -29,6 +29,28 @@
 - 분리 배포용 compose 파일(또는 기존 compose 확장)
 - 마이그레이션 완료 체크리스트
 
+## 4-1) Docker 관련 생성/수정 대상 파일
+- 생성: `frontend/Dockerfile`
+- 생성: `docker-compose.fullstack.yml` (권장안)
+- 수정: 루트 `Dockerfile` (백엔드 빌드에서 `ClientApp` 빌드 단계 제거)
+
+### Docker HEALTHCHECK 예시 스니펫
+```dockerfile
+# frontend/Dockerfile (runner stage 예시)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null || exit 1
+```
+
+```yaml
+# docker-compose.fullstack.yml (예시)
+services:
+  bing_wallpaper_frontend:
+    # ...
+    depends_on:
+      bing_wallpaper:
+        condition: service_healthy
+```
+
 ## 5) 단계 및 의존관계
 1. 기반 셋업
 : `frontend/` 생성, Next.js 초기화, 공통 설정 확정
@@ -66,7 +88,23 @@
 - 라우팅 충돌
 : Next App Router 기준으로 페이지 파일 구조를 URL과 1:1 매핑
 
-## 9) 권장 브랜치/커밋 전략
+## 9) 추가 권장사항
+1. 런타임 API 변수 이원화
+: `NEXT_PUBLIC_API_BASE_URL`(브라우저) + `INTERNAL_API_BASE_URL`(서버사이드) 분리
+2. CORS 최소화
+: 가능하면 Next `rewrites` 기반 `/api` 프록시 우선 적용, 직접 호출은 필요 시에만 유지
+3. CI 스모크 테스트 추가
+: `frontend build` + `docker compose up` + 핵심 라우트/API 헬스 체크 자동화
+4. 이미지 태그 전략 고정
+: `latest` 단독 대신 `git sha` 또는 `semver` 태그 병행
+5. 컷오버 기준 명문화
+: `ClientApp` 제거/legacy 전환 트리거(예: 1주 무사고, 핵심 시나리오 100% 통과) 사전 합의
+6. OpenAPI 생성 안정화
+: generator 버전/옵션 고정 및 CI 드리프트 체크 도입
+7. frontend 컨테이너 HEALTHCHECK 적용
+: `frontend/Dockerfile`에 health endpoint 기반 `HEALTHCHECK`를 추가하고 compose `depends_on`의 health 조건과 연계
+
+## 10) 권장 브랜치/커밋 전략
 - 브랜치: `feature/373-migrate-clientapp-to-nextjs`
 - 커밋 단위
 1. `chore(frontend): bootstrap nextjs app`
@@ -74,3 +112,26 @@
 3. `feat(frontend): migrate store and api integration`
 4. `chore(docker): add frontend image and compose integration`
 5. `docs: add migration notes and runbook`
+
+## 11) 진행 현황 (2026-03-15)
+- Phase 0~3: 완료
+- Phase 4: 파일/설정 작업 완료, 로컬 `docker` 부재로 compose 실기동 검증 보류
+- Phase 5: 문서 정리 진행 중
+
+### 완료 항목
+1. `frontend/` Next.js 앱 구성 및 주요 라우트(`/`, `/collector`, `/logs`, `not-found`) 이관
+2. API 클라이언트/서비스 이관 및 `NEXT_PUBLIC_API_BASE_URL` 반영
+3. 백엔드 CORS를 `Cors:AllowedOrigins` 기반 명시 허용 방식으로 변경
+4. `frontend/Dockerfile`/`docker-compose.fullstack.yml` 추가
+5. 루트 `Dockerfile`에서 `ClientApp` 빌드 단계 제거
+6. `README.md`에 분리 배포 실행 절차 추가
+7. GitHub Actions에서 `ClientApp` 빌드 단계를 `frontend` 빌드로 전환
+8. 릴리즈 Docker workflow를 backend/frontend 이미지 분리 빌드/푸시로 확장
+
+### 보류 항목
+1. `docker compose -f docker-compose.fullstack.yml up -d --build` 실기동 검증
+2. 브라우저 실환경에서 프론트-백엔드 연동 스모크 테스트 최종 확인
+
+### 컷오버 결정
+- `src/Bing.Wallpaper/ClientApp`은 즉시 삭제하지 않고 read-only legacy로 유지
+- 컷오버 기준 충족(무사고 기간 + 핵심 시나리오 통과) 후 제거 또는 `legacy/` 이관 재평가
