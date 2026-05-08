@@ -11,7 +11,7 @@
     "gen": "cross-env TS_POST_PROCESS_FILE=true openapi-generator-cli generate -i ${OPENAPI_SPEC_URL:-http://localhost:5000/swagger/v1/swagger.json} -g typescript-axios -o src/api -c ./openapi.config.json --enable-post-process-file"
   },
   "dependencies": {
-    "axios": "1.13.5",
+    "axios": "1.15.2",
     "bulma": "0.9.4",
     "dayjs": "1.11.19",
     "next": "16.1.6",
